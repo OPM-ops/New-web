@@ -1,5 +1,108 @@
 [
   {
+    "id": "sleeves-transparentes-mlikero-msszbztw",
+    "name": "Sleeves Transparentes Mlikero",
+    "category": "Accesorios",
+    "categoryId": "accesorios",
+    "price": 10000,
+    "description": "Mantén tus cartas protegidas del polvo, la suciedad, rayones y el desgaste del uso diario con los Sleeves Transparentes Mlikero.",
+    "expansion": "Mlikero",
+    "status": "disponible",
+    "new": true,
+    "bestSeller": false,
+    "encargo": false,
+    "includes": [
+      "100 Unidades de protectores transparentes",
+      "Cartas de Pokémon TCG, One Piece, Magic y otros TCG",
+      "Almacenamiento y organización de colecciones"
+    ],
+    "images": [
+      "images/products/K0010.webp"
+    ],
+    "attributes": [
+      {
+        "name": "Cantidad",
+        "options": [
+          {
+            "value": "100 Unidades",
+            "price": 10000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "toploader-ultra-pro-mssyr81v",
+    "name": "Toploader Ultra Pro",
+    "category": "Accesorios",
+    "categoryId": "accesorios",
+    "price": 1200,
+    "description": "🛡️ ¡Protege tus cartas favoritas como se merecen!\n\nMantén tus cartas de colección seguras, protegidas y listas para exhibir con los Ultra PRO Toploaders, uno de los accesorios esenciales para cualquier coleccionista de TCG.",
+    "expansion": "Toploaders",
+    "status": "disponible",
+    "new": true,
+    "bestSeller": true,
+    "encargo": false,
+    "includes": [
+      "Protector rígido de alta resistencia",
+      "Tamaño estándar 3\" × 4\"",
+      "Diseñado para cartas estándar de 2.5\" × 3.5\"",
+      "Marca Ultra PRO, referente en accesorios para coleccionistas"
+    ],
+    "images": [
+      "images/products/3-x-4-ultra-clear-platinum-toploaders-25ct-143493.webp",
+      "images/products/producto-up-regular-toploader-3x4-unidad.webp"
+    ],
+    "attributes": [
+      {
+        "name": "Cantidad",
+        "options": [
+          {
+            "value": "Individual",
+            "price": 1200
+          },
+          {
+            "value": "Set x25 unidades",
+            "price": 25000
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "booster-bundle-chaos-rising-mssyhiim",
+    "name": "Booster  Bundle Chaos Rising",
+    "category": "Pokémon TCG",
+    "categoryId": "pokemon",
+    "subcategoryId": "chaos-rising",
+    "price": 140000,
+    "originalPrice": 150000,
+    "description": "Sumérgete en Mega Evolution Chaos Rising con esta Booster Bundle, una excelente opción para quienes quieren disfrutar de una apertura más completa sin llegar a una Booster Box.",
+    "expansion": "Chaos Rising",
+    "status": "disponible",
+    "new": false,
+    "bestSeller": true,
+    "encargo": false,
+    "includes": [
+      "6 sobres de Mega Evolution Chaos Rising",
+      "Cada sobre contiene 10 cartas + 1 Energía Básica"
+    ],
+    "images": [
+      "images/products/Booster-Bundle-Chaos-Rising.png"
+    ],
+    "attributes": [
+      {
+        "name": "Idioma",
+        "options": [
+          {
+            "value": "Inglés",
+            "price": 140000
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "3-blister-pitch-black-mssl9apk",
     "name": "3 Blister Pitch Black",
     "category": "Pokémon TCG",
@@ -237,9 +340,10 @@
     "name": "Mega Lucario ex League Battle Deck",
     "category": "Pokémon TCG",
     "categoryId": "pokemon",
+    "subcategoryId": "mazos",
     "price": 135000,
     "description": "Prepárate para entrar en combate con un League Battle Deck listo para jugar, protagonizado por el poderoso Mega Lucario ex. Este mazo de 60 cartas está diseñado para ofrecer una experiencia de juego sólida desde el primer momento y, al mismo tiempo, servir como una excelente base para quienes quieran personalizar y mejorar su estrategia.",
-    "expansion": "Otros",
+    "expansion": "Decks",
     "status": "disponible",
     "new": false,
     "bestSeller": false,
@@ -317,10 +421,11 @@
     "name": "Deluxe Battle Deck - Miraidon EX",
     "category": "Pokémon TCG",
     "categoryId": "pokemon",
+    "subcategoryId": "mazos",
     "price": 90000,
     "originalPrice": 100000,
     "description": "Lleva la velocidad y el poder del futuro al combate con el Deluxe Battle Deck de Miraidon ex, un mazo preconstruido de nivel intermedio diseñado para jugadores que buscan una experiencia más competitiva y estratégica. Este deck está protagonizado por Miraidon ex, acompañado por Iron Valiant ex, creando una combinación enfocada en ataques rápidos y presión constante en el campo de batalla.",
-    "expansion": "Otros",
+    "expansion": "Decks",
     "status": "agotado",
     "new": false,
     "bestSeller": true,
@@ -910,10 +1015,11 @@
     "name": "Deluxe Battle Deck - Miraidon EX",
     "category": "Pokémon TCG",
     "categoryId": "pokemon",
+    "subcategoryId": "mazos",
     "price": 85000,
     "originalPrice": 90000,
     "description": "¡Los poderosos Pokémon ex están listos para cargar en el campo de batalla en Pokémon TCG",
-    "expansion": "Otros",
+    "expansion": "Decks",
     "status": "agotado",
     "new": false,
     "bestSeller": true,

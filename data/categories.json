@@ -38,6 +38,12 @@
         "filterType": "expansion",
         "filterValue": "Chaos Rising",
         "image": "images/expansiones/CHAOS_RISING_LOGO.webp"
+      },
+      {
+        "id": "mazos",
+        "name": "Mazos",
+        "filterType": "expansion",
+        "filterValue": "Decks"
       }
     ]
   },
