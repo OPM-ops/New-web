@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Play More - Tienda Geek</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- BARRA DE ANUNCIOS -->
+<div id="announcementBar" class="announcement-bar"></div>
+
+<!-- HEADER SUPERIOR: Logo, Búsqueda, Carrito -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-container">
+      <!-- Logo -->
+      <div class="logo-area">
+        <img src="images/logo.png" alt="One Play More" class="logo-img">
+        <span class="slogan">Coleccionables geek</span>
+      </div>
+      
+      <!-- Barra de Búsqueda -->
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar productos...">
+        <button class="search-btn" id="searchBtn">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      
+      <!-- Acciones: Carrito -->
+      <div class="header-actions">
+        <div class="cart-icon" id="cartIcon">
+          <span class="cart-label">CARRITO</span>
+          <span class="cart-divider">/</span>
+          <span class="cart-total-header" id="cartTotalHeader">$0</span>
+          <div class="cart-icon-wrapper">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- HEADER INFERIOR: Navegación con desplegables -->
+  <div class="header-bottom">
+    <div class="header-container">
+      <button class="hamburger-menu" id="hamburgerBtn" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+      
+      <nav class="main-nav" id="mainNav">
+        <button class="category-btn active" data-category="all">TODOS</button>
+        <button class="category-btn" data-category="ofertas">🔥 OFERTAS</button>
+        <button class="category-btn" data-category="novedades">✨ NOVEDADES</button>
+        <!-- Las categorías con dropdown se inyectan desde categories.js -->
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- BANNER CARRUSEL -->
+<section class="carousel-section">
+    <div class="carousel-container" id="carouselContainer">
+        <!-- Los banners se cargarán dinámicamente desde banners.json -->
+    </div>
+    <button class="carousel-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+    <button class="carousel-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+    <div class="carousel-dots" id="carouselDots"></div>
+</section>
+
+
+
+
+
+
+<!-- CATÁLOGO DE PRODUCTOS -->
+<section class="products-section container">
+    <h2 class="section-title">Nuestros Productos</h2>
+    <div class="products-grid" id="productsGrid">
+        <div class="loading">Cargando catálogo...</div>
+    </div>
+</section>
+
+<!-- MODAL DE PRODUCTO (detalle) -->
+<div id="productModal" class="modal">
+    <div class="modal-content modal-product">
+        <span class="close">&times;</span>
+        <div id="productModalBody"></div>
+    </div>
+</div>
+
+<!-- MODAL DEL CARRITO -->
+<div id="cartModal" class="modal">
+    <div class="modal-content modal-cart">
+        <span class="close">&times;</span>
+        <h2><i class="fas fa-shopping-cart"></i> Tu Carrito</h2>
+        <div id="cartItemsContainer"></div>
+
+        <div class="cart-coupon">
+            <input id="couponCodeInput" type="text" placeholder="¿Tienes un cupón?" maxlength="30">
+            <button id="applyCouponBtn" class="btn-coupon-apply">Aplicar</button>
+            <div id="couponAppliedChip" class="coupon-chip" style="display:none;">
+                <i class="fas fa-tag"></i> <span class="coupon-chip-code"></span>
+                <button id="removeCouponBtn" title="Quitar cupón" type="button">✕</button>
+            </div>
+        </div>
+
+        <div class="cart-total">
+            <p>Subtotal: <span id="cartSubtotal">$0</span></p>
+            <p id="cartDiscountRow" class="cart-discount-row" style="display:none;">Descuento (<span id="cartDiscountCode"></span>): <span id="cartDiscountAmount">-$0</span></p>
+            <p id="cartTotalRow" class="cart-final-total-row" style="display:none;"><strong>Total: <span id="cartFinalTotal">$0</span></strong></p>
+        </div>
+        <div class="cart-buttons">
+            <button id="whatsappQuoteBtn" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Cotizar por WhatsApp</button>
+            <button id="checkoutBtn" class="btn btn-primary">Finalizar Pedido</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL DE CHECKOUT -->
+<div id="checkoutModal" class="modal">
+    <div class="modal-content modal-checkout">
+        <span class="close">&times;</span>
+        <h2>Finalizar Pedido</h2>
+        <div id="checkoutSteps"></div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <img src="images/logo.png" alt="One Play More" class="footer-logo">
+        <p class="footer-description">Tu tienda de confianza para coleccionables geek. Pokémon TCG, Funko Pop!, figuras Ichiban y más.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explora</h4>
+        <ul>
+          <li><a href="#productos" id="footer-productos-link">Productos</a></li>
+          <li><a href="#ofertas" id="footer-ofertas-link">Ofertas</a></li>
+          <li><a href="#novedades" id="footer-novedades-link">Novedades</a></li>
+          <li><a href="aprende.html">Cómo jugar</a></li>
+          <li><a href="coleccionar.html">Cómo coleccionar</a></li>
+          <li><a href="#contacto" id="footer-contacto-link">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <ul>
+          <li><i class="fab fa-whatsapp"></i> +57 311 541 6469</li>
+          <li><i class="far fa-envelope"></i> Oneplaymore13@gmail.com</li>
+          <li><i class="fas fa-map-marker-alt"></i> Bogotá, Colombia</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Síguenos</h4>
+        <div class="social-links">
+          <a href="https://www.instagram.com/one_play_more/" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.facebook.com/profile.php?id=61574480273019" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://tiktok.com" target="_blank"><i class="fab fa-tiktok"></i></a>
+          <a href="https://twitter.com" target="_blank"><i class="fab fa-x-twitter"></i></a>
+        </div>
+        <div class="payment-methods">
+          <h4>Aceptamos</h4>
+          <i class="fab fa-cc-visa" title="Visa"></i>
+          <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+          <i class="fas fa-bolt" title="Nequi"></i>
+          <i class="fas fa-mobile-alt" title="Bre-B"></i>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 One Play More. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="js/email.js"></script>
+<script src="js/products.js"></script>
+<script src="js/hero.js"></script>
+<script src="js/animations.js"></script>
+<script src="js/categories.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/modal.js"></script>
+<script src="js/checkout.js"></script>
+<script src="js/main.js"></script>
+<script src="js/announcement.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/admin.js"></script>  <!-- ← AÑADIDO AQUÍ, DENTRO DEL BODY -->
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast" class="toast hidden">
+  <span id="toast-message"></span>
+</div>
+
+<!-- BOTÓN FLOTANTE DE WHATSAPP -->
+<a href="#" id="whatsappFloatBtn" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Chatea con nosotros por WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+</body>
+</html>

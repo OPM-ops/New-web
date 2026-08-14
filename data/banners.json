@@ -1,0 +1,61 @@
+[
+  {
+    "image": "images/banners/sss.png",
+    "title": "¡Síguenos en Instagram!",
+    "subtitle": "@one_play_more",
+    "buttonText": "Ir a Instagram",
+    "link": "https://www.instagram.com/one_play_more/"
+  },
+  {
+    "image": "images/banners/pitchblack.png",
+    "title": "PITCH BLACK",
+    "subtitle": "Con más de 115 cartas para descubrir, Pitch Black reúne nuevas Mega Evoluciones ex, Pokémon ex, cartas de Entrenador y una amplia selección de cartas con ilustraciones especiales que harán las delicias tanto de jugadores como de coleccionistas.",
+    "buttonText": "DESCUBRE LA EXPANSIÓN",
+    "link": "#productos",
+    "mediaType": "image",
+    "scope": "global"
+  },
+  {
+    "image": "images/banners/chaosrising.png",
+    "title": "CHAOS RISING",
+    "subtitle": "El poder emerge. El caos comienza.",
+    "buttonText": "EXPLORAR EXPANSIÓN",
+    "link": "#productos",
+    "mediaType": "image",
+    "scope": "global"
+  },
+  {
+    "image": "https://clichead.com/wp-content/uploads/2020/11/KASR2XOVA5EAPNIGCQN4KLHISE.jpg",
+    "title": "Descuentos especiales",
+    "subtitle": "Hasta 50% en Funkos seleccionados",
+    "buttonText": "Aprovecha",
+    "link": "",
+    "filterType": "expansion",
+    "filterValue": "",
+    "categoryId": "Perfect Order"
+  },
+  {
+    "image": "",
+    "title": "Megaevolución ya está aquí!",
+    "subtitle": "",
+    "buttonText": "",
+    "link": "",
+    "mediaType": "youtube",
+    "youtubeId": "9uj-A1J_rf0",
+    "scope": "category",
+    "targetCategory": "novedades",
+    "filterType": "new",
+    "filterValue": "true"
+  },
+  {
+    "image": "",
+    "title": "Más Funkos!",
+    "subtitle": "",
+    "buttonText": "",
+    "link": "",
+    "mediaType": "youtube",
+    "youtubeId": "OeMnCqFOfh0",
+    "scope": "category",
+    "targetCategory": "funko"
+  }
+]

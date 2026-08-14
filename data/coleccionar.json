@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "label": "📦 CENTRO DE APRENDIZAJE",
+    "title": "CÓMO EMPEZAR A COLECCIONAR CARTAS POKÉMON",
+    "subtitle": "Aprende a identificar rarezas, proteger tus cartas y elegir por dónde empezar tu colección sin perderte en el intento. Guías paso a paso para coleccionistas nuevos y experimentados.",
+    "ctaText": "Empieza a coleccionar",
+    "image1": "images/products/Chase Scarlet & Violet.webp",
+    "image2": "images/products/Cards MVenusaur.webp"
+  },
+  "lessons": [
+    {
+      "id": "leccion-1",
+      "title": "Rarezas y símbolos de las cartas",
+      "text": "Cada carta de Pokémon TCG tiene un símbolo en la esquina inferior derecha que indica su rareza: círculo (común), diamante (poco común) y estrella (rara), además de categorías especiales como holográficas, full art, ilustraciones raras y doradas. Aprender a leer estos símbolos te ayuda a reconocer el valor real de lo que tienes antes de comprar o vender.",
+      "youtubeId": "s-lIeipltKs",
+      "ctaText": "Ver ilustraciones raras",
+      "ctaLink": "index.html?category=cartas&filterType=cardType&filterValue=ilustracion_raras#productos"
+    },
+    {
+      "id": "leccion-2",
+      "title": "Cómo proteger y guardar tu colección",
+      "text": "Una carta sin protección pierde valor rápido. Usa fundas (sleeves) desde el primer momento, agrega toploaders a tus cartas más valiosas y guarda todo en álbumes o carpetas específicas para TCG, lejos de la luz solar directa y la humedad. Es el hábito más importante para cualquier coleccionista, sin importar el presupuesto.",
+      "youtubeId": "X3QbNYLglqM",
+      "ctaText": "Ver accesorios de protección",
+      "ctaLink": "index.html?category=accesorios#productos"
+    },
+    {
+      "id": "leccion-3",
+      "title": "¿Por dónde empezar?",
+      "text": "No necesitas saberlo todo desde el primer día. Elige una expansión que te guste visualmente, abre algunos sobres para familiarizarte con las rarezas y mecánica del set, y evita el error más común: comprar sobres sueltos de muchas colecciones distintas sin profundizar en ninguna. Es más satisfactorio (y rentable) enfocarte en un set a la vez.",
+      "youtubeId": "V6QaSwy1gtY",
+      "ctaText": "Ver todo Pokémon TCG",
+      "ctaLink": "index.html?category=pokemon#productos"
+    }
+  ],
+  "closingCta": {
+    "title": "¿Listo para armar tu colección?",
+    "subtitle": "Explora nuestro catálogo y encuentra las cartas, expansiones y accesorios de protección que necesitas para empezar con el pie derecho.",
+    "buttonText": "Ver catálogo",
+    "link": "index.html#productos"
+  }
+}

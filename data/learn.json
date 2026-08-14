@@ -1,0 +1,42 @@
+{
+  "hero": {
+    "label": "🎓 CENTRO DE APRENDIZAJE",
+    "title": "POKÉMON TCG: GUÍA PARA PRINCIPIANTES",
+    "subtitle": "Descubre cómo comenzar, entender las cartas, aprender las reglas básicas y dominar la arena Pokémon. Todo lo que necesitas para entrar al mundo TCG… ¡y comenzar tu colección hoy!",
+    "ctaText": "Empieza a aprender",
+    "image1": "images/products/Cards MVenusaur.webp",
+    "image2": "images/products/Chase Obsidian.avif"
+  },
+  "lessons": [
+    {
+      "id": "leccion-1",
+      "title": "Preparación antes de jugar",
+      "text": "Antes de sentarte a jugar tu primera partida es clave saber cómo armar tu mano inicial, cuántas cartas de premio se colocan y cómo se organiza el terreno de juego. Esta guía oficial te muestra el paso a paso para que llegues listo a tu primer duelo.",
+      "youtubeId": "qiiXxlGpqBA",
+      "ctaText": "Ver mazos para empezar",
+      "ctaLink": "index.html?search=deck#productos"
+    },
+    {
+      "id": "leccion-2",
+      "title": "¿Qué es un Mulligan?",
+      "text": "A veces tu mano inicial no trae ningún Pokémon Básico, y ahí es cuando entra el Mulligan. Aprende qué pasa cuando esto sucede, cómo se resuelve entre ambos jugadores y por qué no debes preocuparte si te pasa.",
+      "youtubeId": "RHBZPyaqml8",
+      "ctaText": "Ver cartas básicas",
+      "ctaLink": "index.html?category=cartas#productos"
+    },
+    {
+      "id": "leccion-3",
+      "title": "Preparativos para iniciar una partida",
+      "text": "Ya armaste tu mazo, ¿y ahora qué? Conoce el orden exacto de los preparativos antes del primer turno: quién empieza, cómo se reparten las cartas de premio y cómo se coloca tu Pokémon activo y tu banca.",
+      "youtubeId": "LPG0Cn1YzVA",
+      "ctaText": "Empezar mi colección",
+      "ctaLink": "index.html?category=pokemon#productos"
+    }
+  ],
+  "closingCta": {
+    "title": "¿Listo para armar tu colección?",
+    "subtitle": "Explora nuestro catálogo y encuentra las cartas, expansiones y accesorios que necesitas para empezar a jugar.",
+    "buttonText": "Ver catálogo",
+    "link": "index.html#productos"
+  }
+}

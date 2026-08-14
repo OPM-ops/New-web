@@ -1,0 +1,74 @@
+[
+  {
+    "id": "pokemon",
+    "name": "Pokémon TCG",
+    "menuStyle": "grid",
+    "subcategories": [
+      {
+        "id": "expansion_sv",
+        "name": "Scarlet & Violet",
+        "filterType": "expansion",
+        "filterValue": "Scarlet & Violet",
+        "image": ""
+      },
+      {
+        "id": "expansion_paldean_fates",
+        "name": "Paldean Fates",
+        "filterType": "expansion",
+        "filterValue": "Paldean Fates",
+        "image": ""
+      },
+      {
+        "id": "expansion_temporal_forces",
+        "name": "Temporal Forces",
+        "filterType": "expansion",
+        "filterValue": "Temporal Forces",
+        "image": ""
+      },
+      {
+        "id": "pitch-black",
+        "name": "Pitch Black",
+        "filterType": "expansion",
+        "filterValue": "Pitch Black",
+        "image": "images/expansiones/me05.png"
+      },
+      {
+        "id": "chaos-rising",
+        "name": "Chaos Rising",
+        "filterType": "expansion",
+        "filterValue": "Chaos Rising",
+        "image": "images/expansiones/CHAOS_RISING_LOGO.webp"
+      }
+    ]
+  },
+  {
+    "id": "funko",
+    "name": "Funko Pop!"
+  },
+  {
+    "id": "figuras",
+    "name": "Figuras Ichiban"
+  },
+  {
+    "id": "cartas",
+    "name": "Cartas",
+    "subcategories": [
+      {
+        "id": "cartas_estandar",
+        "name": "Cartas Estándar",
+        "filterType": "cardType",
+        "filterValue": "estandar"
+      },
+      {
+        "id": "ilustraciones_raras",
+        "name": "Ilustraciones Raras",
+        "filterType": "cardType",
+        "filterValue": "ilustracion_raras"
+      }
+    ]
+  },
+  {
+    "id": "accesorios",
+    "name": "Accesorios"
+  }
+]
