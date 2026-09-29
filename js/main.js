@@ -1,13 +1,14 @@
 let allBanners = [];
+let allCollections = [];
 let currentCarouselBanners = []; // banners realmente renderizados en este momento (globales o de categoría)
 let currentSlide = 0;
 let slideInterval = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadProducts();
-    renderRandomRecommendations(4);
     renderHeroSection();
     await loadCategories();     
+    renderCollectionsSection();
     await loadCarousel();
     loadCart();
     setupFooterLinks();
@@ -78,8 +79,12 @@ function renderRandomRecommendations(count = 4) {
     }
     if (!allProducts || allProducts.length === 0) return;
 
-    // Copiar y mezclar el array de productos
-    let shuffled = [...allProducts];
+    // Solo recomendar productos disponibles (nunca agotados o "próximamente")
+    const availableProducts = allProducts.filter(p => p.status !== 'agotado' && p.status !== 'proximamente');
+    if (availableProducts.length === 0) return;
+
+    // Copiar y mezclar el array de productos disponibles
+    let shuffled = [...availableProducts];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -287,12 +292,6 @@ function applyCategoryBannerView(categoryId) {
 window.applyCategoryBannerView = applyCategoryBannerView;
 
 function applyBannerFilter(banner) {
-    // Scroll a productos
-    const productsSection = document.querySelector('.products-section');
-    if (productsSection) {
-        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
     // Aplicar filtro según el tipo
     switch(banner.filterType) {
         case 'bestSeller':
@@ -334,6 +333,12 @@ function applyBannerFilter(banner) {
         default:
             console.warn('Tipo de filtro no reconocido:', banner.filterType);
     }
+
+    // Scroll a productos — ahora sí, después de que la sección ya quedó visible
+    const productsSection = document.querySelector('.products-section');
+    if (productsSection) {
+        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // Función auxiliar para resaltar botón en navegación
@@ -348,6 +353,7 @@ function highlightNavButton(categoryId) {
 
 // Filtrar por estado (preventa, agotado, etc.)
 function filterByStatus(status) {
+    if (typeof showCatalogView === 'function') showCatalogView();
     let filtered = allProducts.filter(p => p.status === status);
     renderProducts(filtered);
 
@@ -368,6 +374,7 @@ function filterByStatus(status) {
 
 // Filtrar por expansión (para subcategorías de Pokémon)
 function filterByExpansion(expansionName, categoryId = 'pokemon') {
+    if (typeof showCatalogView === 'function') showCatalogView();
     let filtered = allProducts.filter(p => 
         p.categoryId === categoryId && p.expansion === expansionName
     );
@@ -468,6 +475,7 @@ function setupSearch() {
 
     function doSearch() {
         const query = input.value.trim().toLowerCase();
+        if (typeof showCatalogView === 'function') showCatalogView();
         if (!query) {
             renderProducts(allProducts);
             document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -531,6 +539,95 @@ function applyDeepLinkFromURL() {
         }
     }
 }
+
+// ──────────────────────────────────────────────────
+// COLECCIONES: vitrina curada de marcas/colecciones en el home
+// (editable desde el admin, vive en data/collections.json — no depende
+// 1:1 del árbol de categorías, así se pueden destacar cosas como
+// "Ichibansho" aunque sea subcategoría de "Figuras")
+// ──────────────────────────────────────────────────
+const COLLECTION_FALLBACK_ICONS = {
+    pokemon: 'fa-bolt',
+    funko: 'fa-user-astronaut',
+    figuras: 'fa-cubes',
+    ichibansho: 'fa-cubes',
+    cartas: 'fa-layer-group',
+    accesorios: 'fa-shield-halved',
+    'juegos-mesa': 'fa-dice',
+};
+
+async function renderCollectionsSection() {
+    const grid = document.getElementById('collectionsGrid');
+    if (!grid) return;
+
+    // Si el admin ya aplicó cambios en vivo esta sesión, usamos esos en vez
+    // de volver a pedir el archivo (así "Aplicar" se refleja al instante).
+    let items = allCollections && allCollections.length > 0 ? allCollections : null;
+
+    if (!items) {
+        try {
+            const res = await fetch('data/collections.json');
+            items = await res.json();
+            allCollections = items;
+        } catch (error) {
+            console.warn('No se pudo cargar collections.json:', error);
+            return;
+        }
+    }
+
+    if (!items || items.length === 0) {
+        grid.parentElement.style.display = 'none';
+        return;
+    }
+
+    grid.innerHTML = items.map(item => {
+        const icon = COLLECTION_FALLBACK_ICONS[item.filterValue || item.categoryId] || 'fa-shapes';
+        const hasImage = !!item.image;
+        const media = hasImage
+            ? `<img src="${item.image}" alt="${item.name}" loading="lazy" onerror="this.parentElement.classList.add('collection-card-media--fallback'); this.remove();">`
+            : `<i class="fas ${icon}"></i>`;
+        return `
+        <button class="collection-card"
+                data-category-id="${item.categoryId}"
+                data-filter-type="${item.filterType || ''}"
+                data-filter-value="${item.filterValue || ''}">
+            <div class="collection-card-media${hasImage ? '' : ' collection-card-media--fallback'}">
+                ${media}
+            </div>
+            <span class="collection-card-name">${item.name}</span>
+        </button>`;
+    }).join('');
+
+    grid.querySelectorAll('.collection-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const { categoryId, filterType, filterValue } = card.dataset;
+            if (typeof applyFilter === 'function') applyFilter(categoryId, filterType || null, filterValue || null);
+            if (typeof highlightActiveCategory === 'function') highlightActiveCategory(categoryId);
+        });
+    });
+}
+
+// ─────────────────────────────────────────────
+// INICIO vs CATÁLOGO: alterna entre la vista curada del home
+// (colecciones + recomendados) y la grilla completa de productos.
+// ─────────────────────────────────────────────
+function showHomeView() {
+    const home = document.getElementById('homeSections');
+    const catalog = document.getElementById('productsSection');
+    if (home) home.style.display = '';
+    if (catalog) catalog.style.display = 'none';
+    if (typeof applyCategoryBannerView === 'function') applyCategoryBannerView('all');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showCatalogView() {
+    const home = document.getElementById('homeSections');
+    const catalog = document.getElementById('productsSection');
+    if (home) home.style.display = 'none';
+    if (catalog) catalog.style.display = '';
+}
+window.showHomeView = showHomeView;
+window.showCatalogView = showCatalogView;
 
 function setupFooterLinks() {
     const productosLink = document.getElementById('footer-productos-link');

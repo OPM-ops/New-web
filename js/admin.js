@@ -16,6 +16,7 @@ let adminCoupons     = [];
 let editingBannerIndex = null;
 let editingCategoryIndex = null;
 let editingSubcategoryIndex = null;
+let editingSubcategoryArrayKey = 'subcategories'; // 'subcategories' o 'expansions'
 let editingCouponIndex = null;
 
 const BANNER_IMAGE_SIZES = {
@@ -43,9 +44,10 @@ const BANNER_STATUS_OPTIONS = [
 const STATIC_BANNER_CATEGORIES = [
   { id: 'pokemon',  name: 'Pokémon TCG'     },
   { id: 'funko',    name: 'Funko Pop!'       },
-  { id: 'figuras',  name: 'Figuras Ichiban'  },
+  { id: 'figuras',  name: 'Figuras'          },
   { id: 'cartas',   name: 'Cartas'           },
   { id: 'accesorios', name: 'Accesorios'     },
+  { id: 'juegos-mesa', name: 'Juegos de Mesa' },
 ];
 
 // Extrae el ID de video de una URL de YouTube (o lo deja igual si ya es un ID)
@@ -195,6 +197,7 @@ function refreshAdminData() {
   refreshAdminCategories();
   refreshAdminCoupons();
   refreshAdminAnnouncement();
+  refreshAdminCollections();
 }
 
 function renderAdminStats() {
@@ -216,6 +219,125 @@ function setStatEl(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val;
 }
+
+// ─────────────────────────────────────────────
+// INVENTARIO
+// ─────────────────────────────────────────────
+function renderInventoryDashboard() {
+  renderInventoryStats();
+  renderAdminInventoryList();
+}
+
+function renderInventoryStats() {
+  const container = document.getElementById('inventoryStats');
+  if (!container) return;
+
+  const tracked = adminProducts.filter(p => p.stock !== undefined && p.stock !== null);
+  const totalProducts = adminProducts.length;
+  const totalUnits = tracked.reduce((sum, p) => sum + (p.stock || 0), 0);
+  const inventoryValue = tracked.reduce((sum, p) => sum + (p.price * (p.stock || 0)), 0);
+  const potentialProfit = tracked.reduce((sum, p) => {
+    if (p.cost === undefined || p.cost === null) return sum;
+    return sum + ((p.price - p.cost) * (p.stock || 0));
+  }, 0);
+
+  container.innerHTML = `
+    <div class="admin-stat"><span>${totalProducts}</span><label>Productos totales</label></div>
+    <div class="admin-stat"><span>${totalUnits}</span><label>Unidades en stock</label></div>
+    <div class="admin-stat"><span>$${inventoryValue.toLocaleString('es-CO')}</span><label>Valor de inventario</label></div>
+    <div class="admin-stat"><span>$${potentialProfit.toLocaleString('es-CO')}</span><label>Ganancia potencial</label></div>
+  `;
+}
+
+function renderAdminInventoryList() {
+  const container = document.getElementById('adminInventoryList');
+  if (!container) return;
+
+  const searchInput = document.getElementById('inventorySearchInput');
+  const sortSelect = document.getElementById('inventorySortSelect');
+  const query = (searchInput?.value || '').trim().toLowerCase();
+  const sortMode = sortSelect?.value || 'stock-asc';
+
+  let list = [...adminProducts];
+  if (query) {
+    list = list.filter(p => p.name.toLowerCase().includes(query) || (p.location || '').toLowerCase().includes(query));
+  }
+
+  list.sort((a, b) => {
+    if (sortMode === 'name-asc') return a.name.localeCompare(b.name);
+    if (sortMode === 'profit-desc') {
+      const profitA = (a.cost !== undefined && a.cost !== null) ? (a.price - a.cost) * (a.stock || 0) : -1;
+      const profitB = (b.cost !== undefined && b.cost !== null) ? (b.price - b.cost) * (b.stock || 0) : -1;
+      return profitB - profitA;
+    }
+    // stock-asc (default): sin dato de stock al final, luego de menor a mayor cantidad
+    const stockA = (a.stock === undefined || a.stock === null) ? Infinity : a.stock;
+    const stockB = (b.stock === undefined || b.stock === null) ? Infinity : b.stock;
+    return stockA - stockB;
+  });
+
+  if (list.length === 0) {
+    container.innerHTML = `<div class="admin-empty">No hay productos que coincidan.</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(p => {
+    const img = p.images && p.images[0] ? p.images[0] : 'images/products/placeholder.jpg';
+    const stock = (p.stock === undefined || p.stock === null) ? '' : p.stock;
+    const hasCost = p.cost !== undefined && p.cost !== null;
+    const profit = hasCost ? (p.price - p.cost) * (p.stock || 0) : null;
+
+    let stockBadgeClass = '';
+    let stockBadgeLabel = '';
+    if (p.stock === undefined || p.stock === null) {
+      stockBadgeLabel = 'Sin datos';
+    } else if (p.stock === 0) {
+      stockBadgeClass = 'inventory-badge--out';
+      stockBadgeLabel = 'Sin stock';
+    } else if (p.stock <= 2) {
+      stockBadgeClass = 'inventory-badge--low';
+      stockBadgeLabel = 'Poco stock';
+    } else {
+      stockBadgeClass = 'inventory-badge--ok';
+      stockBadgeLabel = 'OK';
+    }
+
+    return `
+      <div class="admin-product-row inventory-row" data-id="${p.id}">
+        <img src="${img}" class="admin-product-thumb" onerror="this.src='images/products/placeholder.jpg'">
+        <div class="admin-product-info">
+          <div class="admin-product-name">${p.name}</div>
+          <div class="admin-product-meta">
+            ${p.location ? `<i class="fas fa-map-marker-alt"></i> ${p.location}` : '<span style="opacity:0.4;">Sin ubicación</span>'}
+            ${hasCost ? ` · Costo: $${p.cost.toLocaleString('es-CO')}` : ''}
+            ${profit !== null ? ` · Ganancia potencial: <strong style="color:#4ade80;">$${profit.toLocaleString('es-CO')}</strong>` : ''}
+          </div>
+        </div>
+        <div class="inventory-stock-control">
+          ${stockBadgeLabel ? `<span class="inventory-badge ${stockBadgeClass}">${stockBadgeLabel}</span>` : ''}
+          <input type="number" min="0" step="1" class="inventory-stock-input" value="${stock}" placeholder="—"
+                 onchange="updateProductStock('${p.id}', this.value)">
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Actualiza el stock de un producto directamente desde la lista (edición rápida)
+function updateProductStock(id, value) {
+  const idx = adminProducts.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  const stock = value === '' ? undefined : Math.max(0, parseInt(value, 10) || 0);
+  if (stock === undefined) {
+    delete adminProducts[idx].stock;
+  } else {
+    adminProducts[idx].stock = stock;
+  }
+  renderInventoryStats();
+  renderAdminInventoryList();
+  showAdminToast('Stock actualizado. Exporta productos.json para que quede permanente.', 'success');
+}
+window.updateProductStock = updateProductStock;
 
 function renderAdminProductList(filterText = '') {
   const container = document.getElementById('adminProductList');
@@ -260,19 +382,28 @@ function renderAdminProductList(filterText = '') {
   }).join('');
 }
 
+// Lista de categorías para los selects del formulario de producto. Se usa en
+// tres lugares (poblar el <select>, guardar el producto, y restaurar el
+// formulario al editar), así que vive en un solo sitio para que los tres
+// siempre vean exactamente las mismas definiciones de categoría/subcategoría.
+function getAdminCategoryDefs() {
+  const staticCats = [
+    { id: 'pokemon',  name: 'Pokémon TCG'     },
+    { id: 'funko',    name: 'Funko Pop!'       },
+    { id: 'figuras',  name: 'Figuras'          },
+    { id: 'cartas',   name: 'Cartas'           },
+    { id: 'accesorios', name: 'Accesorios'     },
+    { id: 'juegos-mesa', name: 'Juegos de Mesa' },
+  ];
+  return adminCategories.length > 0 ? adminCategories : staticCats;
+}
+
 function populateCategorySelect() {
   const sel = document.getElementById('formCategory');
   const subSel = document.getElementById('formSubcategory');
   if (!sel) return;
 
-  const staticCats = [
-    { id: 'pokemon',  name: 'Pokémon TCG'     },
-    { id: 'funko',    name: 'Funko Pop!'       },
-    { id: 'figuras',  name: 'Figuras Ichiban'  },
-    { id: 'cartas',   name: 'Cartas'           },
-    { id: 'accesorios', name: 'Accesorios'     },
-  ];
-  const cats = adminCategories.length > 0 ? adminCategories : staticCats;
+  const cats = getAdminCategoryDefs();
 
   sel.innerHTML = '<option value="">— Categoría —</option>' +
     cats.map(c => `<option value="${c.id}" data-name="${c.name}">${c.name}</option>`).join('');
@@ -306,6 +437,7 @@ function openProductForm(product = null) {
     document.getElementById('formOriginalPrice').value = product.originalPrice || '';
     document.getElementById('formDescription').value = product.description || '';
     document.getElementById('formExpansion').value   = product.expansion   || '';
+    document.getElementById('formCondition').value   = product.condition  || '';
     document.getElementById('formStatus').value      = product.status      || 'disponible';
     document.getElementById('formNew').checked       = !!product.new;
     document.getElementById('formBestSeller').checked = !!product.bestSeller;
@@ -313,16 +445,49 @@ function openProductForm(product = null) {
     document.getElementById('formEncargoNota').value = product.encargoNota || '';
     document.getElementById('formIncludes').value    = (product.includes || []).join('\n');
     document.getElementById('formImages').value      = (product.images   || []).join('\n');
+    document.getElementById('formStock').value       = (product.stock !== undefined && product.stock !== null) ? product.stock : '';
+    document.getElementById('formCost').value        = (product.cost  !== undefined && product.cost  !== null) ? product.cost  : '';
+    document.getElementById('formLocation').value    = product.location || '';
+    document.getElementById('formBoardGameId').value = product.boardGameId || '';
 
     const catSel = document.getElementById('formCategory');
     if (catSel && product.categoryId) {
-      catSel.value = product.categoryId;
+      const cats = getAdminCategoryDefs();
+      let restoreCatId = product.categoryId;
+      let restoreSubId = product.subcategoryId || '';
+
+      // Si categoryId no es una categoría "real" del menú (ej. quedó como
+      // "funko" o "accesorios" porque el producto vino de una subcategoría
+      // tipo enlace), buscamos qué subcategoría de qué categoría padre
+      // apunta ahí, para dejar el formulario tal como se eligió originalmente.
+      const isRealCategory = cats.some(c => c.id === restoreCatId);
+      if (!isRealCategory) {
+        for (const c of cats) {
+          const linkSub = (c.subcategories || []).find(s => s.categoryId === restoreCatId);
+          if (linkSub) { restoreCatId = c.id; restoreSubId = linkSub.id; break; }
+        }
+      } else if (!restoreSubId && product.expansion) {
+        // Producto etiquetado vía subcategoría tipo "Mazos"/"Otros Productos"
+        // (filterType: expansion), que se guarda en product.expansion, no en subcategoryId.
+        const cat = cats.find(c => c.id === restoreCatId);
+        const matchByExpansion = (cat?.subcategories || []).find(s => s.filterType === 'expansion' && s.filterValue === product.expansion);
+        if (matchByExpansion) restoreSubId = matchByExpansion.id;
+      }
+
+      catSel.value = restoreCatId;
       catSel.dispatchEvent(new Event('change'));
+      // El 'change' de arriba repuebla las opciones de subcategoría, pero no
+      // selecciona ninguna — sin esto, la subcategoría guardada se perdía
+      // cada vez que se reabría el producto para editar.
+      const subSelRestore = document.getElementById('formSubcategory');
+      if (subSelRestore) subSelRestore.value = restoreSubId;
     }
 
-    document.getElementById('formAttributes').value = product.attributes
-      ? JSON.stringify(product.attributes, null, 2)
-      : '';
+    const attrBuilder = document.getElementById('attributesBuilder');
+    if (attrBuilder) attrBuilder.innerHTML = '';
+    if (product.attributes && product.attributes.length) {
+      product.attributes.forEach(attr => addAttributeBlock(attr.name, attr.options));
+    }
   }
 
   updateProductPreview();
@@ -331,10 +496,13 @@ function openProductForm(product = null) {
 
 function clearProductForm() {
   ['formId','formName','formPrice','formOriginalPrice','formDescription',
-   'formExpansion','formAttributes','formIncludes','formImages','formEncargoNota'].forEach(id => {
+   'formExpansion','formCondition','formIncludes','formImages','formEncargoNota',
+   'formStock','formCost','formLocation','formBoardGameId'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  const attrBuilder = document.getElementById('attributesBuilder');
+  if (attrBuilder) attrBuilder.innerHTML = '';
   const status = document.getElementById('formStatus');
   if (status) status.value = 'disponible';
   ['formNew','formBestSeller','formEncargo'].forEach(id => {
@@ -359,6 +527,120 @@ function deleteAdminProduct(id) {
   showAdminToast('Producto eliminado de la lista temporal.', 'warning');
 }
 
+// ─────────────────────────────────────────────
+// BUILDER VISUAL DE ATRIBUTOS/VARIANTES (ej. Idioma, Talla)
+// ─────────────────────────────────────────────
+function escAttrVal(str) {
+  return String(str == null ? '' : str).replace(/"/g, '&quot;');
+}
+
+let attrBlockUidCounter = 0;
+
+function addAttributeBlock(name = '', options = []) {
+  const container = document.getElementById('attributesBuilder');
+  if (!container) return;
+  const uid = attrBlockUidCounter++;
+
+  const block = document.createElement('div');
+  block.className = 'attribute-block';
+  block.id = `attr-block-${uid}`;
+  block.dataset.nextOptUid = '0';
+  block.style.cssText = 'border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:0.8rem; background:rgba(255,255,255,0.03);';
+  block.innerHTML = `
+    <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.7rem;">
+      <input type="text" class="attr-name-input" placeholder="Nombre del atributo (ej. Idioma)" value="${escAttrVal(name)}"
+             style="flex:1; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:0.45rem 0.6rem; color:#fff; font-size:0.85rem;">
+      <button type="button" onclick="removeAttributeBlock(${uid})" title="Eliminar atributo completo"
+              style="background:rgba(220,60,60,0.15); border:1px solid rgba(220,60,60,0.4); color:#ff8a8a; border-radius:6px; width:32px; height:32px; cursor:pointer; flex-shrink:0;">
+        <i class="fas fa-trash"></i>
+      </button>
+    </div>
+    <div class="attribute-options-list" id="attr-options-${uid}" style="display:flex; flex-direction:column; gap:0.5rem;"></div>
+    <button type="button" onclick="addOptionRow(${uid})"
+            style="margin-top:0.6rem; background:none; border:1px dashed rgba(255,255,255,0.3); color:rgba(255,255,255,0.7); border-radius:6px; padding:0.35rem 0.7rem; font-size:0.75rem; cursor:pointer;">
+      <i class="fas fa-plus"></i> Agregar opción
+    </button>
+  `;
+  container.appendChild(block);
+
+  if (options && options.length) {
+    options.forEach(opt => {
+      const optValue = typeof opt === 'string' ? opt : opt.value;
+      const optPrice = (typeof opt === 'object' && opt.price != null) ? opt.price : '';
+      const optAvailable = !(typeof opt === 'object' && opt.available === false);
+      addOptionRow(uid, optValue, optPrice, optAvailable);
+    });
+  } else {
+    addOptionRow(uid);
+  }
+}
+
+function removeAttributeBlock(uid) {
+  const block = document.getElementById(`attr-block-${uid}`);
+  if (block) block.remove();
+}
+
+function addOptionRow(attrUid, value = '', price = '', available = true) {
+  const block = document.getElementById(`attr-block-${attrUid}`);
+  const optsContainer = document.getElementById(`attr-options-${attrUid}`);
+  if (!block || !optsContainer) return;
+
+  const optUid = parseInt(block.dataset.nextOptUid, 10);
+  block.dataset.nextOptUid = String(optUid + 1);
+
+  const row = document.createElement('div');
+  row.id = `opt-row-${attrUid}-${optUid}`;
+  row.style.cssText = 'display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;';
+  row.innerHTML = `
+    <input type="text" class="opt-value-input" placeholder="Valor (ej. Español)" value="${escAttrVal(value)}"
+           style="flex:1 1 130px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:0.4rem 0.55rem; color:#fff; font-size:0.8rem;">
+    <input type="number" class="opt-price-input" placeholder="Precio (opcional)" min="0" value="${price !== '' && price != null ? price : ''}"
+           style="flex:1 1 130px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:6px; padding:0.4rem 0.55rem; color:#fff; font-size:0.8rem;">
+    <label style="display:flex; align-items:center; gap:0.35rem; font-size:0.78rem; color:rgba(255,255,255,0.75); white-space:nowrap;">
+      <input type="checkbox" class="opt-available-input" ${available ? 'checked' : ''}> Disponible
+    </label>
+    <button type="button" onclick="removeOptionRow(${attrUid}, ${optUid})" title="Eliminar esta opción"
+            style="background:rgba(220,60,60,0.12); border:1px solid rgba(220,60,60,0.35); color:#ff8a8a; border-radius:6px; width:28px; height:28px; cursor:pointer; flex-shrink:0;">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+  optsContainer.appendChild(row);
+}
+
+function removeOptionRow(attrUid, optUid) {
+  const row = document.getElementById(`opt-row-${attrUid}-${optUid}`);
+  if (row) row.remove();
+}
+
+function readAttributesFromBuilder() {
+  const attributes = [];
+  document.querySelectorAll('#attributesBuilder .attribute-block').forEach(block => {
+    const nameInput = block.querySelector('.attr-name-input');
+    const attrName = nameInput ? nameInput.value.trim() : '';
+    if (!attrName) return;
+
+    const options = [];
+    block.querySelectorAll('.attribute-options-list > div').forEach(row => {
+      const valueInput = row.querySelector('.opt-value-input');
+      const value = valueInput ? valueInput.value.trim() : '';
+      if (!value) return;
+
+      const priceInput = row.querySelector('.opt-price-input');
+      const priceRaw = priceInput ? priceInput.value : '';
+      const availableInput = row.querySelector('.opt-available-input');
+      const available = availableInput ? availableInput.checked : true;
+
+      const opt = { value };
+      if (priceRaw !== '') opt.price = parseFloat(priceRaw);
+      if (!available) opt.available = false;
+      options.push(opt);
+    });
+
+    if (options.length) attributes.push({ name: attrName, options });
+  });
+  return attributes;
+}
+
 function saveAdminProduct() {
   const name  = document.getElementById('formName').value.trim();
   const price = parseFloat(document.getElementById('formPrice').value);
@@ -366,23 +648,56 @@ function saveAdminProduct() {
   if (isNaN(price))  { showAdminToast('El precio es obligatorio.', 'error'); return; }
 
   const catSel  = document.getElementById('formCategory');
-  const catId   = catSel.value;
-  const catName = catSel.selectedOptions[0]?.dataset.name || catId;
+  let catId   = catSel.value;
+  let catName = catSel.selectedOptions[0]?.dataset.name || catId;
 
   const includes   = document.getElementById('formIncludes').value
     .split("\n").map(s => s.trim()).filter(Boolean);
   const images     = document.getElementById('formImages').value
     .split("\n").map(s => s.trim()).filter(Boolean);
-  let attributes   = [];
-  const attrsRaw   = document.getElementById('formAttributes').value.trim();
-  if (attrsRaw) {
-    try { attributes = JSON.parse(attrsRaw); }
-    catch { showAdminToast('El JSON de atributos no es válido.', 'error'); return; }
-  }
+  const attributes = readAttributesFromBuilder();
 
   const id = editingProductId || slugify(name) + '-' + Date.now().toString(36);
   const subSel = document.getElementById('formSubcategory');
-  const subcategoryId = subSel && subSel.value ? subSel.value : undefined;
+  let subcategoryId = subSel && subSel.value ? subSel.value : undefined;
+  let expansionValue = document.getElementById('formExpansion').value.trim() || undefined;
+
+  // Resolver qué significa REALMENTE la subcategoría elegida. En categories.json
+  // una "subcategoría" puede ser de tres tipos, y cada uno se guarda distinto
+  // en el producto — guardar siempre el valor crudo del <select> (como se hacía
+  // antes) es exactamente el bug que hacía que, por ejemplo, un Funko Pop!
+  // elegido desde "Figuras > Funko Pop!" quedara con categoryId:"figuras" y
+  // subcategoryId:"funko-link" (un valor que ningún filtro reconoce), en vez
+  // de categoryId:"funko" como debía ser:
+  //   1) Subcategoría "enlace" (tiene su propio `categoryId`, ej. Funko Pop!
+  //      dentro de Figuras, Accesorios dentro de TCG): el producto pertenece
+  //      por completo a ESA categoría destino, no a la categoría padre del menú.
+  //   2) filterType "subcategoryId" (ej. Ichibansho, Model Kits, Magic, Naruto
+  //      Mythos, Yu-Gi-Oh!): se guarda en product.subcategoryId, usando el
+  //      filterValue (no el id crudo, aunque hoy coincidan).
+  //   3) filterType "expansion" (ej. Mazos, Otros Productos): se guarda en
+  //      product.expansion (el mismo campo que usan las expansiones normales
+  //      de Pokémon), no en subcategoryId.
+  const catDefs = getAdminCategoryDefs();
+  const selectedCatDef = catDefs.find(c => c.id === catId);
+  const selectedSubDef = selectedCatDef?.subcategories?.find(s => s.id === subcategoryId);
+
+  if (selectedSubDef) {
+    if (selectedSubDef.categoryId) {
+      catId = selectedSubDef.categoryId;
+      catName = selectedSubDef.name;
+      subcategoryId = undefined;
+    } else if (selectedSubDef.filterType === 'subcategoryId') {
+      subcategoryId = selectedSubDef.filterValue;
+    } else if (selectedSubDef.filterType === 'expansion') {
+      expansionValue = selectedSubDef.filterValue;
+      subcategoryId = undefined;
+    }
+  }
+
+  const stockRaw = document.getElementById('formStock').value;
+  const costRaw = document.getElementById('formCost').value;
+  const location = document.getElementById('formLocation').value.trim();
 
   const product = {
     id,
@@ -393,7 +708,8 @@ function saveAdminProduct() {
     price,
     originalPrice: parseFloat(document.getElementById('formOriginalPrice').value) || null,
     description:   document.getElementById('formDescription').value.trim(),
-    expansion:     document.getElementById('formExpansion').value.trim() || undefined,
+    expansion:     expansionValue,
+    condition:     document.getElementById('formCondition').value || undefined,
     status:        document.getElementById('formStatus').value,
     new:           document.getElementById('formNew').checked,
     bestSeller:    document.getElementById('formBestSeller').checked,
@@ -402,6 +718,10 @@ function saveAdminProduct() {
     includes:      includes.length ? includes : undefined,
     images:        images.length   ? images   : ['images/products/placeholder.jpg'],
     attributes:    attributes.length ? attributes : undefined,
+    stock:         stockRaw !== '' ? parseInt(stockRaw, 10) : undefined,
+    cost:          costRaw !== '' ? parseFloat(costRaw) : undefined,
+    location:      location || undefined,
+    boardGameId:   document.getElementById('formBoardGameId').value.trim() || undefined,
   };
 
   Object.keys(product).forEach(k => {
@@ -417,7 +737,17 @@ function saveAdminProduct() {
 
   renderAdminProductList();
   renderAdminStats();
-  showAdminToast(editingProductId ? 'Producto actualizado ✓' : 'Producto creado ✓', 'success');
+
+  // Aplicar en vivo automáticamente al guardar, para que cambios como el ID
+  // de guía "Cómo Jugar" o el filtro de subcategoría se vean de inmediato
+  // sin tener que acordarse de tocar "Aplicar" aparte.
+  if (typeof allProducts !== 'undefined') {
+    allProducts.length = 0;
+    adminProducts.forEach(p => allProducts.push(p));
+    if (typeof renderProducts === 'function') renderProducts(allProducts);
+  }
+
+  showAdminToast(editingProductId ? 'Producto actualizado ✓ (aplicado, recuerda exportar)' : 'Producto creado ✓ (aplicado, recuerda exportar)', 'success');
   showAdminView('dashboardView');
 }
 
@@ -432,6 +762,7 @@ function updateProductPreview() {
   const isNew   = document.getElementById('formNew')?.checked;
   const isOffer = document.getElementById('formBestSeller')?.checked;
   const isEnc   = document.getElementById('formEncargo')?.checked;
+  const condition = document.getElementById('formCondition')?.value || '';
 
   const preview = document.getElementById('adminPreviewCard');
   if (!preview) return;
@@ -445,7 +776,10 @@ function updateProductPreview() {
         <img src="${img}" alt="${name}" onerror="this.src='images/products/placeholder.jpg'">
       </div>
       <div class="admin-preview-body">
-        <div class="admin-preview-cat">${cat}</div>
+        <div class="admin-preview-cat-row">
+          <div class="admin-preview-cat">${cat}</div>
+          ${condition ? `<div class="admin-preview-condition"><span>${condition}</span></div>` : ''}
+        </div>
         <div class="admin-preview-name">${name}</div>
         <div class="admin-preview-prices">
           ${origP ? `<span class="admin-preview-orig">$${origP.toLocaleString('es-CO')}</span>` : ''}
@@ -471,6 +805,155 @@ function previewAdminProduct(id) {
   }
 }
 
+// ─────────────────────────────────────────────
+// EXPORTAR CATÁLOGO A EXCEL (.xlsx)
+// Usa la librería ExcelJS (cargada vía CDN en index.html), que sí puede
+// incrustar imágenes reales dentro de las celdas. Excel no reconoce bien
+// imágenes .webp/.avif incrustadas, así que cada foto se dibuja primero
+// en un <canvas> oculto y se convierte a PNG antes de pegarla.
+// ─────────────────────────────────────────────
+
+// Carga una imagen y la convierte a PNG en base64 (sin el prefijo data:...).
+// Devuelve null si la imagen no existe o falla al cargar, para no romper
+// el resto de la exportación por una sola foto rota.
+function loadImageAsPngBase64(path, maxSize = 160) {
+  return new Promise(resolve => {
+    if (!path) { resolve(null); return; }
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const ratio = Math.min(maxSize / img.width, maxSize / img.height, 1);
+        const w = Math.max(1, Math.round(img.width * ratio));
+        const h = Math.max(1, Math.round(img.height * ratio));
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/png');
+        resolve({ base64: dataUrl.split(',')[1], width: w, height: h });
+      } catch (err) {
+        resolve(null);
+      }
+    };
+    img.onerror = () => resolve(null);
+    img.src = path;
+  });
+}
+
+async function exportProductsToExcel() {
+  if (typeof ExcelJS === 'undefined') {
+    showAdminToast('No se pudo cargar la librería de Excel. Revisa tu conexión e intenta de nuevo.', 'error');
+    return;
+  }
+  if (!adminProducts || !adminProducts.length) {
+    showAdminToast('No hay productos para exportar.', 'error');
+    return;
+  }
+
+  const exportBtn = document.getElementById('adminExportExcelBtn');
+  if (exportBtn) { exportBtn.disabled = true; exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...'; }
+  showAdminToast('Generando Excel con fotos, esto puede tardar unos segundos...', 'info');
+
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'One Play More';
+  workbook.created = new Date();
+
+  const sheet = workbook.addWorksheet('Productos', {
+    views: [{ state: 'frozen', ySplit: 1 }] // congela la fila de encabezado
+  });
+
+  sheet.columns = [
+    { header: 'Imagen',      key: 'image',         width: 12 },
+    { header: 'Nombre',      key: 'name',          width: 34 },
+    { header: 'Precio',      key: 'price',         width: 12 },
+    { header: 'Categoría',   key: 'category',      width: 14 },
+    { header: 'Subcategoría',key: 'subcategoryId',  width: 18 },
+    { header: 'Expansión',   key: 'expansion',      width: 20 },
+    { header: 'Estado',      key: 'status',         width: 13 },
+    { header: 'Stock',       key: 'stock',          width: 8  },
+    { header: 'Ubicación',   key: 'location',       width: 14 },
+    { header: 'Nuevo',       key: 'isNew',          width: 8  },
+    { header: 'Destacado',   key: 'bestSeller',     width: 10 },
+    { header: 'Por encargo', key: 'encargo',        width: 11 },
+    { header: 'Descripción', key: 'description',    width: 55 }
+  ];
+
+  const THIN_GRAY = { style: 'thin', color: { argb: 'FFD0D0D0' } };
+  const FULL_BORDER = { top: THIN_GRAY, left: THIN_GRAY, bottom: THIN_GRAY, right: THIN_GRAY };
+
+  // --- Encabezado: negro, negrita, fondo blanco/gris muy claro ---
+  const headerRow = sheet.getRow(1);
+  headerRow.height = 20;
+  headerRow.eachCell(cell => {
+    cell.font = { bold: true, color: { argb: 'FF1A1A1A' }, size: 11 };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF3F3F3' } };
+    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    cell.border = FULL_BORDER;
+  });
+  sheet.autoFilter = { from: 'A1', to: 'M1' };
+
+  const ROW_HEIGHT = 60; // suficiente para ver bien la miniatura
+
+  for (let i = 0; i < adminProducts.length; i++) {
+    const p = adminProducts[i];
+    const rowNumber = i + 2; // la fila 1 es el encabezado
+
+    const row = sheet.addRow({
+      image: '',
+      name: p.name || '',
+      price: p.price != null ? p.price : null,
+      category: p.category || '',
+      subcategoryId: p.subcategoryId || '',
+      expansion: p.expansion || '',
+      status: p.status || '',
+      stock: p.stock != null ? p.stock : null,
+      location: p.location || '',
+      isNew: p.new ? 'Sí' : 'No',
+      bestSeller: p.bestSeller ? 'Sí' : 'No',
+      encargo: p.encargo ? 'Sí' : 'No',
+      description: p.description || ''
+    });
+
+    row.height = ROW_HEIGHT;
+    row.getCell('price').numFmt = '$#,##0';
+
+    row.eachCell({ includeEmpty: true }, cell => {
+      cell.border = FULL_BORDER;
+      cell.alignment = { vertical: 'middle', wrapText: false };
+    });
+
+    // Incrustar la foto real (convertida a PNG) dentro de la celda "Imagen"
+    const imgPath = p.images && p.images[0];
+    if (imgPath) {
+      const imgData = await loadImageAsPngBase64(imgPath, 150);
+      if (imgData) {
+        const imageId = workbook.addImage({ base64: imgData.base64, extension: 'png' });
+        // Tamaño de la miniatura dentro de la celda, con un pequeño margen
+        const cellSize = ROW_HEIGHT - 8;
+        const ratio = Math.min(cellSize / imgData.width, cellSize / imgData.height, 1);
+        sheet.addImage(imageId, {
+          tl: { col: 0.05, row: (rowNumber - 1) + 0.05 },
+          ext: { width: imgData.width * ratio, height: imgData.height * ratio }
+        });
+      }
+    }
+  }
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const today = new Date().toISOString().slice(0, 10);
+  a.download = `catalogo-one-play-more-${today}.xlsx`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  if (exportBtn) { exportBtn.disabled = false; exportBtn.innerHTML = '<i class="fas fa-file-excel"></i> Exportar Excel'; }
+  showAdminToast(`Excel exportado con ${adminProducts.length} productos.`, 'success');
+}
+
 function exportAdminJSON() {
   const json = JSON.stringify(adminProducts, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
@@ -484,12 +967,108 @@ function exportAdminJSON() {
 }
 
 function applyAdminChangesLive() {
+  pushProductsLive();
+  if (typeof allProducts !== 'undefined') {
+    showAdminToast('Cambios aplicados al sitio (sesión actual).', 'success');
+  }
+}
+
+// Empuja adminProducts -> allProducts (el array real que usa la tienda) y refresca el catálogo visible.
+// Separado en su propia función para reutilizarlo desde el interruptor de ofertas
+// sin duplicar la lógica de "Aplicar".
+function pushProductsLive() {
   if (typeof allProducts !== 'undefined') {
     allProducts.length = 0;
     adminProducts.forEach(p => allProducts.push(p));
     if (typeof renderProducts === 'function') renderProducts(allProducts);
-    showAdminToast('Cambios aplicados al sitio (sesión actual).', 'success');
+  } else {
+    console.warn('allProducts no definido, no se puede aplicar.');
   }
+}
+
+// ─────────────────────────────────────────────
+// INTERRUPTOR MASIVO DE OFERTAS (precio rebajado + badge "🔥 Oferta")
+// Sirve para, por ejemplo, activar un cupón de "10% en toda la tienda" con la
+// certeza de que ningún producto que YA tenía un precio rebajado (originalPrice
+// > price) sume ese descuento por encima del suyo propio. "Desactivar todas"
+// deja el precio en su valor original y le quita el badge "🔥 Oferta"
+// (bestSeller), por lo que también desaparece del apartado "OFERTAS" del
+// sitio. "Activar todas" restaura ambas cosas tal como estaban.
+// ─────────────────────────────────────────────
+let disabledOffersBackup = null; // null = no hay ninguna oferta desactivada en este momento
+
+// Productos que ACTUALMENTE se consideran "en oferta": ya sea porque tienen
+// precio rebajado (originalPrice > price) o porque están marcados con el
+// badge "🔥 Oferta" (bestSeller), que es lo que los mete en el apartado OFERTAS.
+function getActiveOfferProducts() {
+  return adminProducts.filter(p => (p.originalPrice && p.originalPrice > p.price) || p.bestSeller);
+}
+
+// Descarga un respaldo de los precios rebajados y el badge de oferta originales,
+// por si se recarga la página (o se cierra el navegador) antes de volver a
+// activarlas: sin este respaldo descargado, esos datos se perderían para siempre.
+function downloadOffersBackupFile(backup) {
+  try {
+    const json = JSON.stringify(backup, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const today = new Date().toISOString().slice(0, 10);
+    a.download = `ofertas-desactivadas-backup-${today}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.warn('No se pudo generar el backup de ofertas:', err);
+  }
+}
+
+function disableAllOffers() {
+  if (disabledOffersBackup) {
+    showAdminToast('Las ofertas ya están desactivadas. Usa "Activar todas" para restaurarlas primero.', 'warning');
+    return;
+  }
+  const offerProducts = getActiveOfferProducts();
+  if (offerProducts.length === 0) {
+    showAdminToast('No hay productos en oferta activa en este momento.', 'warning');
+    return;
+  }
+  if (!confirm(`¿Desactivar la oferta de ${offerProducts.length} producto(s) ahora mismo? Su precio vuelve al original y salen del apartado "OFERTAS" mientras estén desactivadas.`)) return;
+
+  disabledOffersBackup = offerProducts.map(p => ({ id: p.id, price: p.price, bestSeller: !!p.bestSeller }));
+  downloadOffersBackupFile(disabledOffersBackup); // respaldo de seguridad descargado
+
+  offerProducts.forEach(p => {
+    if (p.originalPrice) p.price = p.originalPrice;
+    p.bestSeller = false; // saca al producto del apartado "OFERTAS"
+  });
+
+  renderAdminProductList();
+  renderAdminStats();
+  pushProductsLive();
+  showAdminToast(`Ofertas desactivadas en ${offerProducts.length} producto(s) ✓ (aplicado en vivo, recuerda exportar si quieres que quede así aunque recargues la página)`, 'warning');
+}
+
+function enableAllOffers() {
+  if (!disabledOffersBackup || disabledOffersBackup.length === 0) {
+    showAdminToast('No hay ofertas desactivadas para restaurar en esta sesión.', 'warning');
+    return;
+  }
+  let restored = 0;
+  disabledOffersBackup.forEach(entry => {
+    const p = adminProducts.find(ap => ap.id === entry.id);
+    if (p) {
+      p.price = entry.price;
+      p.bestSeller = entry.bestSeller;
+      restored++;
+    }
+  });
+  disabledOffersBackup = null;
+
+  renderAdminProductList();
+  renderAdminStats();
+  pushProductsLive();
+  showAdminToast(`Ofertas restauradas en ${restored} producto(s) ✓`, 'success');
 }
 
 function showAdminToast(msg, type = 'success') {
@@ -538,6 +1117,10 @@ function renderAdminBannerList() {
       : '';
     return `
     <div class="admin-banner-row" data-index="${idx}">
+      <div class="admin-reorder-col">
+        <button class="admin-btn-icon reorder" onclick="moveBanner(${idx}, -1)" title="Subir" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-chevron-up"></i></button>
+        <button class="admin-btn-icon reorder" onclick="moveBanner(${idx}, 1)" title="Bajar" ${idx === adminBanners.length - 1 ? 'disabled' : ''}><i class="fas fa-chevron-down"></i></button>
+      </div>
       <img src="${thumb}" class="admin-banner-thumb" onerror="this.src='images/products/placeholder.jpg'">
       <div class="admin-banner-info">
         <div class="admin-banner-title">${mediaIcon} ${b.title}</div>
@@ -552,6 +1135,16 @@ function renderAdminBannerList() {
       </div>
     </div>
   `}).join('');
+}
+
+// Reordenar banners (sube/baja uno respecto al anterior o siguiente)
+function moveBanner(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= adminBanners.length) return;
+  const temp = adminBanners[index];
+  adminBanners[index] = adminBanners[newIndex];
+  adminBanners[newIndex] = temp;
+  renderAdminBannerList();
 }
 
 function openBannerForm(banner = null, index = null) {
@@ -965,6 +1558,56 @@ function toggleAdminCouponActive(index) {
   );
 }
 
+// Empuja adminCoupons -> allCoupons (el array real que usa el carrito) y refresca la UI del carrito.
+// Es lo mismo que hace "Aplicar", separado en su propia función para poder reutilizarlo
+// desde los botones de activar/desactivar todos sin duplicar el toast.
+function pushCouponsLive() {
+  if (typeof allCoupons !== 'undefined') {
+    allCoupons.length = 0;
+    adminCoupons.forEach(c => allCoupons.push(c));
+    if (typeof updateCartUI === 'function') updateCartUI();
+  } else {
+    console.warn('allCoupons no definido, no se puede aplicar.');
+  }
+}
+
+// Botón de apagado de emergencia: desactiva TODOS los cupones/ofertas de una sola vez
+// y lo aplica en vivo de inmediato (no requiere presionar "Aplicar" después).
+function disableAllCoupons() {
+  if (adminCoupons.length === 0) {
+    showAdminToast('No hay cupones para desactivar.', 'warning');
+    return;
+  }
+  const activeCount = adminCoupons.filter(c => c.active).length;
+  if (activeCount === 0) {
+    showAdminToast('Ya no hay cupones activos.', 'warning');
+    return;
+  }
+  if (!confirm(`¿Desactivar los ${activeCount} cupón(es)/oferta(s) activos ahora mismo? Esto los apaga de inmediato para los clientes.`)) return;
+  adminCoupons.forEach(c => c.active = false);
+  renderAdminCouponList();
+  pushCouponsLive();
+  showAdminToast('Todos los cupones fueron desactivados ✓', 'warning');
+}
+
+// Vuelve a activar todos los cupones que estaban activos antes de un apagado masivo
+// (o simplemente activa todos, si el admin lo prefiere así).
+function enableAllCoupons() {
+  if (adminCoupons.length === 0) {
+    showAdminToast('No hay cupones para activar.', 'warning');
+    return;
+  }
+  const inactiveCount = adminCoupons.filter(c => !c.active).length;
+  if (inactiveCount === 0) {
+    showAdminToast('Todos los cupones ya están activos.', 'success');
+    return;
+  }
+  adminCoupons.forEach(c => c.active = true);
+  renderAdminCouponList();
+  pushCouponsLive();
+  showAdminToast('Todos los cupones fueron reactivados ✓', 'success');
+}
+
 function populateCouponScopeSelect() {
   const sel = document.getElementById('couponScopeValue');
   if (!sel) return;
@@ -1078,13 +1721,9 @@ function exportCouponsJSON() {
 }
 
 function applyCouponsChangesLive() {
+  pushCouponsLive();
   if (typeof allCoupons !== 'undefined') {
-    allCoupons.length = 0;
-    adminCoupons.forEach(c => allCoupons.push(c));
-    if (typeof updateCartUI === 'function') updateCartUI();
     showAdminToast('Cupones aplicados. Ya puedes probarlos en el carrito.', 'success');
-  } else {
-    console.warn('allCoupons no definido, no se puede aplicar.');
   }
 }
 
@@ -1185,15 +1824,216 @@ function applyAnnouncementChangesLive() {
   }
 }
 
+// ─────────────────────────────────────────────
+// COLECCIONES (vitrina "Explora por Colección" del home)
+// ─────────────────────────────────────────────
+let adminCollections = [];
+let editingCollectionIndex = null;
+
+function refreshAdminCollections() {
+  adminCollections = JSON.parse(JSON.stringify(typeof allCollections !== 'undefined' && allCollections ? allCollections : []));
+  renderAdminCollectionsList();
+}
+
+function renderAdminCollectionsList() {
+  const container = document.getElementById('adminCollectionsList');
+  if (!container) return;
+
+  if (adminCollections.length === 0) {
+    container.innerHTML = `<div class="admin-empty">No hay colecciones. ¡Crea la primera!</div>`;
+    return;
+  }
+
+  container.innerHTML = adminCollections.map((item, idx) => `
+    <div class="admin-category-row" data-index="${idx}">
+      <div class="admin-reorder-col">
+        <button class="admin-btn-icon reorder" onclick="moveCollection(${idx}, -1)" title="Subir" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-chevron-up"></i></button>
+        <button class="admin-btn-icon reorder" onclick="moveCollection(${idx}, 1)" title="Bajar" ${idx === adminCollections.length - 1 ? 'disabled' : ''}><i class="fas fa-chevron-down"></i></button>
+      </div>
+      ${item.image ? `<img src="${item.image}" class="admin-banner-thumb" onerror="this.src='images/products/placeholder.jpg'">` : '<div class="admin-banner-thumb" style="display:flex;align-items:center;justify-content:center;background:rgba(106,76,156,0.15);"><i class="fas fa-image" style="color:rgba(255,255,255,0.3);"></i></div>'}
+      <div class="admin-category-info">
+        <div class="admin-category-name">${item.name}</div>
+        <div class="admin-category-meta">Categoría: ${item.categoryId}${item.filterValue ? ` · Subcategoría: ${item.filterValue}` : ''}</div>
+      </div>
+      <div class="admin-category-actions">
+        <button class="admin-btn-icon edit" onclick="editAdminCollection(${idx})" title="Editar"><i class="fas fa-pen"></i></button>
+        <button class="admin-btn-icon delete" onclick="deleteAdminCollection(${idx})" title="Eliminar"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function moveCollection(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= adminCollections.length) return;
+  const temp = adminCollections[index];
+  adminCollections[index] = adminCollections[newIndex];
+  adminCollections[newIndex] = temp;
+  renderAdminCollectionsList();
+}
+
+function populateCollectionCategorySelect() {
+  const sel = document.getElementById('collectionCategoryId');
+  if (!sel) return;
+  const cats = adminCategories.length > 0 ? adminCategories : STATIC_BANNER_CATEGORIES;
+  sel.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+}
+
+function populateCollectionSubcategorySelect(categoryId, selectedSubId) {
+  const wrap = document.getElementById('collectionSubcategoryWrap');
+  const sel = document.getElementById('collectionSubcategoryId');
+  if (!wrap || !sel) return;
+
+  const cat = adminCategories.find(c => c.id === categoryId);
+  const subs = (cat && cat.subcategories) ? cat.subcategories : [];
+
+  if (subs.length === 0) {
+    wrap.style.display = 'none';
+    sel.innerHTML = '';
+    return;
+  }
+
+  wrap.style.display = 'block';
+  sel.innerHTML = `<option value="">— Toda la categoría —</option>` +
+    subs.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  if (selectedSubId) sel.value = selectedSubId;
+}
+
+function openCollectionForm(item = null, index = null) {
+  editingCollectionIndex = index;
+  const title = document.getElementById('collectionFormTitle');
+  title.textContent = item ? 'Editar Colección' : 'Nueva Colección';
+
+  populateCollectionCategorySelect();
+
+  document.getElementById('collectionName').value = item ? item.name : '';
+  document.getElementById('collectionImage').value = item ? (item.image || '') : '';
+  document.getElementById('collectionCategoryId').value = item ? item.categoryId : (adminCategories[0]?.id || '');
+
+  populateCollectionSubcategorySelect(document.getElementById('collectionCategoryId').value, item ? item.filterValue : '');
+
+  showAdminView('collectionFormView');
+}
+
+function editAdminCollection(index) {
+  openCollectionForm(adminCollections[index], index);
+}
+
+function saveAdminCollection() {
+  const name = document.getElementById('collectionName').value.trim();
+  const image = document.getElementById('collectionImage').value.trim();
+  const categoryId = document.getElementById('collectionCategoryId').value;
+  const subcategoryId = document.getElementById('collectionSubcategoryId').value;
+
+  if (!name || !categoryId) {
+    showAdminToast('Nombre y categoría son obligatorios.', 'error');
+    return;
+  }
+
+  const item = { name, categoryId };
+  if (image) item.image = image;
+  if (subcategoryId) {
+    item.filterType = 'subcategoryId';
+    item.filterValue = subcategoryId;
+  }
+
+  if (editingCollectionIndex !== null) {
+    adminCollections[editingCollectionIndex] = item;
+  } else {
+    adminCollections.push(item);
+  }
+
+  renderAdminCollectionsList();
+  showAdminToast(editingCollectionIndex !== null ? 'Colección actualizada ✓' : 'Colección creada ✓', 'success');
+  showAdminView('collectionsListView');
+}
+
+function deleteAdminCollection(index) {
+  const item = adminCollections[index];
+  if (!confirm(`¿Eliminar la colección "${item.name}"?`)) return;
+  adminCollections.splice(index, 1);
+  renderAdminCollectionsList();
+  showAdminToast('Colección eliminada.', 'warning');
+}
+
+function exportCollectionsJSON() {
+  const json = JSON.stringify(adminCollections, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'collections.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showAdminToast('collections.json descargado.', 'success');
+}
+
+function applyCollectionsChangesLive() {
+  if (typeof allCollections === 'undefined') {
+    window.allCollections = [];
+  }
+  allCollections.length = 0;
+  adminCollections.forEach(c => allCollections.push(c));
+  if (typeof renderCollectionsSection === 'function') renderCollectionsSection();
+  showAdminToast('Colecciones aplicadas al inicio.', 'success');
+}
+
 
 // ─────────────────────────────────────────────
 // CATEGORÍAS
 // ─────────────────────────────────────────────
 
+let adminCategoriesDefaultCollapseApplied = false;
+
 function refreshAdminCategories() {
   adminCategories = JSON.parse(JSON.stringify(typeof allCategories !== 'undefined' ? allCategories : []));
+  // La primera vez que se cargan las categorías, arrancamos colapsadas las
+  // que tengan muchas subcategorías/expansiones (ej. Cartas/Pokémon con
+  // decenas de expansiones) para que la lista sea manejable desde el inicio.
+  // Las visitas siguientes respetan lo que el admin haya colapsado/expandido
+  // a mano.
+  if (!adminCategoriesDefaultCollapseApplied) {
+    adminCollapsedCategories = new Set(
+      adminCategories
+        .map((cat, idx) => ({ idx, count: (cat.subcategories?.length || 0) + (cat.expansions?.length || 0) }))
+        .filter(x => x.count > 8)
+        .map(x => x.idx)
+    );
+    adminCategoriesDefaultCollapseApplied = true;
+  }
   renderAdminCategoryList();
   populateCategorySelect();
+}
+
+// Estado de qué categorías/eras están colapsadas en el panel de admin.
+// Solo vive en memoria de esta sesión (no se guarda en el JSON): es
+// puramente para que la lista larga de categorías/expansiones sea manejable
+// de navegar, no afecta al sitio ni a los datos.
+let adminCollapsedCategories = new Set();
+let adminCollapsedEras = new Set();
+
+function toggleAdminCategoryCollapse(idx) {
+  if (adminCollapsedCategories.has(idx)) adminCollapsedCategories.delete(idx);
+  else adminCollapsedCategories.add(idx);
+  renderAdminCategoryList();
+}
+
+function toggleAdminEraCollapse(idx, era) {
+  const key = idx + '::' + era;
+  if (adminCollapsedEras.has(key)) adminCollapsedEras.delete(key);
+  else adminCollapsedEras.add(key);
+  renderAdminCategoryList();
+}
+
+function collapseAllAdminCategories() {
+  adminCollapsedCategories = new Set(adminCategories.map((_, idx) => idx));
+  renderAdminCategoryList();
+}
+
+function expandAllAdminCategories() {
+  adminCollapsedCategories = new Set();
+  adminCollapsedEras = new Set();
+  renderAdminCategoryList();
 }
 
 function renderAdminCategoryList() {
@@ -1207,23 +2047,83 @@ function renderAdminCategoryList() {
 
   container.innerHTML = adminCategories.map((cat, idx) => {
     const subCount = cat.subcategories ? cat.subcategories.length : 0;
+    const expCount = cat.expansions ? cat.expansions.length : 0;
     const gridBadge = cat.menuStyle === 'grid' ? ' · <i class="fas fa-th-large"></i> Mega-menú grid' : '';
+    const isCartas = cat.menuStyle === 'grid-tiered';
+    const isCollapsed = adminCollapsedCategories.has(idx);
+
+    // Agrupar expansiones por era (manteniendo el índice REAL dentro de
+    // cat.expansions, que es lo que usan mover/editar/eliminar) para poder
+    // colapsar cada era por separado — son las listas que más crecen.
+    let eraGroupsHTML = '';
+    if (isCartas && cat.expansions && cat.expansions.length > 0) {
+      const eraOrder = [];
+      const eraGroups = {};
+      cat.expansions.forEach((exp, eidx) => {
+        const key = exp.era || '(sin era)';
+        if (!eraGroups[key]) { eraGroups[key] = []; eraOrder.push(key); }
+        eraGroups[key].push({ exp, eidx });
+      });
+
+      eraGroupsHTML = `
+        <div class="admin-subcategory-row" style="opacity:0.6; cursor:default;">
+          <div class="admin-subcat-indent">└─</div>
+          <div class="admin-category-info"><div class="admin-category-meta" style="text-transform:uppercase; letter-spacing:0.5px;"><i class="fas fa-layer-group"></i> Expansiones de "${cat.name}" agrupadas por era (${expCount} en total)</div></div>
+        </div>
+        ${eraOrder.map(era => {
+          const items = eraGroups[era];
+          const eraKey = idx + '::' + era;
+          const eraCollapsed = adminCollapsedEras.has(eraKey);
+          const eraEsc = era.replace(/'/g, "\\'");
+          return `
+            <div class="admin-subcategory-row admin-era-row" style="cursor:pointer;" onclick="toggleAdminEraCollapse(${idx}, '${eraEsc}')">
+              <div class="admin-subcat-indent">└─</div>
+              <div class="admin-category-info">
+                <div class="admin-category-name"><i class="fas fa-chevron-${eraCollapsed ? 'right' : 'down'}" style="font-size:0.65rem; margin-right:0.4rem; opacity:0.6;"></i>${era} <span style="font-size:0.68rem; color:rgba(255,255,255,0.4); font-weight:400;">(${items.length})</span></div>
+              </div>
+            </div>
+            ${eraCollapsed ? '' : items.map(({ exp, eidx }) => `
+            <div class="admin-subcategory-row" data-parent="${idx}" data-index="${eidx}">
+              <div class="admin-subcat-indent" style="padding-left:1.2rem;">└─</div>
+              <div class="admin-reorder-col">
+                <button class="admin-btn-icon reorder" onclick="event.stopPropagation(); moveSubcategory(${idx}, ${eidx}, -1, 'expansions')" title="Subir" ${eidx === 0 ? 'disabled' : ''}><i class="fas fa-chevron-up"></i></button>
+                <button class="admin-btn-icon reorder" onclick="event.stopPropagation(); moveSubcategory(${idx}, ${eidx}, 1, 'expansions')" title="Bajar" ${eidx === cat.expansions.length - 1 ? 'disabled' : ''}><i class="fas fa-chevron-down"></i></button>
+              </div>
+              ${exp.image ? `<img src="${exp.image}" class="admin-banner-thumb" style="width:36px;height:36px;" onerror="this.src='images/products/placeholder.jpg'">` : ''}
+              <div class="admin-category-info">
+                <div class="admin-category-name">${exp.name}${exp.image ? '' : ' <span style="font-size:0.65rem; color:rgba(255,255,255,0.35);">(sin logo)</span>'}</div>
+                <div class="admin-category-meta">Filtro: ${exp.filterType} = ${exp.filterValue}${exp.era ? ` · Era: ${exp.era}` : ' · Sin era (no aparece agrupada)'}</div>
+              </div>
+              <div class="admin-category-actions">
+                <button class="admin-btn-icon edit" onclick="event.stopPropagation(); openSubcategoryForm(${idx}, ${eidx}, 'expansions')" title="Editar"><i class="fas fa-pen"></i></button>
+                <button class="admin-btn-icon delete" onclick="event.stopPropagation(); deleteAdminSubcategory(${idx}, ${eidx}, 'expansions')" title="Eliminar"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          `).join('')}
+          `;
+        }).join('')}
+      `;
+    }
+
     return `
       <div class="admin-category-row" data-index="${idx}">
         <div class="admin-reorder-col">
           <button class="admin-btn-icon reorder" onclick="moveCategory(${idx}, -1)" title="Subir" ${idx === 0 ? 'disabled' : ''}><i class="fas fa-chevron-up"></i></button>
           <button class="admin-btn-icon reorder" onclick="moveCategory(${idx}, 1)" title="Bajar" ${idx === adminCategories.length - 1 ? 'disabled' : ''}><i class="fas fa-chevron-down"></i></button>
         </div>
+        <button class="admin-btn-icon" onclick="toggleAdminCategoryCollapse(${idx})" title="${isCollapsed ? 'Expandir' : 'Colapsar'}"><i class="fas fa-chevron-${isCollapsed ? 'right' : 'down'}"></i></button>
         <div class="admin-category-info">
           <div class="admin-category-name">${cat.name}</div>
-          <div class="admin-category-meta">ID: ${cat.id} · ${subCount} subcategoría(s)${gridBadge}</div>
+          <div class="admin-category-meta">ID: ${cat.id} · ${subCount} subcategoría(s)${isCartas ? ` · ${expCount} expansión(es) propia(s)` : ''}${gridBadge}</div>
         </div>
         <div class="admin-category-actions">
           <button class="admin-btn-icon edit" onclick="editAdminCategory(${idx})" title="Editar"><i class="fas fa-pen"></i></button>
           <button class="admin-btn-icon preview" onclick="openSubcategoryForm(${idx})" title="Agregar subcategoría"><i class="fas fa-plus"></i></button>
+          ${isCartas ? `<button class="admin-btn-icon preview" onclick="openSubcategoryForm(${idx}, null, 'expansions')" title="Agregar expansión de ${cat.name}"><i class="fas fa-layer-group"></i></button>` : ''}
           <button class="admin-btn-icon delete" onclick="deleteAdminCategory(${idx})" title="Eliminar"><i class="fas fa-trash"></i></button>
         </div>
       </div>
+      ${isCollapsed ? '' : `
       ${cat.subcategories ? cat.subcategories.map((sub, sidx) => `
         <div class="admin-subcategory-row" data-parent="${idx}" data-index="${sidx}">
           <div class="admin-subcat-indent">└─</div>
@@ -1234,7 +2134,7 @@ function renderAdminCategoryList() {
           ${sub.image ? `<img src="${sub.image}" class="admin-banner-thumb" style="width:36px;height:36px;" onerror="this.src='images/products/placeholder.jpg'">` : ''}
           <div class="admin-category-info">
             <div class="admin-category-name">${sub.name}${sub.image ? '' : ' <span style="font-size:0.65rem; color:rgba(255,255,255,0.35);">(sin logo)</span>'}</div>
-            <div class="admin-category-meta">Filtro: ${sub.filterType} = ${sub.filterValue}</div>
+            <div class="admin-category-meta">${sub.categoryId && !sub.filterType ? `Enlace → categoryId: ${sub.categoryId}` : `Filtro: ${sub.filterType} = ${sub.filterValue}`}</div>
           </div>
           <div class="admin-category-actions">
             <button class="admin-btn-icon edit" onclick="openSubcategoryForm(${idx}, ${sidx})" title="Editar"><i class="fas fa-pen"></i></button>
@@ -1242,6 +2142,8 @@ function renderAdminCategoryList() {
           </div>
         </div>
       `).join('') : ''}
+      ${eraGroupsHTML}
+      `}
     `;
   }).join('');
 }
@@ -1257,8 +2159,8 @@ function moveCategory(index, direction) {
 }
 
 // Reordenar subcategorías dentro de una categoría
-function moveSubcategory(parentIndex, subIndex, direction) {
-  const subs = adminCategories[parentIndex].subcategories;
+function moveSubcategory(parentIndex, subIndex, direction, arrayKey = 'subcategories') {
+  const subs = adminCategories[parentIndex][arrayKey];
   const newIndex = subIndex + direction;
   if (!subs || newIndex < 0 || newIndex >= subs.length) return;
   const temp = subs[subIndex];
@@ -1274,6 +2176,7 @@ function openCategoryForm(category = null, index = null) {
 
   document.getElementById('catId').value = category ? category.id : '';
   document.getElementById('catName').value = category ? category.name : '';
+  document.getElementById('catImage').value = category ? (category.image || '') : '';
   const hasSubs = category ? !!(category.subcategories && category.subcategories.length) : false;
   document.getElementById('catHasSubs').checked = hasSubs;
   document.getElementById('catMenuGrid').checked = category ? category.menuStyle === 'grid' : false;
@@ -1304,18 +2207,26 @@ function saveAdminCategory() {
     return;
   }
 
-  const category = { id, name };
+  // Partimos de una copia de la categoría existente (si estamos editando) para
+  // no perder campos que este formulario no controla directamente, como
+  // "expansions" (expansiones propias de Cartas) o "menuStyle: grid-tiered".
+  const existing = editingCategoryIndex !== null ? adminCategories[editingCategoryIndex] : {};
+  const category = { ...existing, id, name };
+
+  const catImage = document.getElementById('catImage').value.trim();
+  if (catImage) category.image = catImage;
+  else delete category.image;
+
   if (document.getElementById('catHasSubs').checked) {
-    category.subcategories = [];
+    if (!category.subcategories) category.subcategories = [];
     if (document.getElementById('catMenuGrid').checked) {
       category.menuStyle = 'grid';
     }
+  } else {
+    delete category.subcategories;
   }
 
   if (editingCategoryIndex !== null) {
-    if (adminCategories[editingCategoryIndex].subcategories) {
-      category.subcategories = adminCategories[editingCategoryIndex].subcategories;
-    }
     adminCategories[editingCategoryIndex] = category;
   } else {
     adminCategories.push(category);
@@ -1327,76 +2238,134 @@ function saveAdminCategory() {
   showAdminView('categoryListView');
 }
 
-function openSubcategoryForm(parentIndex, subIndex = null) {
+function openSubcategoryForm(parentIndex, subIndex = null, arrayKey = 'subcategories') {
   editingCategoryIndex = parentIndex;
   editingSubcategoryIndex = subIndex;
+  editingSubcategoryArrayKey = arrayKey;
   const parentInput = document.getElementById('subcatParentIndex');
   if (parentInput) parentInput.value = parentIndex;
 
+  const isExpansion = arrayKey === 'expansions';
   const title = document.getElementById('subcategoryFormTitle');
 
   if (subIndex !== null) {
-    const sub = adminCategories[parentIndex].subcategories[subIndex];
-    if (title) title.textContent = 'Editar Subcategoría';
+    const sub = adminCategories[parentIndex][arrayKey][subIndex];
+    if (title) title.textContent = isExpansion ? 'Editar Expansión' : 'Editar Subcategoría';
     document.getElementById('subcatName').value = sub.name || '';
-    document.getElementById('subcatFilterType').value = sub.filterType || 'expansion';
-    document.getElementById('subcatFilterValue').value = sub.filterValue || '';
+    // Las subcategorías "enlace" (ej. Funko Pop! dentro de Figuras) no tienen
+    // filterType: solo tienen `categoryId` apuntando a la categoría destino.
+    // Sin este caso especial, se perdía ese dato cada vez que se editaban
+    // (ej. solo para agregarles el logo), convirtiéndolas en un filtro roto.
+    const isLink = !!sub.categoryId && !sub.filterType;
+    document.getElementById('subcatFilterType').value = isLink ? 'categoryId' : (sub.filterType || (isExpansion ? 'expansion' : 'subcategoryId'));
+    document.getElementById('subcatFilterValue').value = isLink ? sub.categoryId : (sub.filterValue || '');
     document.getElementById('subcatImage').value = sub.image || '';
+    document.getElementById('subcatEra').value = sub.era || '';
   } else {
-    if (title) title.textContent = 'Nueva Subcategoría';
+    if (title) title.textContent = isExpansion ? 'Nueva Expansión' : 'Nueva Subcategoría';
     document.getElementById('subcatName').value = '';
-    document.getElementById('subcatFilterType').value = 'expansion';
+    document.getElementById('subcatFilterType').value = isExpansion ? 'expansion' : 'subcategoryId';
     document.getElementById('subcatFilterValue').value = '';
     document.getElementById('subcatImage').value = '';
+    document.getElementById('subcatEra').value = '';
   }
 
+  updateSubcatFilterTypeUI();
   showAdminView('subcategoryFormView');
+}
+
+// Cuando el tipo de filtro es "subcategoryId", el valor del filtro no lo escribe
+// el usuario: siempre debe ser el propio ID de la subcategoría (el mismo que se
+// asigna al producto desde el selector "Subcategoría" del formulario de producto).
+// Por eso ocultamos el campo y lo autocompletamos al guardar.
+function updateSubcatFilterTypeUI() {
+  const filterType = document.getElementById('subcatFilterType').value;
+  const wrap = document.getElementById('subcatFilterValueWrap');
+  const hint = document.getElementById('subcatFilterTypeHint');
+  const valueLabel = wrap ? wrap.querySelector('label') : null;
+  const isSubcategoryMode = filterType === 'subcategoryId';
+  const isCategoryLinkMode = filterType === 'categoryId';
+
+  if (wrap) wrap.style.display = isSubcategoryMode ? 'none' : 'block';
+
+  if (valueLabel) {
+    valueLabel.textContent = isCategoryLinkMode ? 'ID de la categoría destino *' : 'Valor del filtro *';
+  }
+  const valueInput = document.getElementById('subcatFilterValue');
+  if (valueInput) {
+    valueInput.placeholder = isCategoryLinkMode ? 'Ej: funko' : 'Ej: Scarlet & Violet';
+  }
+
+  if (hint) {
+    if (isSubcategoryMode) {
+      hint.textContent = 'Filtra por lo que elijas en "Subcategoría" al crear/editar cada producto. Es la opción correcta para el 90% de los casos (ej. Ichibansho, Cartas Estándar, etc.).';
+    } else if (isCategoryLinkMode) {
+      hint.textContent = 'No es un filtro: es un ATAJO visual a otra categoría completa que vive por su cuenta (ej. "Funko Pop!" dentro del menú de Figuras, pero cuyos productos en realidad tienen categoryId:"funko"). Escribe aquí el ID exacto de esa categoría destino.';
+    } else {
+      hint.textContent = 'Debe coincidir exactamente con el valor guardado en el producto (ej. el nombre de la expansión o el tipo de carta).';
+    }
+  }
 }
 
 function saveAdminSubcategory() {
   const name = document.getElementById('subcatName').value.trim();
   const filterType = document.getElementById('subcatFilterType').value;
-  const filterValue = document.getElementById('subcatFilterValue').value.trim();
   const image = document.getElementById('subcatImage').value.trim();
+  const arrayKey = editingSubcategoryArrayKey;
+  const isCategoryLinkMode = filterType === 'categoryId';
+
+  const subId = editingSubcategoryIndex !== null
+    ? adminCategories[editingCategoryIndex][arrayKey][editingSubcategoryIndex].id
+    : slugify(name);
+
+  // Si el filtro es por subcategoría, el valor SIEMPRE es el propio ID —
+  // no depende de lo que el usuario escriba a mano (evita el bug de que
+  // quede mal escrito o no coincida con lo que se guarda en el producto).
+  const filterValue = filterType === 'subcategoryId'
+    ? subId
+    : document.getElementById('subcatFilterValue').value.trim();
 
   if (!name || !filterValue) {
-    showAdminToast('Nombre y valor de filtro son obligatorios.', 'error');
+    showAdminToast(isCategoryLinkMode ? 'Nombre e ID de categoría destino son obligatorios.' : 'Nombre y valor de filtro son obligatorios.', 'error');
     return;
   }
 
-  const sub = {
-    id: editingSubcategoryIndex !== null
-      ? adminCategories[editingCategoryIndex].subcategories[editingSubcategoryIndex].id
-      : slugify(name),
-    name,
-    filterType,
-    filterValue
-  };
+  // "Categoría ID (avanzado)" no es un filtro: es un ENLACE a otra categoría
+  // completa (ej. Funko Pop! → categoryId "funko"). El sitio (categories.js)
+  // reconoce este tipo por tener `categoryId` SIN `filterType`/`filterValue` —
+  // si guardáramos filterType/filterValue aquí, dejaría de funcionar como
+  // enlace y la subcategoría "desaparecería" (0 productos coinciden con ese
+  // filtro), que es justo el bug que causaba esto antes.
+  const sub = isCategoryLinkMode
+    ? { id: subId, name, categoryId: filterValue }
+    : { id: subId, name, filterType, filterValue };
   if (image) sub.image = image;
+  const era = document.getElementById('subcatEra').value.trim();
+  if (era) sub.era = era;
 
-  if (!adminCategories[editingCategoryIndex].subcategories) {
-    adminCategories[editingCategoryIndex].subcategories = [];
+  if (!adminCategories[editingCategoryIndex][arrayKey]) {
+    adminCategories[editingCategoryIndex][arrayKey] = [];
   }
 
   if (editingSubcategoryIndex !== null) {
-    adminCategories[editingCategoryIndex].subcategories[editingSubcategoryIndex] = sub;
+    adminCategories[editingCategoryIndex][arrayKey][editingSubcategoryIndex] = sub;
   } else {
-    adminCategories[editingCategoryIndex].subcategories.push(sub);
+    adminCategories[editingCategoryIndex][arrayKey].push(sub);
   }
 
   renderAdminCategoryList();
   populateCategorySelect();
-  showAdminToast(editingSubcategoryIndex !== null ? 'Subcategoría actualizada ✓' : 'Subcategoría añadida ✓', 'success');
+  showAdminToast(editingSubcategoryIndex !== null ? 'Guardado ✓' : 'Añadido ✓', 'success');
   editingSubcategoryIndex = null;
   showAdminView('categoryListView');
 }
 
-function deleteAdminSubcategory(parentIndex, subIndex) {
-  if (!confirm('¿Eliminar esta subcategoría?')) return;
-  adminCategories[parentIndex].subcategories.splice(subIndex, 1);
+function deleteAdminSubcategory(parentIndex, subIndex, arrayKey = 'subcategories') {
+  if (!confirm('¿Eliminar esto?')) return;
+  adminCategories[parentIndex][arrayKey].splice(subIndex, 1);
   renderAdminCategoryList();
   populateCategorySelect();
-  showAdminToast('Subcategoría eliminada.', 'warning');
+  showAdminToast('Eliminado.', 'warning');
 }
 
 function exportCategoriesJSON() {
@@ -1472,6 +2441,8 @@ function injectAdminHTML() {
         <button id="adminCategoriesTab" class="admin-tab">Categorías</button>
         <button id="adminCouponsTab" class="admin-tab">Cupones</button>
         <button id="adminAnnouncementTab" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTab" class="admin-tab">Inventario</button>
+        <button id="adminCollectionsTab" class="admin-tab">Colecciones</button>
       </div>
       <div class="admin-topbar">
         <div class="admin-stats-row">
@@ -1484,8 +2455,18 @@ function injectAdminHTML() {
           <button id="adminNewProductBtn" class="admin-btn primary"><i class="fas fa-plus"></i> Nuevo Producto</button>
           <button id="adminApplyBtn" class="admin-btn success"><i class="fas fa-play"></i> Aplicar</button>
           <button id="adminExportBtn" class="admin-btn accent"><i class="fas fa-download"></i> Exportar JSON</button>
+          <button id="adminExportExcelBtn" class="admin-btn accent"><i class="fas fa-file-excel"></i> Exportar Excel</button>
           <button id="adminLogoutBtn" class="admin-btn ghost"><i class="fas fa-sign-out-alt"></i></button>
         </div>
+      </div>
+      <div class="admin-topbar" style="border-bottom:none; padding-top:0;">
+        <div class="admin-topbar-actions">
+          <button id="adminDisableOffersBtn" class="admin-btn danger"><i class="fas fa-percent"></i> Desactivar ofertas</button>
+          <button id="adminEnableOffersBtn" class="admin-btn ghost"><i class="fas fa-check-double"></i> Activar ofertas</button>
+        </div>
+      </div>
+      <div style="padding: 0 1.5rem 0.8rem; font-size:0.72rem; color:rgba(255,255,255,0.4); line-height:1.5;">
+        <i class="fas fa-info-circle"></i> Usa esto antes de lanzar un cupón de descuento en toda la tienda, para tener la certeza de que ningún producto que ya tenga precio rebajado sume ambos descuentos. Quita el precio rebajado y el badge "🔥 Oferta" (por lo que también salen del apartado OFERTAS) de inmediato en el sitio; "Activar ofertas" restaura exactamente cómo estaba cada producto.
       </div>
 
       <div class="admin-search-wrap">
@@ -1506,6 +2487,8 @@ function injectAdminHTML() {
         <button id="adminCategoriesTabBl" class="admin-tab">Categorías</button>
         <button id="adminCouponsTabBl" class="admin-tab">Cupones</button>
         <button id="adminAnnouncementTabBl" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTabBl" class="admin-tab">Inventario</button>
+        <button id="adminCollectionsTabBl" class="admin-tab">Colecciones</button>
       </div>
       <div class="admin-topbar" style="border-bottom:none;">
         <div class="admin-topbar-actions">
@@ -1667,6 +2650,8 @@ function injectAdminHTML() {
         <button id="adminCategoriesTabCl" class="admin-tab active">Categorías</button>
         <button id="adminCouponsTabCl" class="admin-tab">Cupones</button>
         <button id="adminAnnouncementTabCl" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTabCl" class="admin-tab">Inventario</button>
+        <button id="adminCollectionsTabCl" class="admin-tab">Colecciones</button>
       </div>
       <div class="admin-topbar" style="border-bottom:none;">
         <div class="admin-topbar-actions">
@@ -1674,6 +2659,8 @@ function injectAdminHTML() {
           <button id="adminNewSubcategoryBtn" class="admin-btn primary"><i class="fas fa-plus"></i> Nueva Subcategoría</button>
           <button id="adminApplyCategoriesBtn" class="admin-btn success"><i class="fas fa-play"></i> Aplicar</button>
           <button id="adminExportCategoriesBtn" class="admin-btn accent"><i class="fas fa-download"></i> Exportar JSON</button>
+          <button id="adminCollapseAllCategoriesBtn" class="admin-btn ghost"><i class="fas fa-compress-alt"></i> Colapsar todo</button>
+          <button id="adminExpandAllCategoriesBtn" class="admin-btn ghost"><i class="fas fa-expand-alt"></i> Expandir todo</button>
         </div>
       </div>
       <div id="adminCategoryList" class="admin-product-list">
@@ -1697,6 +2684,11 @@ function injectAdminHTML() {
             <div class="form-field">
               <label>Nombre *</label>
               <input id="catName" type="text" placeholder="Nombre visible">
+            </div>
+            <div class="form-field">
+              <label>Imagen <span class="optional">para la sección "Colecciones" del home</span></label>
+              <input id="catImage" type="text" placeholder="images/colecciones/pokemon.jpg">
+              <div class="admin-field-hint">Si la dejas vacía, se muestra un ícono de reemplazo en la vitrina de "Colecciones" del inicio — igual funciona, pero se ve mejor con imagen propia.</div>
             </div>
             <div class="form-field">
               <label class="checkbox-label" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
@@ -1734,12 +2726,14 @@ function injectAdminHTML() {
             <div class="form-field">
               <label>Tipo de filtro *</label>
               <select id="subcatFilterType">
+                <option value="subcategoryId">Por subcategoría (recomendado)</option>
                 <option value="expansion">Expansión</option>
                 <option value="cardType">Tipo de carta</option>
-                <option value="categoryId">Categoría ID</option>
+                <option value="categoryId">Enlace a otra categoría (avanzado, ej. Funko Pop!)</option>
               </select>
+              <div class="admin-field-hint" id="subcatFilterTypeHint">Filtra por lo que elijas en "Subcategoría" al crear/editar cada producto. Es la opción correcta para el 90% de los casos (ej. Ichibansho, Cartas Estándar, etc.).</div>
             </div>
-            <div class="form-field">
+            <div class="form-field" id="subcatFilterValueWrap">
               <label>Valor del filtro *</label>
               <input id="subcatFilterValue" type="text" placeholder="Ej: Scarlet & Violet">
             </div>
@@ -1747,6 +2741,27 @@ function injectAdminHTML() {
               <label>Logo/imagen de la expansión (opcional) <span class="optional">Solo aplica si la categoría usa menú en grid, ej. Pokémon TCG</span></label>
               <input id="subcatImage" type="text" placeholder="images/expansiones/perfect-order.png">
               <div class="admin-field-hint">Si lo dejas vacío, se mostrará un badge de texto con el nombre.</div>
+            </div>
+            <div class="form-field">
+              <label>Era <span class="optional">solo para expansiones de Pokémon TCG</span></label>
+              <input id="subcatEra" type="text" list="subcatEraOptions" placeholder="Ej: Scarlet & Violet">
+              <datalist id="subcatEraOptions">
+                <option value="Original Series">
+                <option value="Neo">
+                <option value="Legendary Collection">
+                <option value="e-Card">
+                <option value="EX">
+                <option value="Diamond & Pearl">
+                <option value="Platinum">
+                <option value="HeartGold & SoulSilver">
+                <option value="Black & White">
+                <option value="XY">
+                <option value="Sun & Moon">
+                <option value="Sword & Shield">
+                <option value="Scarlet & Violet">
+                <option value="Mega Evolution">
+              </datalist>
+              <div class="admin-field-hint">Si le pones una Era, esta expansión aparece agrupada en la pestaña correspondiente dentro del mega-menú (Pokémon TCG o Cartas, según en cuál la estés editando). Déjalo vacío para cosas que no son expansiones, como "Mazos" u "Otros Productos".</div>
             </div>
             <div class="admin-form-actions">
               <button id="adminSaveSubcategoryBtn" class="admin-btn primary full"><i class="fas fa-save"></i> Guardar Subcategoría</button>
@@ -1764,6 +2779,8 @@ function injectAdminHTML() {
         <button id="adminCategoriesTabCo" class="admin-tab">Categorías</button>
         <button id="adminCouponsTabCo" class="admin-tab active">Cupones</button>
         <button id="adminAnnouncementTabCo" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTabCo" class="admin-tab">Inventario</button>
+        <button id="adminCollectionsTabCo" class="admin-tab">Colecciones</button>
       </div>
       <div class="admin-topbar" style="border-bottom:none;">
         <div class="admin-topbar-actions">
@@ -1772,8 +2789,15 @@ function injectAdminHTML() {
           <button id="adminExportCouponsBtn" class="admin-btn accent"><i class="fas fa-download"></i> Exportar JSON</button>
         </div>
       </div>
+      <div class="admin-topbar" style="border-bottom:none; padding-top:0;">
+        <div class="admin-topbar-actions">
+          <button id="adminDisableAllCouponsBtn" class="admin-btn danger"><i class="fas fa-power-off"></i> Desactivar todos</button>
+          <button id="adminEnableAllCouponsBtn" class="admin-btn ghost"><i class="fas fa-check-double"></i> Activar todos</button>
+        </div>
+      </div>
       <div style="padding: 0 1.5rem 0.8rem; font-size:0.72rem; color:rgba(255,255,255,0.4); line-height:1.5;">
         <i class="fas fa-info-circle"></i> Úsalos para descuentos flash puntuales: crea el cupón, actívalo solo cuando quieras la promoción, y desactívalo cuando termine. El cliente lo ingresa en el carrito.
+        "Desactivar/Activar todos" se aplica de inmediato en el sitio, sin necesidad de presionar "Aplicar". Recuerda usar "Exportar JSON" para que el cambio quede guardado permanentemente en <code>data/coupons.json</code>.
       </div>
       <div id="adminCouponList" class="admin-product-list">
         <div class="admin-empty">Cargando cupones...</div>
@@ -1847,7 +2871,9 @@ function injectAdminHTML() {
         <button id="adminBannersTabAn" class="admin-tab">Banners</button>
         <button id="adminCategoriesTabAn" class="admin-tab">Categorías</button>
         <button id="adminCouponsTabAn" class="admin-tab">Cupones</button>
-        <button id="adminAnnouncementTabAn" class="admin-tab active">Anuncios</button>
+        <button id="adminAnnouncementTabAn" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTabAn" class="admin-tab">Inventario</button>
+        <button id="adminCollectionsTabAn" class="admin-tab">Colecciones</button>
       </div>
       <div style="padding: 1rem 1.5rem 0.5rem; font-size:0.72rem; color:rgba(255,255,255,0.4); line-height:1.5;">
         <i class="fas fa-info-circle"></i> Barra rotativa arriba del header, como "Pre-order X ya disponible →". Se puede apagar por completo o dejar varios mensajes que van rotando.
@@ -1866,6 +2892,99 @@ function injectAdminHTML() {
         <div style="display:flex; gap:0.6rem; margin-top:1rem;">
           <button id="adminApplyAnnouncementBtn" class="admin-btn success" style="flex:1;"><i class="fas fa-play"></i> Aplicar</button>
           <button id="adminExportAnnouncementBtn" class="admin-btn accent" style="flex:1;"><i class="fas fa-download"></i> Exportar JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── INVENTORY VIEW ── -->
+    <div id="inventoryView" class="admin-view">
+      <div class="admin-tabs">
+        <button id="adminProductsTabIn" class="admin-tab">Productos</button>
+        <button id="adminBannersTabIn" class="admin-tab">Banners</button>
+        <button id="adminCategoriesTabIn" class="admin-tab">Categorías</button>
+        <button id="adminCouponsTabIn" class="admin-tab">Cupones</button>
+        <button id="adminAnnouncementTabIn" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTabIn" class="admin-tab active">Inventario</button>
+        <button id="adminCollectionsTabIn" class="admin-tab">Colecciones</button>
+      </div>
+
+      <div id="inventoryStats" class="admin-stats-row" style="padding: 1rem 1.5rem 0.5rem;"></div>
+
+      <div style="padding: 0 1.5rem 0.8rem; font-size:0.72rem; color:rgba(255,255,255,0.4); line-height:1.5;">
+        <i class="fas fa-info-circle"></i> Edita la cantidad directamente aquí para actualizarla rápido. Los productos con poco stock (≤2) se resaltan en naranja, y sin stock (0) en rojo.
+      </div>
+
+      <div class="admin-topbar" style="border-bottom:none; padding: 0 1.5rem 0.5rem;">
+        <div class="admin-topbar-actions">
+          <input id="inventorySearchInput" type="text" placeholder="Buscar producto..." style="padding:0.55rem 0.9rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white; font-size:0.8rem; min-width:200px;">
+          <select id="inventorySortSelect" style="padding:0.55rem 0.9rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:white; font-size:0.8rem;">
+            <option value="stock-asc">Menos stock primero</option>
+            <option value="name-asc">Nombre A-Z</option>
+            <option value="profit-desc">Mayor ganancia potencial</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="adminInventoryList" class="admin-product-list">
+        <div class="admin-empty">Cargando inventario...</div>
+      </div>
+    </div>
+
+    <!-- ── COLLECTIONS LIST VIEW ── -->
+    <div id="collectionsListView" class="admin-view">
+      <div class="admin-tabs">
+        <button id="adminProductsTabCoLl" class="admin-tab">Productos</button>
+        <button id="adminBannersTabCoLl" class="admin-tab">Banners</button>
+        <button id="adminCategoriesTabCoLl" class="admin-tab">Categorías</button>
+        <button id="adminCouponsTabCoLl" class="admin-tab">Cupones</button>
+        <button id="adminAnnouncementTabCoLl" class="admin-tab">Anuncios</button>
+        <button id="adminInventoryTabCoLl" class="admin-tab">Inventario</button>
+        <button id="adminCollectionsTabCoLl" class="admin-tab active">Colecciones</button>
+      </div>
+      <div class="admin-topbar" style="border-bottom:none;">
+        <div class="admin-topbar-actions">
+          <button id="adminNewCollectionBtn" class="admin-btn primary"><i class="fas fa-plus"></i> Nueva Colección</button>
+          <button id="adminApplyCollectionsBtn" class="admin-btn success"><i class="fas fa-play"></i> Aplicar</button>
+          <button id="adminExportCollectionsBtn" class="admin-btn accent"><i class="fas fa-download"></i> Exportar JSON</button>
+        </div>
+      </div>
+      <div style="padding: 0 1.5rem 0.8rem; font-size:0.72rem; color:rgba(255,255,255,0.4); line-height:1.5;">
+        <i class="fas fa-info-circle"></i> Son las tarjetas de "Explora por Colección" en el inicio. No dependen del árbol de categorías: puedes destacar "Ichibansho" aunque técnicamente sea subcategoría de "Figuras". El orden de la lista es el orden en que aparecen.
+      </div>
+      <div id="adminCollectionsList" class="admin-product-list">
+        <div class="admin-empty">Cargando colecciones...</div>
+      </div>
+    </div>
+
+    <!-- ── COLLECTION FORM VIEW ── -->
+    <div id="collectionFormView" class="admin-view">
+      <div class="admin-form-layout" style="grid-template-columns:1fr;">
+        <div class="admin-form-col">
+          <div class="admin-form-header">
+            <button class="admin-btn ghost icon" id="adminCancelCollectionBtn"><i class="fas fa-arrow-left"></i></button>
+            <h3 id="collectionFormTitle">Nueva Colección</h3>
+          </div>
+          <div class="admin-form-body">
+            <div class="form-field">
+              <label>Nombre *</label>
+              <input id="collectionName" type="text" placeholder="Ej: Pokémon TCG">
+            </div>
+            <div class="form-field">
+              <label>Imagen <span class="optional">opcional, cae en ícono si se deja vacía</span></label>
+              <input id="collectionImage" type="text" placeholder="images/colecciones/pokemon.jpg">
+            </div>
+            <div class="form-field">
+              <label>Categoría *</label>
+              <select id="collectionCategoryId"></select>
+            </div>
+            <div class="form-field" id="collectionSubcategoryWrap" style="display:none;">
+              <label>Subcategoría <span class="optional">opcional, para destacar algo más específico</span></label>
+              <select id="collectionSubcategoryId"></select>
+            </div>
+            <div class="admin-form-actions">
+              <button id="adminSaveCollectionBtn" class="admin-btn primary full"><i class="fas fa-save"></i> Guardar Colección</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1919,8 +3038,29 @@ function injectAdminHTML() {
             </div>
 
             <div class="form-field">
-              <label>Expansión <span class="optional">opcional</span></label>
+              <label>Expansión <span class="optional">solo para Pokémon TCG</span></label>
               <input id="formExpansion" type="text" placeholder="Ej: Scarlet & Violet">
+              <div class="admin-field-hint">Úsalo solo si la categoría es Pokémon TCG y esta carta pertenece a una expansión del mega-menú. Para "Cartas" (estándar / ilustraciones raras), usa el campo "Subcategoría" de arriba en su lugar.</div>
+            </div>
+
+            <div class="form-field">
+              <label>Condición <span class="optional">solo para cartas sueltas</span></label>
+              <select id="formCondition">
+                <option value="">— No aplica —</option>
+                <option value="Mint">Mint (M)</option>
+                <option value="Near Mint">Near Mint (NM)</option>
+                <option value="Lightly Played">Lightly Played (LP)</option>
+                <option value="Moderately Played">Moderately Played (MP)</option>
+                <option value="Heavily Played">Heavily Played (HP)</option>
+                <option value="Damaged">Damaged (DMG)</option>
+              </select>
+              <div class="admin-field-hint">Aparece como una etiqueta pequeña en la tarjeta del producto y en su ficha, junto al resto de la info de la carta.</div>
+            </div>
+
+            <div class="form-field">
+              <label>ID de guía "Cómo Jugar" <span class="optional">solo para juegos de mesa</span></label>
+              <input id="formBoardGameId" type="text" placeholder="Ej: polilla-tramposa">
+              <div class="admin-field-hint">Si lo llenas, en la ficha del producto aparece un botón "¿Cómo se juega?" que lleva a esa guía en juegos-mesa.html. Debe coincidir con el "id" del juego en data/juegos-mesa.json.</div>
             </div>
 
             <div class="form-row two-col">
@@ -1950,8 +3090,42 @@ function injectAdminHTML() {
             </div>
 
             <div class="form-field">
-              <label>Atributos JSON <span class="optional">opcional</span></label>
-              <textarea id="formAttributes" rows="4" placeholder='[{"name":"Idioma","options":[{"value":"Español","price":85000}]}]'></textarea>
+              <label>Variantes / Atributos <span class="optional">ej. Idioma, Talla</span></label>
+              <div id="attributesBuilder" style="display:flex; flex-direction:column; gap:0.8rem;"></div>
+              <button type="button" onclick="addAttributeBlock()" style="margin-top:0.6rem; background:rgba(106,76,156,0.15); color:#c9b8f0; border:1px dashed rgba(106,76,156,0.5); border-radius:8px; padding:0.5rem 0.9rem; font-size:0.8rem; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem;">
+                <i class="fas fa-plus"></i> Agregar atributo (ej. Idioma)
+              </button>
+              <div class="admin-field-hint">Cada atributo puede tener varias opciones (ej. Idioma → Español / Inglés). Cada opción puede tener su propio precio (déjalo vacío para usar el precio base) y marcarse como "Disponible" o no — así puedes agotar solo el Inglés sin tocar el Español, sin borrar nada.</div>
+            </div>
+
+            <input type="hidden" id="formAttributes">
+            
+
+            <!-- ── INVENTARIO ── -->
+            <div class="admin-filter-section" style="margin-top:1.2rem; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.08);">
+              <div style="font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.5); margin-bottom:0.8rem;">
+                <i class="fas fa-boxes-stacked"></i> Inventario
+              </div>
+              <div class="form-row two-col">
+                <div class="form-field">
+                  <label>Cantidad en stock</label>
+                  <input id="formStock" type="number" min="0" step="1" placeholder="0">
+                </div>
+                <div class="form-field">
+                  <label>Costo unitario <span class="optional">lo que te costó</span></label>
+                  <input id="formCost" type="number" min="0" step="1" placeholder="$0">
+                </div>
+              </div>
+              <div class="form-field">
+                <label>Ubicación</label>
+                <input id="formLocation" type="text" list="formLocationOptions" placeholder="Mi casa">
+                <datalist id="formLocationOptions">
+                  <option value="Mi casa">
+                  <option value="Casa de Clau">
+                  <option value="Bodega">
+                </datalist>
+              </div>
+              <div class="admin-field-hint">Déjalo vacío si no quieres controlar stock para este producto en particular. La ganancia potencial solo se calcula si pones costo unitario.</div>
             </div>
 
             <div class="form-row three-col checkboxes">
@@ -2221,6 +3395,48 @@ function injectAdminStyles() {
 
 .admin-empty { text-align: center; padding: 3rem; color: rgba(255,255,255,0.3); font-size: 0.9rem; }
 
+/* ── INVENTARIO ── */
+.inventory-row {
+  flex-wrap: wrap;
+}
+
+.inventory-stock-control {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.inventory-stock-input {
+  width: 64px;
+  padding: 0.45rem 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.inventory-stock-input:focus {
+  outline: none;
+  border-color: var(--primary-light);
+}
+
+.inventory-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.25rem 0.55rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.inventory-badge--ok   { background: rgba(74,222,128,0.15); color: #4ade80; }
+.inventory-badge--low  { background: rgba(251,146,60,0.15); color: #fb923c; }
+.inventory-badge--out  { background: rgba(239,68,68,0.15);  color: #f87171; }
+
 /* ── FORM ── */
 .admin-form-layout {
   display: grid;
@@ -2315,7 +3531,26 @@ function injectAdminStyles() {
   z-index: 2;
 }
 .admin-preview-body { padding: 0.9rem; }
-.admin-preview-cat { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 0.3rem; }
+.admin-preview-cat-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.3rem; }
+.admin-preview-cat { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: #888; }
+.admin-preview-condition {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.5rem;
+  background: #6a4c9c;
+  transform: skewX(-14deg);
+  flex-shrink: 0;
+}
+.admin-preview-condition span {
+  display: inline-block;
+  transform: skewX(14deg);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: white;
+  white-space: nowrap;
+}
 .admin-preview-name { font-size: 0.88rem; font-weight: 600; line-height: 1.3; margin-bottom: 0.5rem; }
 .admin-preview-prices { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.7rem; }
 .admin-preview-orig { font-size: 0.75rem; color: #aaa; text-decoration: line-through; }
@@ -2367,6 +3602,8 @@ function injectAdminStyles() {
 .admin-btn.accent:hover   { background: #c9a02e; }
 .admin-btn.ghost    { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
 .admin-btn.ghost:hover    { background: rgba(255,255,255,0.1); color: white; }
+.admin-btn.danger   { background: #dc2626; color: white; }
+.admin-btn.danger:hover   { background: #b91c1c; }
 .admin-btn.full     { width: 100%; justify-content: center; padding: 0.7rem; font-size: 0.9rem; }
 .admin-btn.icon     { padding: 0.4rem; }
 
@@ -2779,7 +4016,10 @@ function bindAdminEvents() {
     if (id === 'adminSaveProductBtn') saveAdminProduct();
     if (id === 'adminCancelFormBtn')  showAdminView('dashboardView');
     if (id === 'adminExportBtn')  exportAdminJSON();
+    if (id === 'adminExportExcelBtn') exportProductsToExcel();
     if (id === 'adminApplyBtn')   applyAdminChangesLive();
+    if (id === 'adminDisableOffersBtn') disableAllOffers();
+    if (id === 'adminEnableOffersBtn')  enableAllOffers();
     // Banners
     if (id === 'adminBannersTab') { showAdminView('bannerListView'); }
     if (id === 'adminBannersTabBl') { showAdminView('bannerListView'); }
@@ -2798,6 +4038,8 @@ function bindAdminEvents() {
     if (id === 'adminSaveSubcategoryBtn') saveAdminSubcategory();
     if (id === 'adminCancelSubcategoryBtn') showAdminView('categoryListView');
     if (id === 'adminExportCategoriesBtn') exportCategoriesJSON();
+    if (id === 'adminCollapseAllCategoriesBtn') collapseAllAdminCategories();
+    if (id === 'adminExpandAllCategoriesBtn') expandAllAdminCategories();
     if (id === 'adminApplyCategoriesBtn') applyCategoriesChangesLive();
     // Cupones
     if (id === 'adminCouponsTab' || id === 'adminCouponsTabBl' || id === 'adminCouponsTabCl' || id === 'adminCouponsTabCo') { showAdminView('couponListView'); }
@@ -2806,24 +4048,49 @@ function bindAdminEvents() {
     if (id === 'adminCancelCouponBtn') showAdminView('couponListView');
     if (id === 'adminExportCouponsBtn') exportCouponsJSON();
     if (id === 'adminApplyCouponsBtn') applyCouponsChangesLive();
+    if (id === 'adminDisableAllCouponsBtn') disableAllCoupons();
+    if (id === 'adminEnableAllCouponsBtn') enableAllCoupons();
     // Anuncios
-    if (id === 'adminAnnouncementTab' || id === 'adminAnnouncementTabBl' || id === 'adminAnnouncementTabCl' || id === 'adminAnnouncementTabCo' || id === 'adminAnnouncementTabAn') { showAdminView('announcementView'); }
+    if (id === 'adminAnnouncementTab' || id === 'adminAnnouncementTabBl' || id === 'adminAnnouncementTabCl' || id === 'adminAnnouncementTabCo' || id === 'adminAnnouncementTabAn' || id === 'adminAnnouncementTabIn') { showAdminView('announcementView'); }
     if (id === 'adminAddAnnouncementMsgBtn') addAnnouncementMsg();
     if (id === 'adminSaveAnnouncementBtn') saveAdminAnnouncementForm();
     if (id === 'adminExportAnnouncementBtn') exportAnnouncementJSON();
     if (id === 'adminApplyAnnouncementBtn') applyAnnouncementChangesLive();
+    // Inventario
+    if (id === 'adminInventoryTab' || id === 'adminInventoryTabBl' || id === 'adminInventoryTabCl' || id === 'adminInventoryTabCo' || id === 'adminInventoryTabAn' || id === 'adminInventoryTabIn' || id === 'adminInventoryTabCoLl') {
+      showAdminView('inventoryView');
+      renderInventoryDashboard();
+    }
+    // Colecciones
+    if (id === 'adminCollectionsTab' || id === 'adminCollectionsTabBl' || id === 'adminCollectionsTabCl' || id === 'adminCollectionsTabCo' || id === 'adminCollectionsTabAn' || id === 'adminCollectionsTabIn' || id === 'adminCollectionsTabCoLl') {
+      showAdminView('collectionsListView');
+      refreshAdminCollections();
+    }
+    if (id === 'adminNewCollectionBtn') openCollectionForm();
+    if (id === 'adminSaveCollectionBtn') saveAdminCollection();
+    if (id === 'adminCancelCollectionBtn') showAdminView('collectionsListView');
+    if (id === 'adminExportCollectionsBtn') exportCollectionsJSON();
+    if (id === 'adminApplyCollectionsBtn') applyCollectionsChangesLive();
     // Tabs productos
     if (id === 'adminProductsTab') { showAdminView('dashboardView'); }
     if (id === 'adminProductsTabBl') { showAdminView('dashboardView'); }
     if (id === 'adminProductsTabCl') { showAdminView('dashboardView'); }
     if (id === 'adminProductsTabCo') { showAdminView('dashboardView'); }
     if (id === 'adminProductsTabAn') { showAdminView('dashboardView'); }
+    if (id === 'adminProductsTabIn') { showAdminView('dashboardView'); }
+    if (id === 'adminProductsTabCoLl') { showAdminView('dashboardView'); }
     if (id === 'adminBannersTabCl') { showAdminView('bannerListView'); }
     if (id === 'adminBannersTabCo') { showAdminView('bannerListView'); }
     if (id === 'adminBannersTabAn') { showAdminView('bannerListView'); }
+    if (id === 'adminBannersTabIn') { showAdminView('bannerListView'); }
+    if (id === 'adminBannersTabCoLl') { showAdminView('bannerListView'); }
     if (id === 'adminCategoriesTabCo') { showAdminView('categoryListView'); }
     if (id === 'adminCategoriesTabAn') { showAdminView('categoryListView'); }
+    if (id === 'adminCategoriesTabIn') { showAdminView('categoryListView'); }
+    if (id === 'adminCategoriesTabCoLl') { showAdminView('categoryListView'); }
     if (id === 'adminCouponsTabAn') { showAdminView('couponListView'); }
+    if (id === 'adminCouponsTabIn') { showAdminView('couponListView'); }
+    if (id === 'adminCouponsTabCoLl') { showAdminView('couponListView'); }
   });
 
   document.addEventListener('keydown', e => {
@@ -2835,6 +4102,9 @@ function bindAdminEvents() {
   document.addEventListener('input', e => {
     if (e.target.id === 'adminSearchInput') {
       renderAdminProductList(e.target.value);
+    }
+    if (e.target.id === 'inventorySearchInput') {
+      renderAdminInventoryList();
     }
     if (['formName','formPrice','formOriginalPrice','formImages','formNew','formBestSeller','formEncargo'].includes(e.target.id)) {
       updateProductPreview();
@@ -2848,7 +4118,10 @@ function bindAdminEvents() {
   });
 
   document.addEventListener('change', e => {
-    if (['formCategory','formNew','formBestSeller','formEncargo'].includes(e.target.id)) {
+    if (e.target.id === 'inventorySortSelect') {
+      renderAdminInventoryList();
+    }
+    if (['formCategory','formNew','formBestSeller','formEncargo','formCondition'].includes(e.target.id)) {
       updateProductPreview();
     }
     if (e.target.id === 'formEncargo') {
@@ -2885,10 +4158,15 @@ function bindAdminEvents() {
     if (e.target.id === 'couponScope') {
       updateCouponScopeFields();
     }
+    if (e.target.id === 'subcatFilterType') {
+      updateSubcatFilterTypeUI();
+    }
+    if (e.target.id === 'collectionCategoryId') {
+      populateCollectionSubcategorySelect(e.target.value, '');
+    }
   });
 
-  document.addEventListener('click', e => {
-    const overlay = document.getElementById('adminOverlay');
-    if (e.target === overlay) closeAdminPanel();
-  });
+  // NOTA: se quitó a propósito el cierre por click-fuera del panel de admin.
+  // Antes, un click accidental fuera del panel cerraba todo y perdía el
+  // progreso sin guardar. Ahora solo se cierra con el botón X explícito.
 }

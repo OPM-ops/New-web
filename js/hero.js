@@ -4,12 +4,18 @@ let currentHeroSlide = 0;
 let heroProducts = [];
 
 function renderHeroSection() {
-    const carousel = document.querySelector('.carousel-section');
-    if (!carousel) return;
+    // Se inserta después de "Descubre más universos" (colecciones), no después
+    // del banner principal — el orden pedido es: banner -> colecciones -> este.
+    const anchor = document.querySelector('.collections-section');
+    if (!anchor) return;
 
-    // Seleccionar 3 productos aleatorios (sin repetir)
+    // Solo productos disponibles: nunca destacar algo agotado o "próximamente"
     if (!allProducts || allProducts.length === 0) return;
-    const shuffled = [...allProducts];
+    const availableProducts = allProducts.filter(p => p.status !== 'agotado' && p.status !== 'proximamente');
+    if (availableProducts.length === 0) return;
+
+    // Seleccionar hasta 3 productos aleatorios disponibles (sin repetir)
+    const shuffled = [...availableProducts];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -48,7 +54,7 @@ function renderHeroSection() {
     `;
 
     // Insertar después del carrusel principal (puedes cambiarlo a la posición que quieras)
-    carousel.insertAdjacentHTML('afterend', heroHTML);
+    anchor.insertAdjacentHTML('afterend', heroHTML);
 
     // Generar los dots
     const dotsContainer = document.getElementById('heroDots');

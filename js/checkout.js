@@ -57,6 +57,11 @@ function renderCheckoutStep1() {
                 <input type="radio" name="shipping" value="nacional"> Envío Nacional (+$20.000)
             </label>
             <button id="toStep2" class="btn btn-primary" style="margin-top:1.5rem;">Continuar</button>
+            <p style="margin-top:1rem; font-size:0.75rem; text-align:center;">
+                <a href="politicas.html#envios" target="_blank" style="color:var(--primary-light);">
+                    <i class="fas fa-circle-info"></i> Ver política de envíos, cambios y devoluciones
+                </a>
+            </p>
         </div>
     `;
 
@@ -201,43 +206,128 @@ function renderCheckoutStep4() {
                 ${discount > 0 ? `<p><strong>Descuento (cupón ${appliedCoupon.code}):</strong> -$${discount.toLocaleString('es-CO')}</p>` : ''}
                 <p style="font-size:1.3rem; margin-top:1rem;"><strong>Total a pagar: $${total.toLocaleString('es-CO')}</strong></p>
             </div>
-            <button id="confirmOrderBtn" class="btn btn-success">Confirmar Pedido</button>
-            <button id="backToStep3" class="btn" style="background:#ccc;">Volver</button>
+            <p class="checkout-confirm-hint">¿Cómo prefieres confirmar tu pedido?</p>
+            <button id="confirmWhatsAppBtn" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Confirmar por WhatsApp</button>
+            <button id="confirmEmailBtn" class="btn btn-primary" style="margin-top:0.6rem;"><i class="fas fa-envelope"></i> Confirmar por Correo</button>
+            <button id="backToStep3" class="btn" style="background:#ccc; margin-top:0.6rem;">Volver</button>
         </div>
     `;
 
     document.getElementById('backToStep3').addEventListener('click', renderCheckoutStep3);
-    document.getElementById('confirmOrderBtn').addEventListener('click', async () => {
-        // Preparar datos para EmailJS
-        const orderData = {
-            order_id: orderId,
-            customer_name: checkoutState.customer.name,
-            customer_email: checkoutState.customer.email,
-            customer_whatsapp: checkoutState.customer.whatsapp,
-            customer_address: checkoutState.customer.address,
-            customer_notes: checkoutState.customer.notes,
-            shipping_type: checkoutState.shipping.type,
-            shipping_cost: `$${shippingCost.toLocaleString('es-CO')}`,
-            payment_method: paymentMethods.find(m => m.id === checkoutState.payment.method).name,
-            payment_instructions: checkoutState.payment.instructions,
-            items: itemsList,
-            subtotal: `$${subtotal.toLocaleString('es-CO')}`,
-            coupon_code: discount > 0 ? appliedCoupon.code : '',
-            discount: discount > 0 ? `-$${discount.toLocaleString('es-CO')}` : '$0',
-            total: `$${total.toLocaleString('es-CO')}`,
-            // para plantilla del cliente
-            to_email: checkoutState.customer.email
-        };
 
-        const sent = await sendOrderEmail(orderData);
-        if (sent) {
-            alert(`¡Pedido ${orderId} confirmado! Te hemos enviado un correo con los detalles.`);
-            clearCart();
-            document.getElementById('checkoutModal').style.display = 'none';
-            // Reiniciar estado
-            checkoutState = { shipping: { type: 'pickup', cost: 0 }, payment: {}, customer: {} };
-        } else {
-            alert('No se pudo enviar el correo. Por favor contacta por WhatsApp con tu número de pedido: ' + orderId);
-        }
+    const paymentMethodId = checkoutState.payment.method;
+
+    // ── Opción 1: confirmar por WhatsApp (no manda correo) ──
+    document.getElementById('confirmWhatsAppBtn').addEventListener('click', () => {
+        let waMessage = `🛒 *Nuevo pedido confirmado* — ${orderId}\n\n`;
+        waMessage += `*Cliente:* ${checkoutState.customer.name}\n`;
+        waMessage += `*WhatsApp:* ${checkoutState.customer.whatsapp}\n`;
+        waMessage += `*Dirección:* ${checkoutState.customer.address}\n\n`;
+        waMessage += `*Productos:*\n${itemsList}\n\n`;
+        waMessage += `*Envío:* ${checkoutState.shipping.type === 'pickup' ? 'Recoge en Bogotá' : checkoutState.shipping.type === 'bogota' ? 'Bogotá' : 'Nacional'} - $${shippingCost.toLocaleString('es-CO')}\n`;
+        waMessage += `*Pago:* ${paymentMethods.find(m => m.id === checkoutState.payment.method).name}\n`;
+        waMessage += `*Total:* $${total.toLocaleString('es-CO')}\n`;
+        if (checkoutState.customer.notes) waMessage += `\n*Notas:* ${checkoutState.customer.notes}\n`;
+        window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(waMessage)}`, '_blank');
+
+        finishCheckout(orderId, paymentMethodId, { channel: 'whatsapp' });
+    });
+
+    // ── Opción 2: confirmar por Correo (no manda WhatsApp) ──
+    document.getElementById('confirmEmailBtn').addEventListener('click', () => {
+        (async () => {
+            const SITE_BASE_URL = 'https://opm-ops.github.io/Landing-pages/';
+            const shippingLabel = checkoutState.shipping.type === 'pickup' ? 'Recoge en Bogotá'
+                : checkoutState.shipping.type === 'bogota' ? 'Envío en Bogotá'
+                : 'Envío Nacional';
+
+            const orderData = {
+                order_id: orderId,
+                customer_email: checkoutState.customer.email,
+                orders: cart.map(item => ({
+                    name: item.name + (Object.keys(item.selectedOptions).length
+                        ? ' (' + Object.entries(item.selectedOptions).map(([k, v]) => `${k}: ${v}`).join(', ') + ')'
+                        : ''),
+                    price: (item.price * item.quantity).toLocaleString('es-CO'),
+                    units: item.quantity,
+                    image: item.image.startsWith('http') ? item.image : SITE_BASE_URL + item.image
+                })),
+                cost: {
+                    shipping: shippingCost.toLocaleString('es-CO'),
+                    shipping_method: shippingLabel,
+                    total: total.toLocaleString('es-CO')
+                }
+            };
+
+            const sent = await sendOrderEmail(orderData);
+            finishCheckout(orderId, paymentMethodId, { channel: 'email', sent });
+        })();
+    });
+}
+
+// Limpia el carrito/estado y muestra la pantalla final de éxito
+function finishCheckout(orderId, paymentMethodId, emailResult) {
+    clearCart();
+    checkoutState = { shipping: { type: 'pickup', cost: 0 }, payment: {}, customer: {} };
+    renderCheckoutSuccess(orderId, paymentMethodId, emailResult);
+}
+
+// Paso 5: pantalla de éxito con los recordatorios importantes (reemplaza al alert())
+function renderCheckoutSuccess(orderId, paymentMethodId, emailResult) {
+    const stepsContainer = document.getElementById('checkoutSteps');
+
+    const paymentReminderHTML = paymentMethodId === 'mercadopago'
+        ? `
+        <div class="checkout-reminder checkout-reminder--warning">
+            <i class="fas fa-triangle-exclamation"></i>
+            <div>
+                <strong>Escríbenos por WhatsApp para generarte el link de pago.</strong>
+                <p>Ten en cuenta que Mercado Pago cobra un <strong>6% adicional</strong> por gestión de la plataforma sobre el total de tu pedido.</p>
+            </div>
+        </div>`
+        : `
+        <div class="checkout-reminder">
+            <i class="fas fa-camera"></i>
+            <div>
+                <strong>Envíanos la captura de pantalla de tu pago</strong>
+                <p>Por WhatsApp al <strong>+57 311 541 6469</strong>, así confirmamos tu pedido más rápido.</p>
+            </div>
+        </div>`;
+
+    const emailReminderHTML = emailResult.channel === 'email' ? (
+        emailResult.sent
+            ? `
+        <div class="checkout-reminder checkout-reminder--info">
+            <i class="fas fa-envelope-open-text"></i>
+            <div>
+                <strong>Te enviamos un correo de confirmación.</strong>
+                <p>Si no lo ves en tu bandeja principal en unos minutos, revisa la carpeta de <strong>Spam o Correo no deseado</strong>.</p>
+            </div>
+        </div>`
+            : `
+        <div class="checkout-reminder checkout-reminder--warning">
+            <i class="fas fa-envelope"></i>
+            <div>
+                <strong>No pudimos enviar el correo automático.</strong>
+                <p>Tu pedido ya quedó registrado — igual escríbenos por WhatsApp con tu número de pedido para confirmarlo.</p>
+            </div>
+        </div>`
+    ) : '';
+
+    stepsContainer.innerHTML = `
+        <div class="checkout-step checkout-success">
+            <div class="checkout-success-icon"><i class="fas fa-check-circle"></i></div>
+            <h3>¡Pedido confirmado!</h3>
+            <p class="checkout-success-orderid">Pedido ${orderId}</p>
+
+            ${paymentReminderHTML}
+            ${emailReminderHTML}
+
+            <button id="closeCheckoutBtn" class="btn btn-primary" style="margin-top:1.2rem;">Entendido</button>
+        </div>
+    `;
+
+    document.getElementById('closeCheckoutBtn').addEventListener('click', () => {
+        document.getElementById('checkoutModal').style.display = 'none';
     });
 }

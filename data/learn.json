@@ -2,41 +2,57 @@
   "hero": {
     "label": "🎓 CENTRO DE APRENDIZAJE",
     "title": "POKÉMON TCG: GUÍA PARA PRINCIPIANTES",
-    "subtitle": "Descubre cómo comenzar, entender las cartas, aprender las reglas básicas y dominar la arena Pokémon. Todo lo que necesitas para entrar al mundo TCG… ¡y comenzar tu colección hoy!",
+    "subtitle": "¡Bienvenido al mundo de Pokémon Trading Card Game! Si estás listo para dar tus primeros pasos como Entrenador, aquí te enseñamos de forma sencilla todo lo necesario para armar tu baraja, entender la mesa y comenzar tu primera batalla.",
     "ctaText": "Empieza a aprender",
-    "image1": "images/products/Cards MVenusaur.webp",
-    "image2": "images/products/Chase Obsidian.avif"
+    "image1": "images/Card/128_hires.png",
+    "image2": "images/Card/Crushing-Hammer.PBL.105.61834.webp"
   },
   "lessons": [
     {
       "id": "leccion-1",
-      "title": "Preparación antes de jugar",
-      "text": "Antes de sentarte a jugar tu primera partida es clave saber cómo armar tu mano inicial, cuántas cartas de premio se colocan y cómo se organiza el terreno de juego. Esta guía oficial te muestra el paso a paso para que llegues listo a tu primer duelo.",
-      "youtubeId": "qiiXxlGpqBA",
+      "title": "Lo que necesitas antes de empezar",
+      "text": "Antes de sentarte a jugar, asegúrate de contar con los elementos básicos:<br><br><ul><li><strong>Un mazo de exactamente 60 cartas:</strong> puede ser un Battle Deck preconstruido o uno armado por ti.</li><li><strong>Contadores de daño:</strong> dados o fichas oficiales para llevar la cuenta de los PS (puntos de salud) perdidos.</li><li><strong>Una moneda (o dado legal):</strong> para decidir quién comienza y resolver efectos de ataques.</li><li><strong>Marcadores de Estado Especial:</strong> fichas de Veneno y Quemado (opcionales, pero muy útiles).</li></ul>",
+      "youtubeId": "ivkLaHUIjTw",
       "ctaText": "Ver mazos para empezar",
-      "ctaLink": "index.html?search=deck#productos"
+      "ctaLink": "index.html?category=pokemon&filterType=expansion&filterValue=Decks#productos"
     },
     {
       "id": "leccion-2",
-      "title": "¿Qué es un Mulligan?",
-      "text": "A veces tu mano inicial no trae ningún Pokémon Básico, y ahí es cuando entra el Mulligan. Aprende qué pasa cuando esto sucede, cómo se resuelve entre ambos jugadores y por qué no debes preocuparte si te pasa.",
-      "youtubeId": "RHBZPyaqml8",
+      "title": "Preparación del tablero y el mazo",
+      "text": "Antes de lanzar el primer ataque, la mesa debe organizarse correctamente:<br><br><ol><li>Baraja tu mazo de 60 cartas y colócalo boca abajo en tu zona de juego.</li><li>Roba 7 cartas de la parte superior de tu mazo.</li><li>Busca un Pokémon Básico entre esas 7 cartas y colócalo boca abajo en tu Zona Activa.</li><li>Si tienes más Pokémon Básicos, colócalos boca abajo en tu Banca (hasta 5 espacios disponibles).</li><li>Separa las 6 cartas de Premio de la parte superior del mazo y colócalas boca abajo a un lado, sin mirarlas.</li><li>¡Listo! Ambos jugadores revelan sus Pokémon al mismo tiempo.</li></ol><br><strong>Nota de regla (Mulligan):</strong> si ninguna de tus 7 cartas iniciales es un Pokémon Básico, muéstralas a tu oponente, devuélvelas al mazo, baraja y roba 7 cartas nuevas. Tu oponente podrá robar una carta extra.",
+      "youtubeId": "LPG0Cn1YzVA",
       "ctaText": "Ver cartas básicas",
       "ctaLink": "index.html?category=cartas#productos"
     },
     {
       "id": "leccion-3",
-      "title": "Preparativos para iniciar una partida",
-      "text": "Ya armaste tu mazo, ¿y ahora qué? Conoce el orden exacto de los preparativos antes del primer turno: quién empieza, cómo se reparten las cartas de premio y cómo se coloca tu Pokémon activo y tu banca.",
-      "youtubeId": "LPG0Cn1YzVA",
-      "ctaText": "Empezar mi colección",
+      "title": "El turno a turno: ataca, evoluciona y avanza",
+      "text": "El juego se rige por turnos. El jugador que ganó el lanzamiento de moneda comienza, pero en el primer turno del juego no se puede atacar.<br><br>En tu turno puedes realizar las siguientes acciones:<br><br><ol><li>Roba una carta de tu mazo para iniciar tu turno (obligatorio).</li><li>Juega Pokémon Básicos de tu mano a tu Banca.</li><li>Evoluciona a tus Pokémon: coloca una carta de Fase 1 o Fase 2 encima de un Pokémon que ya lleve un turno en juego.</li><li>Juega cartas de Entrenador (Partidarios, Objeto o Estadio) para obtener ventajas estratégicas.</li><li>Une una carta de Energía a uno de tus Pokémon (solo una por turno).</li><li>Ataca: si cumples los requisitos de energía, declara tu ataque para terminar tu turno y dañar al rival.</li></ol>",
+      "youtubeId": "1DTDiASstUo",
+      "ctaText": "Ver Pokémon para tu mazo",
       "ctaLink": "index.html?category=pokemon#productos"
+    },
+    {
+      "id": "leccion-4",
+      "title": "Cartas de Entrenador: tu ventaja estratégica",
+      "text": "Las cartas de Entrenador —Partidarios, Objetos y Estadios— te dan herramientas extra para cambiar el rumbo de la partida sin depender solo de tus ataques. Aprende cuándo y cómo jugarlas para sacarles el máximo provecho.",
+      "youtubeId": "LaRcCZFHP4U",
+      "ctaText": "Ver cartas de Entrenador",
+      "ctaLink": "index.html?category=cartas#productos"
+    },
+    {
+      "id": "leccion-5",
+      "title": "¿Cómo ganar la partida?",
+      "text": "El objetivo principal es debilitar a los Pokémon del oponente. Ganas la partida bajo cualquiera de estas tres condiciones:<br><br><ul><li><strong>Toma tus 6 Premios:</strong> cada vez que debilitas a un Pokémon rival, tomas una carta de tus Premios. El primero en quedarse sin cartas de Premio gana.</li><li><strong>Elimina todos los Pokémon del rival:</strong> si tu oponente se queda sin Pokémon en su Zona Activa y sin Pokémon en su Banca para reemplazarlo, ganas de inmediato.</li><li><strong>Agotamiento del mazo:</strong> si tu oponente debe robar una carta al inicio de su turno y su mazo está totalmente vacío, pierde la partida por &quot;deckout&quot;.</li></ul>",
+      "youtubeId": "Qw88NDW2EVw",
+      "ctaText": "Ver catálogo completo",
+      "ctaLink": "index.html?category=all#productos"
     }
   ],
   "closingCta": {
     "title": "¿Listo para armar tu colección?",
     "subtitle": "Explora nuestro catálogo y encuentra las cartas, expansiones y accesorios que necesitas para empezar a jugar.",
     "buttonText": "Ver catálogo",
-    "link": "index.html#productos"
+    "link": "index.html?category=all#productos"
   }
 }

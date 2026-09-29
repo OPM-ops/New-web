@@ -1,0 +1,63 @@
+{
+  "title": "Políticas de la Tienda",
+  "subtitle": "Todo lo que necesitas saber sobre envíos, pagos, cambios y el manejo de tus datos en One Play More.",
+  "lastUpdated": "Septiembre 2026",
+  "sections": [
+    {
+      "id": "envios",
+      "title": "🚚 Política de Envíos",
+      "paragraphs": [
+        "Recogida en Bogotá: sin costo, previa coordinación por WhatsApp.",
+        "Envío dentro de Bogotá: $12.000 COP, tiempo estimado de entrega 1 a 3 días hábiles.",
+        "Envíos dentro de Bogotá y pedidos con pago contra entrega: deben solicitarse con al menos 1 día hábil de anticipación. Atendemos despachos de lunes a sábado; los domingos y festivos no realizamos despachos ni entregas — si confirmas tu pedido un sábado, la entrega más próxima disponible es el lunes hábil siguiente.",
+        "La hora exacta de entrega depende de la disponibilidad del repartidor asignado ese día, así que te pedimos contar con flexibilidad de horario y evitar agendar compromisos que dependan de una hora puntual de llegada.",
+        "Envío nacional: $20.000 COP a través de transportadora, tiempo estimado de entrega 3 a 7 días hábiles según la ciudad de destino.",
+        "Productos por encargo: se suman de 2 a 5 días hábiles adicionales al tiempo de envío, ya que se solicitan una vez confirmado el pedido.",
+        "Una vez despachado tu pedido, te compartimos el número de guía para que puedas hacerle seguimiento."
+      ]
+    },
+    {
+      "id": "cambios-devoluciones",
+      "title": "🔄 Cambios y Devoluciones",
+      "paragraphs": [
+        "Aceptamos cambios o devoluciones dentro de los 5 días hábiles siguientes a la entrega, únicamente si el producto presenta un defecto de fábrica o llegó diferente a lo pedido por un error nuestro.",
+        "El producto debe estar en las mismas condiciones en que fue entregado: sin abrir, sin usar y con su empaque original.",
+        "Por tratarse de coleccionables, las cartas individuales, sobres y cajas selladas no tienen devolución una vez abiertos, salvo defecto de fábrica comprobado.",
+        "Para iniciar un cambio o devolución, escríbenos por WhatsApp con tu número de pedido y fotos del producto.",
+        "Los costos de envío de la devolución corren por cuenta del cliente, excepto cuando el error fue nuestro."
+      ]
+    },
+    {
+      "id": "pagos",
+      "title": "💳 Métodos de Pago",
+      "paragraphs": [
+        "Aceptamos Nequi, Bre-B, transferencia bancaria (BBVA) y Mercado Pago.",
+        "Para pagos con Mercado Pago, te contactamos por WhatsApp para enviarte el link de pago seguro.",
+        "El pedido se confirma y se prepara para despacho una vez verificado el pago.",
+        "Los precios están expresados en pesos colombianos (COP) e incluyen IVA cuando aplica."
+      ]
+    },
+    {
+      "id": "privacidad",
+      "title": "🔒 Política de Privacidad",
+      "paragraphs": [
+        "Recopilamos únicamente los datos necesarios para procesar tu pedido: nombre, correo electrónico, número de WhatsApp y dirección de envío.",
+        "Tu información no se vende ni se comparte con terceros, salvo con la transportadora, y solo para poder hacerte llegar tu pedido.",
+        "Usamos tu correo y WhatsApp exclusivamente para comunicarnos sobre el estado de tu pedido y responder tus consultas.",
+        "Puedes solicitar en cualquier momento que eliminemos tus datos de nuestros registros escribiéndonos por WhatsApp o correo."
+      ]
+    },
+    {
+      "id": "terminos",
+      "title": "📋 Términos y Condiciones",
+      "paragraphs": [
+        "Los precios y la disponibilidad de los productos están sujetos a cambios sin previo aviso.",
+        "Las imágenes de los productos son ilustrativas; por tratarse de artículos coleccionables, pueden existir variaciones mínimas de empaque entre unidades.",
+        "La condición indicada en las cartas sueltas (Near Mint, Lightly Played, etc.) es una referencia general del estado de la pieza. Para mayor transparencia, si quieres conocer el estado exacto de una carta específica antes de comprarla, escríbenos por WhatsApp y con gusto te compartimos fotos o video adicional de esa pieza en particular.",
+        "Los juegos de mesa y figuras tienen una edad recomendada indicada en su ficha de producto; la compra de estos artículos es responsabilidad del comprador.",
+        "Al realizar una compra en One Play More, aceptas estas políticas de envío, pago y devoluciones.",
+        "Para cualquier duda que no esté cubierta aquí, contáctanos directamente por WhatsApp — con gusto te ayudamos."
+      ]
+    }
+  ]
+}

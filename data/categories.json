@@ -2,58 +2,1126 @@
   {
     "id": "pokemon",
     "name": "Pokémon TCG",
-    "menuStyle": "grid",
-    "subcategories": [
+    "menuStyle": "grid-tiered",
+    "expansions": [
+      {
+        "id": "base-set",
+        "name": "Base Set",
+        "filterType": "expansion",
+        "filterValue": "Base Set",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "jungle",
+        "name": "Jungle",
+        "filterType": "expansion",
+        "filterValue": "Jungle",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "fossil",
+        "name": "Fossil",
+        "filterType": "expansion",
+        "filterValue": "Fossil",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "base-set-2",
+        "name": "Base Set 2",
+        "filterType": "expansion",
+        "filterValue": "Base Set 2",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "team-rocket",
+        "name": "Team Rocket",
+        "filterType": "expansion",
+        "filterValue": "Team Rocket",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "gym-heroes",
+        "name": "Gym Heroes",
+        "filterType": "expansion",
+        "filterValue": "Gym Heroes",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "gym-challenge",
+        "name": "Gym Challenge",
+        "filterType": "expansion",
+        "filterValue": "Gym Challenge",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "neo-genesis",
+        "name": "Neo Genesis",
+        "filterType": "expansion",
+        "filterValue": "Neo Genesis",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "neo-discovery",
+        "name": "Neo Discovery",
+        "filterType": "expansion",
+        "filterValue": "Neo Discovery",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "neo-revelation",
+        "name": "Neo Revelation",
+        "filterType": "expansion",
+        "filterValue": "Neo Revelation",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "neo-destiny",
+        "name": "Neo Destiny",
+        "filterType": "expansion",
+        "filterValue": "Neo Destiny",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "legendary-collection",
+        "name": "Legendary Collection",
+        "filterType": "expansion",
+        "filterValue": "Legendary Collection",
+        "era": "Legendary Collection",
+        "image": "images/expansiones/era-logos/legendary-collection.svg"
+      },
+      {
+        "id": "expedition-base-set",
+        "name": "Expedition Base Set",
+        "filterType": "expansion",
+        "filterValue": "Expedition Base Set",
+        "era": "e-Card",
+        "image": "images/expansiones/era-logos/e-card.svg"
+      },
+      {
+        "id": "aquapolis",
+        "name": "Aquapolis",
+        "filterType": "expansion",
+        "filterValue": "Aquapolis",
+        "era": "e-Card",
+        "image": "images/expansiones/era-logos/e-card.svg"
+      },
+      {
+        "id": "skyridge",
+        "name": "Skyridge",
+        "filterType": "expansion",
+        "filterValue": "Skyridge",
+        "era": "e-Card",
+        "image": "images/expansiones/era-logos/e-card.svg"
+      },
+      {
+        "id": "ruby-sapphire",
+        "name": "Ruby & Sapphire",
+        "filterType": "expansion",
+        "filterValue": "Ruby & Sapphire",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "sandstorm",
+        "name": "Sandstorm",
+        "filterType": "expansion",
+        "filterValue": "Sandstorm",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "dragon",
+        "name": "Dragon",
+        "filterType": "expansion",
+        "filterValue": "Dragon",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "team-magma-vs-team-aqua",
+        "name": "Team Magma vs Team Aqua",
+        "filterType": "expansion",
+        "filterValue": "Team Magma vs Team Aqua",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "hidden-legends",
+        "name": "Hidden Legends",
+        "filterType": "expansion",
+        "filterValue": "Hidden Legends",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "firered-leafgreen",
+        "name": "FireRed & LeafGreen",
+        "filterType": "expansion",
+        "filterValue": "FireRed & LeafGreen",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "team-rocket-returns",
+        "name": "Team Rocket Returns",
+        "filterType": "expansion",
+        "filterValue": "Team Rocket Returns",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "deoxys",
+        "name": "Deoxys",
+        "filterType": "expansion",
+        "filterValue": "Deoxys",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "emerald",
+        "name": "Emerald",
+        "filterType": "expansion",
+        "filterValue": "Emerald",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "unseen-forces",
+        "name": "Unseen Forces",
+        "filterType": "expansion",
+        "filterValue": "Unseen Forces",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "delta-species",
+        "name": "Delta Species",
+        "filterType": "expansion",
+        "filterValue": "Delta Species",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "legend-maker",
+        "name": "Legend Maker",
+        "filterType": "expansion",
+        "filterValue": "Legend Maker",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "holon-phantoms",
+        "name": "Holon Phantoms",
+        "filterType": "expansion",
+        "filterValue": "Holon Phantoms",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "crystal-guardians",
+        "name": "Crystal Guardians",
+        "filterType": "expansion",
+        "filterValue": "Crystal Guardians",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "dragon-frontiers",
+        "name": "Dragon Frontiers",
+        "filterType": "expansion",
+        "filterValue": "Dragon Frontiers",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "power-keepers",
+        "name": "Power Keepers",
+        "filterType": "expansion",
+        "filterValue": "Power Keepers",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "diamond-pearl",
+        "name": "Diamond & Pearl",
+        "filterType": "expansion",
+        "filterValue": "Diamond & Pearl",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "mysterious-treasures",
+        "name": "Mysterious Treasures",
+        "filterType": "expansion",
+        "filterValue": "Mysterious Treasures",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "secret-wonders",
+        "name": "Secret Wonders",
+        "filterType": "expansion",
+        "filterValue": "Secret Wonders",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "great-encounters",
+        "name": "Great Encounters",
+        "filterType": "expansion",
+        "filterValue": "Great Encounters",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "majestic-dawn",
+        "name": "Majestic Dawn",
+        "filterType": "expansion",
+        "filterValue": "Majestic Dawn",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "legends-awakened",
+        "name": "Legends Awakened",
+        "filterType": "expansion",
+        "filterValue": "Legends Awakened",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "stormfront",
+        "name": "Stormfront",
+        "filterType": "expansion",
+        "filterValue": "Stormfront",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "platinum",
+        "name": "Platinum",
+        "filterType": "expansion",
+        "filterValue": "Platinum",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "rising-rivals",
+        "name": "Rising Rivals",
+        "filterType": "expansion",
+        "filterValue": "Rising Rivals",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "supreme-victors",
+        "name": "Supreme Victors",
+        "filterType": "expansion",
+        "filterValue": "Supreme Victors",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "arceus",
+        "name": "Arceus",
+        "filterType": "expansion",
+        "filterValue": "Arceus",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "heartgold-soulsilver",
+        "name": "HeartGold & SoulSilver",
+        "filterType": "expansion",
+        "filterValue": "HeartGold & SoulSilver",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "unleashed",
+        "name": "Unleashed",
+        "filterType": "expansion",
+        "filterValue": "Unleashed",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "undaunted",
+        "name": "Undaunted",
+        "filterType": "expansion",
+        "filterValue": "Undaunted",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "triumphant",
+        "name": "Triumphant",
+        "filterType": "expansion",
+        "filterValue": "Triumphant",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "call-of-legends",
+        "name": "Call of Legends",
+        "filterType": "expansion",
+        "filterValue": "Call of Legends",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "black-white",
+        "name": "Black & White",
+        "filterType": "expansion",
+        "filterValue": "Black & White",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "emerging-powers",
+        "name": "Emerging Powers",
+        "filterType": "expansion",
+        "filterValue": "Emerging Powers",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "noble-victories",
+        "name": "Noble Victories",
+        "filterType": "expansion",
+        "filterValue": "Noble Victories",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "next-destinies",
+        "name": "Next Destinies",
+        "filterType": "expansion",
+        "filterValue": "Next Destinies",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "dark-explorers",
+        "name": "Dark Explorers",
+        "filterType": "expansion",
+        "filterValue": "Dark Explorers",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "dragons-exalted",
+        "name": "Dragons Exalted",
+        "filterType": "expansion",
+        "filterValue": "Dragons Exalted",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "dragon-vault",
+        "name": "Dragon Vault",
+        "filterType": "expansion",
+        "filterValue": "Dragon Vault",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "boundaries-crossed",
+        "name": "Boundaries Crossed",
+        "filterType": "expansion",
+        "filterValue": "Boundaries Crossed",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "plasma-storm",
+        "name": "Plasma Storm",
+        "filterType": "expansion",
+        "filterValue": "Plasma Storm",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "plasma-freeze",
+        "name": "Plasma Freeze",
+        "filterType": "expansion",
+        "filterValue": "Plasma Freeze",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "plasma-blast",
+        "name": "Plasma Blast",
+        "filterType": "expansion",
+        "filterValue": "Plasma Blast",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "legendary-treasures",
+        "name": "Legendary Treasures",
+        "filterType": "expansion",
+        "filterValue": "Legendary Treasures",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "kalos-starter-set",
+        "name": "Kalos Starter Set",
+        "filterType": "expansion",
+        "filterValue": "Kalos Starter Set",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "xy",
+        "name": "XY",
+        "filterType": "expansion",
+        "filterValue": "XY",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "flashfire",
+        "name": "Flashfire",
+        "filterType": "expansion",
+        "filterValue": "Flashfire",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "furious-fists",
+        "name": "Furious Fists",
+        "filterType": "expansion",
+        "filterValue": "Furious Fists",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "phantom-forces",
+        "name": "Phantom Forces",
+        "filterType": "expansion",
+        "filterValue": "Phantom Forces",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "primal-clash",
+        "name": "Primal Clash",
+        "filterType": "expansion",
+        "filterValue": "Primal Clash",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "double-crisis",
+        "name": "Double Crisis",
+        "filterType": "expansion",
+        "filterValue": "Double Crisis",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "roaring-skies",
+        "name": "Roaring Skies",
+        "filterType": "expansion",
+        "filterValue": "Roaring Skies",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "ancient-origins",
+        "name": "Ancient Origins",
+        "filterType": "expansion",
+        "filterValue": "Ancient Origins",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "breakthrough",
+        "name": "BREAKthrough",
+        "filterType": "expansion",
+        "filterValue": "BREAKthrough",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "breakpoint",
+        "name": "BREAKpoint",
+        "filterType": "expansion",
+        "filterValue": "BREAKpoint",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "generations",
+        "name": "Generations",
+        "filterType": "expansion",
+        "filterValue": "Generations",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "fates-collide",
+        "name": "Fates Collide",
+        "filterType": "expansion",
+        "filterValue": "Fates Collide",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "steam-siege",
+        "name": "Steam Siege",
+        "filterType": "expansion",
+        "filterValue": "Steam Siege",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "evolutions",
+        "name": "Evolutions",
+        "filterType": "expansion",
+        "filterValue": "Evolutions",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "sun-moon",
+        "name": "Sun & Moon",
+        "filterType": "expansion",
+        "filterValue": "Sun & Moon",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "guardians-rising",
+        "name": "Guardians Rising",
+        "filterType": "expansion",
+        "filterValue": "Guardians Rising",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "burning-shadows",
+        "name": "Burning Shadows",
+        "filterType": "expansion",
+        "filterValue": "Burning Shadows",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "shining-legends",
+        "name": "Shining Legends",
+        "filterType": "expansion",
+        "filterValue": "Shining Legends",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "crimson-invasion",
+        "name": "Crimson Invasion",
+        "filterType": "expansion",
+        "filterValue": "Crimson Invasion",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "ultra-prism",
+        "name": "Ultra Prism",
+        "filterType": "expansion",
+        "filterValue": "Ultra Prism",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "forbidden-light",
+        "name": "Forbidden Light",
+        "filterType": "expansion",
+        "filterValue": "Forbidden Light",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "celestial-storm",
+        "name": "Celestial Storm",
+        "filterType": "expansion",
+        "filterValue": "Celestial Storm",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "dragon-majesty",
+        "name": "Dragon Majesty",
+        "filterType": "expansion",
+        "filterValue": "Dragon Majesty",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "lost-thunder",
+        "name": "Lost Thunder",
+        "filterType": "expansion",
+        "filterValue": "Lost Thunder",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "team-up",
+        "name": "Team Up",
+        "filterType": "expansion",
+        "filterValue": "Team Up",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "detective-pikachu",
+        "name": "Detective Pikachu",
+        "filterType": "expansion",
+        "filterValue": "Detective Pikachu",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "unbroken-bonds",
+        "name": "Unbroken Bonds",
+        "filterType": "expansion",
+        "filterValue": "Unbroken Bonds",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "unified-minds",
+        "name": "Unified Minds",
+        "filterType": "expansion",
+        "filterValue": "Unified Minds",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "hidden-fates",
+        "name": "Hidden Fates",
+        "filterType": "expansion",
+        "filterValue": "Hidden Fates",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "cosmic-eclipse",
+        "name": "Cosmic Eclipse",
+        "filterType": "expansion",
+        "filterValue": "Cosmic Eclipse",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "sword-shield",
+        "name": "Sword & Shield",
+        "filterType": "expansion",
+        "filterValue": "Sword & Shield",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "rebel-clash",
+        "name": "Rebel Clash",
+        "filterType": "expansion",
+        "filterValue": "Rebel Clash",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "darkness-ablaze",
+        "name": "Darkness Ablaze",
+        "filterType": "expansion",
+        "filterValue": "Darkness Ablaze",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "champion-s-path",
+        "name": "Champion's Path",
+        "filterType": "expansion",
+        "filterValue": "Champion's Path",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "vivid-voltage",
+        "name": "Vivid Voltage",
+        "filterType": "expansion",
+        "filterValue": "Vivid Voltage",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "shining-fates",
+        "name": "Shining Fates",
+        "filterType": "expansion",
+        "filterValue": "Shining Fates",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "battle-styles",
+        "name": "Battle Styles",
+        "filterType": "expansion",
+        "filterValue": "Battle Styles",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "chilling-reign",
+        "name": "Chilling Reign",
+        "filterType": "expansion",
+        "filterValue": "Chilling Reign",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "evolving-skies",
+        "name": "Evolving Skies",
+        "filterType": "expansion",
+        "filterValue": "Evolving Skies",
+        "image": "images/expansiones/Evolving_Skies.webp",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "celebrations",
+        "name": "Celebrations",
+        "filterType": "expansion",
+        "filterValue": "Celebrations",
+        "image": "images/expansiones/25th_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "fusion-strike",
+        "name": "Fusion Strike",
+        "filterType": "expansion",
+        "filterValue": "Fusion Strike",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "brilliant-stars",
+        "name": "Brilliant Stars",
+        "filterType": "expansion",
+        "filterValue": "Brilliant Stars",
+        "image": "images/expansiones/swsh09_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "astral-radiance",
+        "name": "Astral Radiance",
+        "filterType": "expansion",
+        "filterValue": "Astral Radiance",
+        "image": "images/expansiones/swsh10_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "pokemon-go",
+        "name": "Pokémon GO",
+        "filterType": "expansion",
+        "filterValue": "Pokémon GO",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "lost-origin",
+        "name": "Lost Origin",
+        "filterType": "expansion",
+        "filterValue": "Lost Origin",
+        "image": "images/expansiones/Pokemon_TCG_Sword_Shield—Lost_Origin_Logo.webp",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "silver-tempest",
+        "name": "Silver Tempest",
+        "filterType": "expansion",
+        "filterValue": "Silver Tempest",
+        "image": "images/expansiones/swsh12_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "crown-zenith",
+        "name": "Crown Zenith",
+        "filterType": "expansion",
+        "filterValue": "Crown Zenith",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
       {
         "id": "expansion_sv",
         "name": "Scarlet & Violet",
         "filterType": "expansion",
         "filterValue": "Scarlet & Violet",
-        "image": ""
+        "image": "images/expansiones/ptcg-sc1-logo.webp",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "paldea-evolved",
+        "name": "Paldea Evolved",
+        "filterType": "expansion",
+        "filterValue": "Paldea Evolved",
+        "image": "images/expansiones/sv02-header-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "obsidian-flames",
+        "name": "Obsidian Flames",
+        "filterType": "expansion",
+        "filterValue": "Obsidian Flames",
+        "image": "images/expansiones/sv03-header-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "151",
+        "name": "151",
+        "filterType": "expansion",
+        "filterValue": "151",
+        "image": "images/expansiones/sv035_logo_169_en.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "paradox-rift",
+        "name": "Paradox Rift",
+        "filterType": "expansion",
+        "filterValue": "Paradox Rift",
+        "image": "images/expansiones/sv04-logo-cmyk.png",
+        "era": "Scarlet & Violet"
       },
       {
         "id": "expansion_paldean_fates",
         "name": "Paldean Fates",
         "filterType": "expansion",
         "filterValue": "Paldean Fates",
-        "image": ""
+        "image": "images/expansiones/sv045_logo_169_en.png",
+        "era": "Scarlet & Violet"
       },
       {
         "id": "expansion_temporal_forces",
         "name": "Temporal Forces",
         "filterType": "expansion",
         "filterValue": "Temporal Forces",
-        "image": ""
+        "image": "images/expansiones/images.png",
+        "era": "Scarlet & Violet"
       },
       {
-        "id": "pitch-black",
-        "name": "Pitch Black",
+        "id": "twilight-masquerade",
+        "name": "Twilight Masquerade",
         "filterType": "expansion",
-        "filterValue": "Pitch Black",
-        "image": "images/expansiones/me05.png"
+        "filterValue": "Twilight Masquerade",
+        "image": "images/expansiones/sv06_logo_169_en.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "shrouded-fable",
+        "name": "Shrouded Fable",
+        "filterType": "expansion",
+        "filterValue": "Shrouded Fable",
+        "image": "images/expansiones/sv6pt5-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "stellar-crown",
+        "name": "Stellar Crown",
+        "filterType": "expansion",
+        "filterValue": "Stellar Crown",
+        "image": "images/expansiones/sv7-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "surging-sparks",
+        "name": "Surging Sparks",
+        "filterType": "expansion",
+        "filterValue": "Surging Sparks",
+        "image": "images/expansiones/sv8-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "prismatic-evolutions",
+        "name": "Prismatic Evolutions",
+        "filterType": "expansion",
+        "filterValue": "Prismatic Evolutions",
+        "image": "images/expansiones/sv8pt5-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "journey-together",
+        "name": "Journey Together",
+        "filterType": "expansion",
+        "filterValue": "Journey Together",
+        "image": "images/expansiones/sv9-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "destined-rivals",
+        "name": "Destined Rivals",
+        "filterType": "expansion",
+        "filterValue": "Destined Rivals",
+        "image": "images/expansiones/sv10-logoDR.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "black-bolt-white-flare",
+        "name": "Black Bolt & White Flare",
+        "filterType": "expansion",
+        "filterValue": "Black Bolt & White Flare",
+        "image": "images/expansiones/Pokemon_TCG_Scarlet_Violet—Black_Bolt_and_Scarlet_Violet—White_Flare_Logo.webp",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "mega-evolution",
+        "name": "Mega Evolution",
+        "filterType": "expansion",
+        "filterValue": "Mega Evolution",
+        "image": "images/expansiones/640px-Logo_Megaevolución_(TCG).png",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "phantasmal-flames",
+        "name": "Phantasmal Flames",
+        "filterType": "expansion",
+        "filterValue": "Phantasmal Flames",
+        "image": "images/expansiones/0011-126586120535126987.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "ascended-heroes",
+        "name": "Ascended Heroes",
+        "filterType": "expansion",
+        "filterValue": "Ascended Heroes",
+        "image": "images/expansiones/Logo-Ascended-Heroes.png.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "perfect-order",
+        "name": "Perfect Order",
+        "filterType": "expansion",
+        "filterValue": "Perfect Order",
+        "image": "images/expansiones/me03-logo.png",
+        "era": "Mega Evolution"
       },
       {
         "id": "chaos-rising",
         "name": "Chaos Rising",
         "filterType": "expansion",
         "filterValue": "Chaos Rising",
-        "image": "images/expansiones/CHAOS_RISING_LOGO.webp"
+        "image": "images/expansiones/CHAOS_RISING_LOGO.webp",
+        "era": "Mega Evolution"
       },
+      {
+        "id": "pitch-black",
+        "name": "Pitch Black",
+        "filterType": "expansion",
+        "filterValue": "Pitch Black",
+        "image": "images/expansiones/me05.png",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "delta-reign",
+        "name": "Delta Reign",
+        "filterType": "expansion",
+        "filterValue": "Delta Reign",
+        "image": "images/expansiones/P11222_ME06_Logo_EN-3757x1799-9dc7257.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "30th-celebration",
+        "name": "30th Celebration",
+        "filterType": "expansion",
+        "filterValue": "30th aniversario",
+        "image": "images/expansiones/P11221-30th_Logo_EN_CMYK_GLOSS_WP-7117x3926-b3babf6.webp",
+        "era": "Mega Evolution"
+      }
+    ],
+    "subcategories": [
       {
         "id": "mazos",
         "name": "Mazos",
         "filterType": "expansion",
         "filterValue": "Decks"
+      },
+      {
+        "id": "otros-productos",
+        "name": "Otros Productos",
+        "filterType": "expansion",
+        "filterValue": "Otros"
       }
     ]
   },
   {
-    "id": "funko",
-    "name": "Funko Pop!"
+    "id": "tcg",
+    "name": "TCG",
+    "menuTitle": "Descubre nuevos universos",
+    "menuSubtitle": "Encuentra tu juego de cartas favorito",
+    "subcategories": [
+      {
+        "id": "magic",
+        "name": "Magic: The Gathering",
+        "filterType": "subcategoryId",
+        "filterValue": "magic",
+        "image": "images/marcas/magic.png"
+      },
+      {
+        "id": "naruto-mythos",
+        "name": "Naruto Mythos",
+        "filterType": "subcategoryId",
+        "filterValue": "naruto-mythos",
+        "image": "images/expansiones/Naruto-Mythos.webp"
+      },
+      {
+        "id": "yugioh",
+        "name": "Yu-Gi-Oh!",
+        "filterType": "subcategoryId",
+        "filterValue": "yugioh",
+        "image": "images/marcas/yugioh.png"
+      },
+      {
+        "id": "accesorios-link",
+        "name": "Accesorios",
+        "categoryId": "accesorios"
+      }
+    ],
+    "menuStyle": "grid"
   },
   {
     "id": "figuras",
-    "name": "Figuras Ichiban"
+    "name": "Figuras",
+    "menuTitle": "Encuentra tu marca favorita",
+    "menuSubtitle": "Descubre figuras de tus universos favoritos",
+    "subcategories": [
+      {
+        "id": "ichibansho",
+        "name": "Ichibansho",
+        "filterType": "subcategoryId",
+        "filterValue": "ichibansho",
+        "image": "images/expansiones/ICHIBANSHO_02.webp"
+      },
+      {
+        "id": "model-kits",
+        "name": "Model Kits",
+        "filterType": "subcategoryId",
+        "filterValue": "model-kits"
+      },
+      {
+        "id": "funko-link",
+        "name": "Funko Pop!",
+        "image": "images/expansiones/Funko-Logo.png",
+        "categoryId": "funko"
+      }
+    ],
+    "menuStyle": "grid"
   },
   {
     "id": "cartas",
@@ -62,19 +1130,1095 @@
       {
         "id": "cartas_estandar",
         "name": "Cartas Estándar",
-        "filterType": "cardType",
-        "filterValue": "estandar"
+        "filterType": "subcategoryId",
+        "filterValue": "cartas_estandar"
       },
       {
         "id": "ilustraciones_raras",
         "name": "Ilustraciones Raras",
-        "filterType": "cardType",
-        "filterValue": "ilustracion_raras"
+        "filterType": "subcategoryId",
+        "filterValue": "ilustraciones_raras"
+      },
+      {
+        "id": "cartas-ex",
+        "name": "Cartas ex",
+        "filterType": "subcategoryId",
+        "filterValue": "cartas-ex"
+      }
+    ],
+    "menuStyle": "grid-tiered",
+    "expansions": [
+      {
+        "id": "promo",
+        "name": "Promo",
+        "filterType": "expansion",
+        "filterValue": "Promo",
+        "era": "Especiales"
+      },
+      {
+        "id": "trick-or-trade",
+        "name": "Trick or Trade",
+        "filterType": "expansion",
+        "filterValue": "Trick or Trade",
+        "image": "images/expansiones/ToT.webp",
+        "era": "Especiales"
+      },
+      {
+        "id": "calendario-adviento",
+        "name": "Calendario de Adviento",
+        "filterType": "expansion",
+        "filterValue": "Calendario de Adviento",
+        "era": "Especiales"
+      },
+      {
+        "id": "base-set",
+        "name": "Base Set",
+        "filterType": "expansion",
+        "filterValue": "Base Set",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "jungle",
+        "name": "Jungle",
+        "filterType": "expansion",
+        "filterValue": "Jungle",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "fossil",
+        "name": "Fossil",
+        "filterType": "expansion",
+        "filterValue": "Fossil",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "base-set-2",
+        "name": "Base Set 2",
+        "filterType": "expansion",
+        "filterValue": "Base Set 2",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "team-rocket",
+        "name": "Team Rocket",
+        "filterType": "expansion",
+        "filterValue": "Team Rocket",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "gym-heroes",
+        "name": "Gym Heroes",
+        "filterType": "expansion",
+        "filterValue": "Gym Heroes",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "gym-challenge",
+        "name": "Gym Challenge",
+        "filterType": "expansion",
+        "filterValue": "Gym Challenge",
+        "era": "Original Series",
+        "image": "images/expansiones/era-logos/original-series.svg"
+      },
+      {
+        "id": "neo-genesis",
+        "name": "Neo Genesis",
+        "filterType": "expansion",
+        "filterValue": "Neo Genesis",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "neo-discovery",
+        "name": "Neo Discovery",
+        "filterType": "expansion",
+        "filterValue": "Neo Discovery",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "neo-revelation",
+        "name": "Neo Revelation",
+        "filterType": "expansion",
+        "filterValue": "Neo Revelation",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "neo-destiny",
+        "name": "Neo Destiny",
+        "filterType": "expansion",
+        "filterValue": "Neo Destiny",
+        "era": "Neo",
+        "image": "images/expansiones/era-logos/neo.svg"
+      },
+      {
+        "id": "legendary-collection",
+        "name": "Legendary Collection",
+        "filterType": "expansion",
+        "filterValue": "Legendary Collection",
+        "era": "Legendary Collection",
+        "image": "images/expansiones/era-logos/legendary-collection.svg"
+      },
+      {
+        "id": "expedition-base-set",
+        "name": "Expedition Base Set",
+        "filterType": "expansion",
+        "filterValue": "Expedition Base Set",
+        "era": "e-Card",
+        "image": "images/expansiones/era-logos/e-card.svg"
+      },
+      {
+        "id": "aquapolis",
+        "name": "Aquapolis",
+        "filterType": "expansion",
+        "filterValue": "Aquapolis",
+        "era": "e-Card",
+        "image": "images/expansiones/era-logos/e-card.svg"
+      },
+      {
+        "id": "skyridge",
+        "name": "Skyridge",
+        "filterType": "expansion",
+        "filterValue": "Skyridge",
+        "era": "e-Card",
+        "image": "images/expansiones/era-logos/e-card.svg"
+      },
+      {
+        "id": "ruby-sapphire",
+        "name": "Ruby & Sapphire",
+        "filterType": "expansion",
+        "filterValue": "Ruby & Sapphire",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "sandstorm",
+        "name": "Sandstorm",
+        "filterType": "expansion",
+        "filterValue": "Sandstorm",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "dragon",
+        "name": "Dragon",
+        "filterType": "expansion",
+        "filterValue": "Dragon",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "team-magma-vs-team-aqua",
+        "name": "Team Magma vs Team Aqua",
+        "filterType": "expansion",
+        "filterValue": "Team Magma vs Team Aqua",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "hidden-legends",
+        "name": "Hidden Legends",
+        "filterType": "expansion",
+        "filterValue": "Hidden Legends",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "firered-leafgreen",
+        "name": "FireRed & LeafGreen",
+        "filterType": "expansion",
+        "filterValue": "FireRed & LeafGreen",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "team-rocket-returns",
+        "name": "Team Rocket Returns",
+        "filterType": "expansion",
+        "filterValue": "Team Rocket Returns",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "deoxys",
+        "name": "Deoxys",
+        "filterType": "expansion",
+        "filterValue": "Deoxys",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "emerald",
+        "name": "Emerald",
+        "filterType": "expansion",
+        "filterValue": "Emerald",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "unseen-forces",
+        "name": "Unseen Forces",
+        "filterType": "expansion",
+        "filterValue": "Unseen Forces",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "delta-species",
+        "name": "Delta Species",
+        "filterType": "expansion",
+        "filterValue": "Delta Species",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "legend-maker",
+        "name": "Legend Maker",
+        "filterType": "expansion",
+        "filterValue": "Legend Maker",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "holon-phantoms",
+        "name": "Holon Phantoms",
+        "filterType": "expansion",
+        "filterValue": "Holon Phantoms",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "crystal-guardians",
+        "name": "Crystal Guardians",
+        "filterType": "expansion",
+        "filterValue": "Crystal Guardians",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "dragon-frontiers",
+        "name": "Dragon Frontiers",
+        "filterType": "expansion",
+        "filterValue": "Dragon Frontiers",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "power-keepers",
+        "name": "Power Keepers",
+        "filterType": "expansion",
+        "filterValue": "Power Keepers",
+        "era": "EX",
+        "image": "images/expansiones/era-logos/ex.svg"
+      },
+      {
+        "id": "diamond-pearl",
+        "name": "Diamond & Pearl",
+        "filterType": "expansion",
+        "filterValue": "Diamond & Pearl",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "mysterious-treasures",
+        "name": "Mysterious Treasures",
+        "filterType": "expansion",
+        "filterValue": "Mysterious Treasures",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "secret-wonders",
+        "name": "Secret Wonders",
+        "filterType": "expansion",
+        "filterValue": "Secret Wonders",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "great-encounters",
+        "name": "Great Encounters",
+        "filterType": "expansion",
+        "filterValue": "Great Encounters",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "majestic-dawn",
+        "name": "Majestic Dawn",
+        "filterType": "expansion",
+        "filterValue": "Majestic Dawn",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "legends-awakened",
+        "name": "Legends Awakened",
+        "filterType": "expansion",
+        "filterValue": "Legends Awakened",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "stormfront",
+        "name": "Stormfront",
+        "filterType": "expansion",
+        "filterValue": "Stormfront",
+        "era": "Diamond & Pearl",
+        "image": "images/expansiones/era-logos/diamond-pearl.svg"
+      },
+      {
+        "id": "platinum",
+        "name": "Platinum",
+        "filterType": "expansion",
+        "filterValue": "Platinum",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "rising-rivals",
+        "name": "Rising Rivals",
+        "filterType": "expansion",
+        "filterValue": "Rising Rivals",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "supreme-victors",
+        "name": "Supreme Victors",
+        "filterType": "expansion",
+        "filterValue": "Supreme Victors",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "arceus",
+        "name": "Arceus",
+        "filterType": "expansion",
+        "filterValue": "Arceus",
+        "era": "Platinum",
+        "image": "images/expansiones/era-logos/platinum.svg"
+      },
+      {
+        "id": "heartgold-soulsilver",
+        "name": "HeartGold & SoulSilver",
+        "filterType": "expansion",
+        "filterValue": "HeartGold & SoulSilver",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "unleashed",
+        "name": "Unleashed",
+        "filterType": "expansion",
+        "filterValue": "Unleashed",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "undaunted",
+        "name": "Undaunted",
+        "filterType": "expansion",
+        "filterValue": "Undaunted",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "triumphant",
+        "name": "Triumphant",
+        "filterType": "expansion",
+        "filterValue": "Triumphant",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "call-of-legends",
+        "name": "Call of Legends",
+        "filterType": "expansion",
+        "filterValue": "Call of Legends",
+        "era": "HeartGold & SoulSilver",
+        "image": "images/expansiones/era-logos/heartgold-soulsilver.svg"
+      },
+      {
+        "id": "black-white",
+        "name": "Black & White",
+        "filterType": "expansion",
+        "filterValue": "Black & White",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "emerging-powers",
+        "name": "Emerging Powers",
+        "filterType": "expansion",
+        "filterValue": "Emerging Powers",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "noble-victories",
+        "name": "Noble Victories",
+        "filterType": "expansion",
+        "filterValue": "Noble Victories",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "next-destinies",
+        "name": "Next Destinies",
+        "filterType": "expansion",
+        "filterValue": "Next Destinies",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "dark-explorers",
+        "name": "Dark Explorers",
+        "filterType": "expansion",
+        "filterValue": "Dark Explorers",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "dragons-exalted",
+        "name": "Dragons Exalted",
+        "filterType": "expansion",
+        "filterValue": "Dragons Exalted",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "dragon-vault",
+        "name": "Dragon Vault",
+        "filterType": "expansion",
+        "filterValue": "Dragon Vault",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "boundaries-crossed",
+        "name": "Boundaries Crossed",
+        "filterType": "expansion",
+        "filterValue": "Boundaries Crossed",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "plasma-storm",
+        "name": "Plasma Storm",
+        "filterType": "expansion",
+        "filterValue": "Plasma Storm",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "plasma-freeze",
+        "name": "Plasma Freeze",
+        "filterType": "expansion",
+        "filterValue": "Plasma Freeze",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "plasma-blast",
+        "name": "Plasma Blast",
+        "filterType": "expansion",
+        "filterValue": "Plasma Blast",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "legendary-treasures",
+        "name": "Legendary Treasures",
+        "filterType": "expansion",
+        "filterValue": "Legendary Treasures",
+        "era": "Black & White",
+        "image": "images/expansiones/era-logos/black-white.svg"
+      },
+      {
+        "id": "kalos-starter-set",
+        "name": "Kalos Starter Set",
+        "filterType": "expansion",
+        "filterValue": "Kalos Starter Set",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "xy",
+        "name": "XY",
+        "filterType": "expansion",
+        "filterValue": "XY",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "flashfire",
+        "name": "Flashfire",
+        "filterType": "expansion",
+        "filterValue": "Flashfire",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "furious-fists",
+        "name": "Furious Fists",
+        "filterType": "expansion",
+        "filterValue": "Furious Fists",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "phantom-forces",
+        "name": "Phantom Forces",
+        "filterType": "expansion",
+        "filterValue": "Phantom Forces",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "primal-clash",
+        "name": "Primal Clash",
+        "filterType": "expansion",
+        "filterValue": "Primal Clash",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "double-crisis",
+        "name": "Double Crisis",
+        "filterType": "expansion",
+        "filterValue": "Double Crisis",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "roaring-skies",
+        "name": "Roaring Skies",
+        "filterType": "expansion",
+        "filterValue": "Roaring Skies",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "ancient-origins",
+        "name": "Ancient Origins",
+        "filterType": "expansion",
+        "filterValue": "Ancient Origins",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "breakthrough",
+        "name": "BREAKthrough",
+        "filterType": "expansion",
+        "filterValue": "BREAKthrough",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "breakpoint",
+        "name": "BREAKpoint",
+        "filterType": "expansion",
+        "filterValue": "BREAKpoint",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "generations",
+        "name": "Generations",
+        "filterType": "expansion",
+        "filterValue": "Generations",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "fates-collide",
+        "name": "Fates Collide",
+        "filterType": "expansion",
+        "filterValue": "Fates Collide",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "steam-siege",
+        "name": "Steam Siege",
+        "filterType": "expansion",
+        "filterValue": "Steam Siege",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "evolutions",
+        "name": "Evolutions",
+        "filterType": "expansion",
+        "filterValue": "Evolutions",
+        "era": "XY",
+        "image": "images/expansiones/era-logos/xy.svg"
+      },
+      {
+        "id": "sun-moon",
+        "name": "Sun & Moon",
+        "filterType": "expansion",
+        "filterValue": "Sun & Moon",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "guardians-rising",
+        "name": "Guardians Rising",
+        "filterType": "expansion",
+        "filterValue": "Guardians Rising",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "burning-shadows",
+        "name": "Burning Shadows",
+        "filterType": "expansion",
+        "filterValue": "Burning Shadows",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "shining-legends",
+        "name": "Shining Legends",
+        "filterType": "expansion",
+        "filterValue": "Shining Legends",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "crimson-invasion",
+        "name": "Crimson Invasion",
+        "filterType": "expansion",
+        "filterValue": "Crimson Invasion",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "ultra-prism",
+        "name": "Ultra Prism",
+        "filterType": "expansion",
+        "filterValue": "Ultra Prism",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "forbidden-light",
+        "name": "Forbidden Light",
+        "filterType": "expansion",
+        "filterValue": "Forbidden Light",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "celestial-storm",
+        "name": "Celestial Storm",
+        "filterType": "expansion",
+        "filterValue": "Celestial Storm",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "dragon-majesty",
+        "name": "Dragon Majesty",
+        "filterType": "expansion",
+        "filterValue": "Dragon Majesty",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "lost-thunder",
+        "name": "Lost Thunder",
+        "filterType": "expansion",
+        "filterValue": "Lost Thunder",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "team-up",
+        "name": "Team Up",
+        "filterType": "expansion",
+        "filterValue": "Team Up",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "detective-pikachu",
+        "name": "Detective Pikachu",
+        "filterType": "expansion",
+        "filterValue": "Detective Pikachu",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "unbroken-bonds",
+        "name": "Unbroken Bonds",
+        "filterType": "expansion",
+        "filterValue": "Unbroken Bonds",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "unified-minds",
+        "name": "Unified Minds",
+        "filterType": "expansion",
+        "filterValue": "Unified Minds",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "hidden-fates",
+        "name": "Hidden Fates",
+        "filterType": "expansion",
+        "filterValue": "Hidden Fates",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "cosmic-eclipse",
+        "name": "Cosmic Eclipse",
+        "filterType": "expansion",
+        "filterValue": "Cosmic Eclipse",
+        "era": "Sun & Moon",
+        "image": "images/expansiones/era-logos/sun-moon.svg"
+      },
+      {
+        "id": "sword-shield",
+        "name": "Sword & Shield",
+        "filterType": "expansion",
+        "filterValue": "Sword & Shield",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "rebel-clash",
+        "name": "Rebel Clash",
+        "filterType": "expansion",
+        "filterValue": "Rebel Clash",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "darkness-ablaze",
+        "name": "Darkness Ablaze",
+        "filterType": "expansion",
+        "filterValue": "Darkness Ablaze",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "champion-s-path",
+        "name": "Champion's Path",
+        "filterType": "expansion",
+        "filterValue": "Champion's Path",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "vivid-voltage",
+        "name": "Vivid Voltage",
+        "filterType": "expansion",
+        "filterValue": "Vivid Voltage",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "shining-fates",
+        "name": "Shining Fates",
+        "filterType": "expansion",
+        "filterValue": "Shining Fates",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "battle-styles",
+        "name": "Battle Styles",
+        "filterType": "expansion",
+        "filterValue": "Battle Styles",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "chilling-reign",
+        "name": "Chilling Reign",
+        "filterType": "expansion",
+        "filterValue": "Chilling Reign",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "evolving-skies",
+        "name": "Evolving Skies",
+        "filterType": "expansion",
+        "filterValue": "Evolving Skies",
+        "image": "images/expansiones/Evolving_Skies.webp",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "celebrations",
+        "name": "Celebrations",
+        "filterType": "expansion",
+        "filterValue": "Celebrations",
+        "image": "images/expansiones/25th_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "fusion-strike",
+        "name": "Fusion Strike",
+        "filterType": "expansion",
+        "filterValue": "Fusion Strike",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "brilliant-stars",
+        "name": "Brilliant Stars",
+        "filterType": "expansion",
+        "filterValue": "Brilliant Stars",
+        "image": "images/expansiones/swsh09_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "astral-radiance",
+        "name": "Astral Radiance",
+        "filterType": "expansion",
+        "filterValue": "Astral Radiance",
+        "image": "images/expansiones/swsh10_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "pokemon-go",
+        "name": "Pokémon GO",
+        "filterType": "expansion",
+        "filterValue": "Pokémon GO",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "lost-origin",
+        "name": "Lost Origin",
+        "filterType": "expansion",
+        "filterValue": "Lost Origin",
+        "image": "images/expansiones/Pokemon_TCG_Sword_Shield—Lost_Origin_Logo.webp",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "silver-tempest",
+        "name": "Silver Tempest",
+        "filterType": "expansion",
+        "filterValue": "Silver Tempest",
+        "image": "images/expansiones/swsh12_logo_169_en.png",
+        "era": "Sword & Shield"
+      },
+      {
+        "id": "crown-zenith",
+        "name": "Crown Zenith",
+        "filterType": "expansion",
+        "filterValue": "Crown Zenith",
+        "era": "Sword & Shield",
+        "image": "images/expansiones/era-logos/sword-shield.svg"
+      },
+      {
+        "id": "expansion_sv",
+        "name": "Scarlet & Violet",
+        "filterType": "expansion",
+        "filterValue": "Scarlet & Violet",
+        "image": "images/expansiones/ptcg-sc1-logo.webp",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "paldea-evolved",
+        "name": "Paldea Evolved",
+        "filterType": "expansion",
+        "filterValue": "Paldea Evolved",
+        "image": "images/expansiones/sv02-header-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "obsidian-flames",
+        "name": "Obsidian Flames",
+        "filterType": "expansion",
+        "filterValue": "Obsidian Flames",
+        "image": "images/expansiones/sv03-header-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "151",
+        "name": "151",
+        "filterType": "expansion",
+        "filterValue": "151",
+        "image": "images/expansiones/sv035_logo_169_en.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "paradox-rift",
+        "name": "Paradox Rift",
+        "filterType": "expansion",
+        "filterValue": "Paradox Rift",
+        "image": "images/expansiones/sv04-logo-cmyk.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "expansion_paldean_fates",
+        "name": "Paldean Fates",
+        "filterType": "expansion",
+        "filterValue": "Paldean Fates",
+        "image": "images/expansiones/sv045_logo_169_en.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "expansion_temporal_forces",
+        "name": "Temporal Forces",
+        "filterType": "expansion",
+        "filterValue": "Temporal Forces",
+        "image": "images/expansiones/images.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "twilight-masquerade",
+        "name": "Twilight Masquerade",
+        "filterType": "expansion",
+        "filterValue": "Twilight Masquerade",
+        "image": "images/expansiones/sv06_logo_169_en.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "shrouded-fable",
+        "name": "Shrouded Fable",
+        "filterType": "expansion",
+        "filterValue": "Shrouded Fable",
+        "image": "images/expansiones/sv6pt5-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "stellar-crown",
+        "name": "Stellar Crown",
+        "filterType": "expansion",
+        "filterValue": "Stellar Crown",
+        "image": "images/expansiones/sv7-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "surging-sparks",
+        "name": "Surging Sparks",
+        "filterType": "expansion",
+        "filterValue": "Surging Sparks",
+        "image": "images/expansiones/sv8-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "prismatic-evolutions",
+        "name": "Prismatic Evolutions",
+        "filterType": "expansion",
+        "filterValue": "Prismatic Evolutions",
+        "image": "images/expansiones/sv8pt5-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "journey-together",
+        "name": "Journey Together",
+        "filterType": "expansion",
+        "filterValue": "Journey Together",
+        "image": "images/expansiones/sv9-logo.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "destined-rivals",
+        "name": "Destined Rivals",
+        "filterType": "expansion",
+        "filterValue": "Destined Rivals",
+        "image": "images/expansiones/sv10-logoDR.png",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "black-bolt-white-flare",
+        "name": "Black Bolt & White Flare",
+        "filterType": "expansion",
+        "filterValue": "Black Bolt & White Flare",
+        "image": "images/expansiones/Pokemon_TCG_Scarlet_Violet—Black_Bolt_and_Scarlet_Violet—White_Flare_Logo.webp",
+        "era": "Scarlet & Violet"
+      },
+      {
+        "id": "mega-evolution",
+        "name": "Mega Evolution",
+        "filterType": "expansion",
+        "filterValue": "Mega Evolution",
+        "image": "images/expansiones/640px-Logo_Megaevolución_(TCG).png",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "phantasmal-flames",
+        "name": "Phantasmal Flames",
+        "filterType": "expansion",
+        "filterValue": "Phantasmal Flames",
+        "image": "images/expansiones/0011-126586120535126987.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "ascended-heroes",
+        "name": "Ascended Heroes",
+        "filterType": "expansion",
+        "filterValue": "Ascended Heroes",
+        "image": "images/expansiones/Logo-Ascended-Heroes.png.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "perfect-order",
+        "name": "Perfect Order",
+        "filterType": "expansion",
+        "filterValue": "Perfect Order",
+        "image": "images/expansiones/me03-logo.png",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "chaos-rising",
+        "name": "Chaos Rising",
+        "filterType": "expansion",
+        "filterValue": "Chaos Rising",
+        "image": "images/expansiones/CHAOS_RISING_LOGO.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "pitch-black",
+        "name": "Pitch Black",
+        "filterType": "expansion",
+        "filterValue": "Pitch Black",
+        "image": "images/expansiones/me05.png",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "delta-reign",
+        "name": "Delta Reign",
+        "filterType": "expansion",
+        "filterValue": "Delta Reign",
+        "image": "images/expansiones/P11222_ME06_Logo_EN-3757x1799-9dc7257.webp",
+        "era": "Mega Evolution"
+      },
+      {
+        "id": "30th-celebration",
+        "name": "30th Celebration",
+        "filterType": "expansion",
+        "filterValue": "30th aniversario",
+        "image": "images/expansiones/P11221-30th_Logo_EN_CMYK_GLOSS_WP-7117x3926-b3babf6.webp",
+        "era": "Mega Evolution"
       }
     ]
   },
   {
     "id": "accesorios",
-    "name": "Accesorios"
+    "name": "Accesorios",
+    "hideFromNav": true
+  },
+  {
+    "id": "juegos-mesa",
+    "name": "Juegos de Mesa"
   }
 ]

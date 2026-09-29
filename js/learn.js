@@ -44,7 +44,7 @@ function renderLearnLessons(lessons) {
             <div class="learn-lesson-text">
                 <span class="learn-lesson-number">Lección ${index + 1}</span>
                 <h2>${lesson.title || ''}</h2>
-                <p>${lesson.text || ''}</p>
+                <div class="learn-lesson-body">${lesson.text || ''}</div>
                 ${lesson.ctaLink ? `<a href="${lesson.ctaLink}" class="btn btn-primary learn-lesson-btn">${lesson.ctaText || 'Ver más'}</a>` : ''}
             </div>
             <div class="learn-lesson-video">

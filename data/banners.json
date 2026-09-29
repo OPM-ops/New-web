@@ -7,13 +7,37 @@
     "link": "https://www.instagram.com/one_play_more/"
   },
   {
+    "image": "images/banners/deltareign.jpg",
+    "title": "DELTA REIGN",
+    "subtitle": "¡El poder cambia de forma con Delta Reign! Sumérgete en esta nueva expansión llena de artes alternos increíbles, nuevas estrategias competitivas y cartas ultra raras. Expande tu colección, domina el juego y encuentra tus \"hits\" favoritos aquí en One Play More",
+    "buttonText": "EXPLORA LA EXPANSIÓN",
+    "link": "#productos",
+    "mediaType": "image",
+    "scope": "global",
+    "filterType": "expansion",
+    "filterValue": "Delta Reign"
+  },
+  {
+    "image": "images/banners/30th aniversario.jpg",
+    "title": "Pokémon 30 Aniversario",
+    "subtitle": "Celebra tres décadas de aventura con las ediciones especiales del 30 Aniversario de Pokémon. Unidades altamente limitadas. ¡Asegura tu parte de la leyenda!",
+    "buttonText": "30 AÑOS DE HISTORIA",
+    "link": "#productos",
+    "mediaType": "image",
+    "scope": "global",
+    "filterType": "expansion",
+    "filterValue": "30th aniversario"
+  },
+  {
     "image": "images/banners/pitchblack.png",
     "title": "PITCH BLACK",
-    "subtitle": "Con más de 115 cartas para descubrir, Pitch Black reúne nuevas Mega Evoluciones ex, Pokémon ex, cartas de Entrenador y una amplia selección de cartas con ilustraciones especiales que harán las delicias tanto de jugadores como de coleccionistas.",
+    "subtitle": "Con más de 115 cartas para descubrir, Pitch Black reúne nuevas Mega Evoluciones ex, Pokémon ex, cartas de Entrenador y una amplia selección de cartas con ilustraciones especiales.",
     "buttonText": "DESCUBRE LA EXPANSIÓN",
     "link": "#productos",
     "mediaType": "image",
-    "scope": "global"
+    "scope": "global",
+    "filterType": "expansion",
+    "filterValue": "Pitch Black"
   },
   {
     "image": "images/banners/chaosrising.png",
@@ -22,7 +46,9 @@
     "buttonText": "EXPLORAR EXPANSIÓN",
     "link": "#productos",
     "mediaType": "image",
-    "scope": "global"
+    "scope": "global",
+    "filterType": "expansion",
+    "filterValue": "Chaos Rising"
   },
   {
     "image": "https://clichead.com/wp-content/uploads/2020/11/KASR2XOVA5EAPNIGCQN4KLHISE.jpg",

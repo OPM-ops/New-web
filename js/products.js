@@ -52,14 +52,18 @@ function renderProducts(products) {
     return;
   }
 
-  // Ordenar: disponibles primero, agotados al final
-  const sortedProducts = [...products].sort((a, b) => {
-    const aAgotado = a.status === 'agotado' || a.status === 'proximamente';
-    const bAgotado = b.status === 'agotado' || b.status === 'proximamente';
-    if (aAgotado && !bAgotado) return 1;
-    if (!aAgotado && bAgotado) return -1;
+  // Orden de aparición:
+  //   1) Disponibles que NO son cartas (Funko, figuras, accesorios, mazos destacados, etc.)
+  //   2) Disponibles que SÍ son cartas (comunes, ilustraciones raras, etc.) — van después
+  //   3) Agotados / "próximamente" — siempre al final de todo, sin importar la categoría
+  function getSortPriority(product) {
+    const isUnavailable = product.status === 'agotado' || product.status === 'proximamente';
+    if (isUnavailable) return 2;
+    if (product.categoryId === 'cartas') return 1;
     return 0;
-  });
+  }
+
+  const sortedProducts = [...products].sort((a, b) => getSortPriority(a) - getSortPriority(b));
 
   grid.innerHTML = sortedProducts.map(product => buildProductCard(product)).join('');
 
@@ -98,6 +102,21 @@ function buildProductCard(product) {
   // Usamos una clase especial para que no se recorten dentro de la tarjeta.
   const isCardProduct = product.categoryId === 'cartas';
 
+  // Si el producto tiene un atributo de Idioma con más de una opción, mostramos
+  // insignias (ES/EN/etc.) para que el cliente sepa en qué idiomas existe
+  // ANTES de entrar al detalle — las agotadas se ven atenuadas, no se ocultan,
+  // para no generar confusión sobre si el producto "no viene" en ese idioma.
+  const idiomaAttr = (product.attributes || []).find(a => (a.name || '').trim().toLowerCase() === 'idioma');
+  let langBadgesHTML = '';
+  if (idiomaAttr && idiomaAttr.options && idiomaAttr.options.length > 0) {
+    langBadgesHTML = `<div class="product-lang-badges">${idiomaAttr.options.map(opt => {
+      const val = typeof opt === 'string' ? opt : opt.value;
+      const available = !(typeof opt === 'object' && opt.available === false);
+      const countryCode = getLanguageCountryCode(val);
+      return `<span class="product-lang-badge fi fi-${countryCode}${available ? '' : ' product-lang-badge--soldout'}" title="${escapeHtml(val)}${available ? '' : ' (agotado)'}"></span>`;
+    }).join('')}</div>`;
+  }
+
   return `
     <article class="product-card${isUnavailable ? ' product-card--unavailable' : ''}" data-product-id="${product.id}" tabindex="0" role="button"
              aria-label="${isUnavailable ? 'Producto no disponible' : 'Ver'} ${product.name}"${isUnavailable ? ' style="cursor:default;"' : ''}>
@@ -108,15 +127,20 @@ function buildProductCard(product) {
           alt="${escapeHtml(product.name)}"
           class="product-img${isUnavailable ? ' product-img--dim' : ''}"
           loading="lazy"
-          onerror="this.src='images/products/placeholder.jpg'; this.onerror=null;">
+          onload="this.classList.add('loaded');"
+          onerror="this.src='images/products/placeholder.jpg'; this.onerror=null; this.classList.add('loaded');">
         <div class="product-card-overlay">
-          <button class="quick-view-btn" data-product-id="${product.id}" aria-label="Vista rápida de ${escapeHtml(product.name)}">
-            <i class="fas fa-eye"></i> Vista rápida
+          <button class="quick-view-btn" data-product-id="${product.id}" aria-label="Vista rápida de ${escapeHtml(product.name)}" title="Vista rápida">
+            <i class="fas fa-box-open"></i>
           </button>
         </div>
+        ${langBadgesHTML}
       </div>
       <div class="product-info">
-        <p class="product-category">${escapeHtml(product.category || '')}</p>
+        <div class="product-category-row">
+          <p class="product-category">${escapeHtml(product.category || '')}</p>
+          ${product.condition ? `<span class="product-condition-badge" title="${escapeHtml(product.condition)}"><span>${getConditionAbbrev(product.condition)}</span></span>` : ''}
+        </div>
         <h3 class="product-title" title="${escapeHtml(product.name)}">${escapeHtml(product.name)}</h3>
         <div class="product-price-row">
           ${hasDiscount
@@ -174,6 +198,38 @@ function handleProductGridClick(e) {
 // ─────────────────────────────────────────────
 // HELPER
 // ─────────────────────────────────────────────
+// Devuelve el código ISO de país (para la clase de flag-icons, ej. "fi-es")
+// correspondiente al idioma, para mostrar una bandera SVG real como insignia
+// circular — no depende de que la fuente del sistema soporte emojis de bandera.
+function getLanguageCountryCode(name) {
+  const map = {
+    'español': 'es', 'espanol': 'es',
+    'inglés': 'us', 'ingles': 'us',
+    'japonés': 'jp', 'japones': 'jp',
+    'coreano': 'kr',
+    'francés': 'fr', 'frances': 'fr',
+    'alemán': 'de', 'aleman': 'de',
+    'italiano': 'it',
+    'portugués': 'pt', 'portugues': 'pt',
+    'chino': 'cn'
+  };
+  const key = String(name || '').trim().toLowerCase();
+  return map[key] || 'xx';
+}
+
+// Abrevia la condición de la carta para la insignia pequeña (ej. "Near Mint" -> "NM")
+function getConditionAbbrev(condition) {
+  const map = {
+    'Mint': 'M',
+    'Near Mint': 'NM',
+    'Lightly Played': 'LP',
+    'Moderately Played': 'MP',
+    'Heavily Played': 'HP',
+    'Damaged': 'DMG'
+  };
+  return map[condition] || condition;
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

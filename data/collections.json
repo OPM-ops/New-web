@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Pokémon TCG",
+    "categoryId": "pokemon",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Pok%C3%A9mon_Trading_Card_Game_logo.svg/1280px-Pok%C3%A9mon_Trading_Card_Game_logo.svg.png?utm_source=es.wikipedia.org&utm_campaign=index&utm_content=thumbnail"
+  },
+  {
+    "name": "Ichibansho",
+    "categoryId": "figuras",
+    "image": "images/expansiones/ICHIBANSHO_02.webp",
+    "filterType": "subcategoryId",
+    "filterValue": "ichibansho"
+  },
+  {
+    "name": "Funko Pop!",
+    "categoryId": "funko",
+    "image": "https://logos-world.net/wp-content/uploads/2024/09/Funko-Logo.png"
+  },
+  {
+    "name": "Cartas Sueltas",
+    "categoryId": "cartas",
+    "image": "https://cardbot.com.au/cdn/shop/collections/pokemon-singles_600x600_crop_center.png?v=1715572328"
+  },
+  {
+    "name": "Accesorios",
+    "categoryId": "accesorios",
+    "image": "images/principal/accesorios.png"
+  },
+  {
+    "name": "Juegos de Mesa",
+    "categoryId": "juegos-mesa",
+    "image": "images/principal/Juegos de mesa.png"
+  }
+]

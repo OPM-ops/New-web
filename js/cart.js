@@ -2,17 +2,22 @@
 let cart = [];
 let allCoupons = [];
 let appliedCoupon = null;
+let couponsLoaded = false; // true una vez que coupons.json ya se intentó cargar (éxito o error)
 
 // Número de WhatsApp para cotizaciones (cámbialo)
 const WA_PHONE = "573115416469"; // Formato internacional sin +
 
 // Cargar carrito desde localStorage
-function loadCart() {
+async function loadCart() {
     const stored = localStorage.getItem('oneplaymore_cart');
     if (stored) {
         cart = JSON.parse(stored);
     }
-    loadCoupons();
+    // Importante: esperamos a que carguen los cupones ANTES de pintar el carrito.
+    // Antes esto no se esperaba, así que si el cliente escribía un código de
+    // cupón justo al abrir la página, `allCoupons` todavía podía estar vacío
+    // y el cupón (válido) se mostraba como "inválido".
+    await loadCoupons();
     updateCartUI();
 }
 
@@ -47,6 +52,7 @@ function addToCart(product, quantity = 1, selectedOptions = {}, finalPrice = nul
             price: priceToUse,           // Guardamos el precio correcto
             image: productImage,
             categoryId: product.categoryId || '', // usado para cupones por categoría
+            status: product.status || '',          // usado para excluir preventa de cupones
             selectedOptions: selectedOptions,
             quantity: quantity
         });
@@ -76,7 +82,7 @@ function updateQuantity(index, newQuantity) {
     }
 }
 
-// Calcular subtotal
+// Calcular subtotal (SIEMPRE incluye todos los productos, preventa incluida)
 function getCartSubtotal() {
     return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 }
@@ -84,6 +90,16 @@ function getCartSubtotal() {
 // ─────────────────────────────────────────────
 // CUPONES / DESCUENTOS FLASH
 // ─────────────────────────────────────────────
+
+// Fecha local (YYYY-MM-DD) para comparar vigencia de cupones.
+// OJO: antes se usaba new Date().toISOString(), que usa UTC. En Colombia
+// (UTC-5) eso podía hacer que un cupón se mostrara vencido/no-iniciado
+// varias horas antes o después de lo que el admin esperaba.
+function getLocalDateStr() {
+    const d = new Date();
+    const tzOffsetMs = d.getTimezoneOffset() * 60000;
+    return new Date(d.getTime() - tzOffsetMs).toISOString().slice(0, 10);
+}
 
 // Cargar cupones desde data/coupons.json y restaurar el cupón aplicado (si sigue siendo válido)
 async function loadCoupons() {
@@ -93,6 +109,8 @@ async function loadCoupons() {
     } catch (error) {
         console.warn('No se pudo cargar coupons.json (puede que no exista aún):', error);
         allCoupons = [];
+    } finally {
+        couponsLoaded = true;
     }
 
     const storedCode = localStorage.getItem('oneplaymore_coupon');
@@ -108,27 +126,49 @@ async function loadCoupons() {
 function findCoupon(code) {
     if (!code) return null;
     const normalized = code.trim().toUpperCase();
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getLocalDateStr();
     return allCoupons.find(c => {
+        if (!c || !c.code) return false;
         if (!c.active) return false;
-        if (c.code.toUpperCase() !== normalized) return false;
+        if (c.code.trim().toUpperCase() !== normalized) return false;
         if (c.startDate && today < c.startDate) return false;
         if (c.endDate && today > c.endDate) return false;
         return true;
     }) || null;
 }
 
-// Monto elegible del carrito para un cupón (según su alcance)
+// ¿Cuál es el status "real" de un item del carrito?
+// Preferimos el status ACTUAL del catálogo (allProducts, cargado por products.js)
+// sobre el que quedó guardado en el item cuando se agregó al carrito. Esto es
+// importante por dos razones:
+//   1) Carritos guardados en localStorage ANTES de que el campo "status" se
+//      empezara a guardar en cada item no tienen ese dato -> sin este respaldo,
+//      un producto en preventa "viejo" en el carrito se trataba como elegible
+//      para cupones, que es justo el bug que no debe volver a pasar.
+//   2) El status de un producto puede cambiar mientras sigue en el carrito
+//      (ej: pasa de "preventa" a "disponible"), y la regla debe aplicarse
+//      según la realidad actual, no una foto vieja.
+function getItemStatus(item) {
+    if (typeof allProducts !== 'undefined' && Array.isArray(allProducts)) {
+        const liveProduct = allProducts.find(p => p.id === item.id);
+        if (liveProduct && liveProduct.status) return liveProduct.status;
+    }
+    return item.status || '';
+}
+
+// Monto elegible del carrito para un cupón (según su alcance).
+// Regla fija, sin excepción: los productos en preventa NUNCA entran en
+// ningún cupón/descuento, sin importar el "scope" del cupón (ni siquiera "all").
 function getEligibleSubtotal(coupon) {
     if (!coupon) return 0;
-    if (!coupon.scope || coupon.scope === 'all') return getCartSubtotal();
     return cart.reduce((sum, item) => {
-        if (item.categoryId === coupon.scopeValue) sum += item.price * item.quantity;
-        return sum;
+        if (getItemStatus(item) === 'preventa') return sum; // ← exclusión dura de preventa
+        if (coupon.scope === 'category' && item.categoryId !== coupon.scopeValue) return sum;
+        return sum + (item.price * item.quantity);
     }, 0);
 }
 
-// Calcula el descuento actual (0 si no hay cupón válido o el carrito no tiene productos elegibles)
+// Calcula el descuento actual (0 si no hay cupón válido o no hay productos elegibles)
 function getCartDiscount() {
     if (!appliedCoupon) return 0;
     const eligible = getEligibleSubtotal(appliedCoupon);
@@ -144,17 +184,35 @@ function getCartTotal() {
     return Math.max(0, getCartSubtotal() - getCartDiscount());
 }
 
+// ¿Hay algún producto en preventa en el carrito? (para avisos en la UI)
+function cartHasPreventaItems() {
+    return cart.some(item => getItemStatus(item) === 'preventa');
+}
+
 // Intentar aplicar un código de cupón ingresado por el cliente
 function applyCouponCode(code) {
+    if (!couponsLoaded) {
+        if (typeof showToast === 'function') showToast('⏳ Cargando cupones, intenta de nuevo en un segundo', 2000);
+        return;
+    }
+
     const coupon = findCoupon(code);
     if (!coupon) {
         if (typeof showToast === 'function') showToast('❌ Cupón inválido, vencido o inactivo', 2500);
         return;
     }
-    if (coupon.scope === 'category' && getEligibleSubtotal(coupon) <= 0) {
-        if (typeof showToast === 'function') showToast('⚠️ Este cupón no aplica a los productos de tu carrito', 3000);
+
+    // Antes solo se validaba esto para cupones de categoría; ahora se valida
+    // siempre, porque un carrito 100% de preventa tampoco es elegible para
+    // un cupón de "todo el carrito".
+    if (getEligibleSubtotal(coupon) <= 0) {
+        const msg = cartHasPreventaItems()
+            ? '⚠️ Este cupón no aplica: los productos de preventa no participan en descuentos'
+            : '⚠️ Este cupón no aplica a los productos de tu carrito';
+        if (typeof showToast === 'function') showToast(msg, 3000);
         return;
     }
+
     appliedCoupon = coupon;
     localStorage.setItem('oneplaymore_coupon', coupon.code);
     if (typeof showToast === 'function') showToast(`✓ Cupón "${coupon.code}" aplicado`);
@@ -195,7 +253,7 @@ cartItemsContainer.innerHTML = cart.map((item, index) => `
         <img src="${item.image}" alt="${item.name}" class="cart-item-img">
         <div class="cart-item-info">
             <div class="cart-item-header">
-                <div class="cart-item-title">${item.name}</div>
+                <div class="cart-item-title">${item.name}${getItemStatus(item) === 'preventa' ? ' <span class="cart-item-preventa-badge">Preventa</span>' : ''}</div>
                 <div class="cart-item-price">$${item.price.toLocaleString('es-CO')}</div>
             </div>
             ${Object.entries(item.selectedOptions).length > 0 ? 
@@ -236,6 +294,13 @@ cartItemsContainer.innerHTML = cart.map((item, index) => `
     if (totalRow) totalRow.style.display = discount > 0 ? 'flex' : 'none';
     if (totalSpan) totalSpan.textContent = `$${getCartTotal().toLocaleString('es-CO')}`;
 
+    // Aviso si hay un cupón aplicado y además hay productos de preventa en el carrito
+    // (para que el cliente entienda por qué esos productos no bajan de precio)
+    const couponPreventaNote = document.getElementById('couponPreventaNote');
+    if (couponPreventaNote) {
+        couponPreventaNote.style.display = (appliedCoupon && cartHasPreventaItems()) ? 'block' : 'none';
+    }
+
     // Estado del input/botón de cupón
     const couponInput = document.getElementById('couponCodeInput');
     const couponApplyBtn = document.getElementById('applyCouponBtn');
@@ -274,6 +339,7 @@ function generateWhatsAppMessage() {
     let message = "¡Hola! Quiero cotizar los siguientes productos:\n\n";
     cart.forEach(item => {
         message += `• ${item.name}`;
+        if (getItemStatus(item) === 'preventa') message += ` (Preventa)`;
         if (Object.keys(item.selectedOptions).length > 0) {
             message += ` (${Object.entries(item.selectedOptions).map(([k,v]) => `${k}:${v}`).join(', ')})`;
         }
@@ -283,6 +349,9 @@ function generateWhatsAppMessage() {
     const discount = getCartDiscount();
     if (discount > 0 && appliedCoupon) {
         message += `Cupón aplicado (${appliedCoupon.code}): -$${discount.toLocaleString('es-CO')}\n`;
+        if (cartHasPreventaItems()) {
+            message += `(Los productos de preventa no participan del descuento)\n`;
+        }
         message += `Total con descuento: $${getCartTotal().toLocaleString('es-CO')}\n`;
     }
     message += "\nPor favor, confirma disponibilidad y costo de envío. ¡Gracias!";

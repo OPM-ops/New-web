@@ -35,24 +35,44 @@ function openProductModal(product) {
     const priceMap = {};
     const originalPriceMap = {};
     let attributesHTML = '';
-    
+    let hasFullySoldOutAttribute = false;
+
     if (product.attributes && product.attributes.length > 0) {
         attributesHTML = product.attributes.map(attr => {
             const attrKey = normalizeId(attr.name);
+
+            // Primero identificamos cuál es la primera opción disponible de este
+            // atributo, para preseleccionarla — así nunca queda por defecto
+            // elegida una opción agotada (el navegador, si no se le indica nada,
+            // selecciona la primera opción de la lista sin importar si está
+            // deshabilitada).
+            let firstAvailableValue = null;
+            attr.options.forEach(opt => {
+                const optAvailable = !(typeof opt === 'object' && opt.available === false);
+                const optValue = typeof opt === 'string' ? opt : opt.value;
+                if (optAvailable && firstAvailableValue === null) {
+                    firstAvailableValue = optValue;
+                }
+            });
+            if (firstAvailableValue === null) hasFullySoldOutAttribute = true;
+
             const optionsHTML = attr.options.map(opt => {
                 const optValue = typeof opt === 'string' ? opt : opt.value;
                 const optPrice = typeof opt === 'object' && opt.price ? opt.price : basePrice;
                 const optOriginal = (typeof opt === 'object' && opt.originalPrice) ? opt.originalPrice : baseOriginalPrice;
-                
+                const optAvailable = !(typeof opt === 'object' && opt.available === false);
+
                 if (!priceMap[attr.name]) priceMap[attr.name] = {};
                 priceMap[attr.name][optValue] = optPrice;
-                
+
                 if (!originalPriceMap[attr.name]) originalPriceMap[attr.name] = {};
                 originalPriceMap[attr.name][optValue] = optOriginal;
-                
+
                 const diff = optPrice - basePrice;
                 const diffText = diff > 0 ? ` (+$${diff.toLocaleString('es-CO')})` : (diff < 0 ? ` (-$${Math.abs(diff).toLocaleString('es-CO')})` : '');
-                return `<option value="${optValue}">${optValue}${diffText}</option>`;
+                const soldOutText = optAvailable ? '' : ' — Agotado';
+                const isSelected = optValue === firstAvailableValue;
+                return `<option value="${optValue}" ${optAvailable ? '' : 'disabled'} ${isSelected ? 'selected' : ''}>${optValue}${diffText}${soldOutText}</option>`;
             }).join('');
             
             return `
@@ -100,6 +120,13 @@ function openProductModal(product) {
         </div>`;
     }
 
+    let howToPlayHTML = '';
+    if (product.boardGameId) {
+        howToPlayHTML = `<a href="juegos-mesa.html#${product.boardGameId}" class="how-to-play-btn">
+            <i class="fas fa-dice"></i> ¿Cómo se juega?
+        </a>`;
+    }
+
     body.innerHTML = `
         <div class="product-detail">
             <div class="product-gallery">
@@ -107,7 +134,10 @@ function openProductModal(product) {
             </div>
             <div class="product-detail-info">
                 <h3>${product.name}</h3>
-                <p class="product-category">${product.category}</p>
+                <div class="product-category-row">
+                    <p class="product-category">${product.category}</p>
+                    ${product.condition ? `<span class="product-condition-badge" title="Condición de la carta"><span>${product.condition}</span></span>` : ''}
+                </div>
                 <div class="product-detail-price-container" id="priceContainer">
                     <span class="old-price" id="modalOriginalPrice" style="display: none;"></span>
                     <span class="product-detail-price current-price" id="modalCurrentPrice">$${product.price.toLocaleString('es-CO')}</span>
@@ -115,6 +145,7 @@ function openProductModal(product) {
                 <p>${safeDescription}</p>
                 ${includesHTML}
                 ${encargoHTML}
+                ${howToPlayHTML}
                 ${attributesHTML}
                 <div class="quantity-selector">
                     <label>Cantidad:</label>
@@ -174,8 +205,9 @@ function openProductModal(product) {
 
     const addBtn = document.getElementById('addToCartFromModal');
     if (addBtn) {
-        // Deshabilitar botón si el producto está agotado
-        if (product.status === 'agotado' || product.status === 'proximamente') {
+        // Deshabilitar botón si el producto está agotado, o si alguno de sus
+        // atributos (ej. Idioma) no tiene ninguna opción disponible.
+        if (product.status === 'agotado' || product.status === 'proximamente' || hasFullySoldOutAttribute) {
             addBtn.disabled = true;
             addBtn.textContent = 'Producto agotado';
             addBtn.style.background = '#6b7280';
@@ -191,10 +223,24 @@ function openProductModal(product) {
 
         addBtn.addEventListener('click', function() {
             // Doble validación: no permitir agregar si está agotado
-            if (product.status === 'agotado' || product.status === 'proximamente') {
+            if (product.status === 'agotado' || product.status === 'proximamente' || hasFullySoldOutAttribute) {
                 if (typeof showToast === 'function') showToast('❌ No se puede añadir: producto agotado', 2500);
                 return;
             }
+
+            // Triple validación: por si alguna opción agotada quedó seleccionada
+            // (no debería pasar con las opciones disabled, pero por seguridad)
+            if (product.attributes) {
+                for (const attr of product.attributes) {
+                    const attrKey = normalizeId(attr.name);
+                    const select = document.getElementById(`attr-${attrKey}`);
+                    if (select && select.options[select.selectedIndex]?.disabled) {
+                        if (typeof showToast === 'function') showToast(`❌ Esa opción de ${attr.name} está agotada`, 2500);
+                        return;
+                    }
+                }
+            }
+
             const quantity = parseInt(document.getElementById('productQuantity').value, 10) || 1;
             const selectedOptions = {};
             let finalPrice = basePrice;
@@ -281,13 +327,17 @@ function openQuickView(product) {
                 </div>
                 <div class="quick-view-details">
                     <h3>${product.name}</h3>
-                    <p class="product-category">${product.category}</p>
+                    <div class="product-category-row">
+                        <p class="product-category">${product.category}</p>
+                        ${product.condition ? `<span class="product-condition-badge" title="Condición de la carta"><span>${product.condition}</span></span>` : ''}
+                    </div>
                     <div class="product-detail-price-container">
                         ${product.originalPrice ? `<span class="old-price">$${product.originalPrice.toLocaleString('es-CO')}</span>` : ''}
                         <span class="product-detail-price current-price">$${product.price.toLocaleString('es-CO')}</span>
                     </div>
                     <p class="quick-view-description">${product.description.substring(0, 100)}...</p>
                     ${product.encargo ? `<div class="product-encargo-note" style="font-size:0.75rem; margin:0.5rem 0;"><i class="fas fa-clock"></i> ${product.encargoNota || 'Por encargo, 2-5 días hábiles'}</div>` : ''}
+                    ${product.boardGameId ? `<a href="juegos-mesa.html#${product.boardGameId}" class="how-to-play-btn" style="margin-bottom:0.8rem;"><i class="fas fa-dice"></i> ¿Cómo se juega?</a>` : ''}
                     <button class="btn btn-primary quick-add-cart" data-product-id="${product.id}">
                         <i class="fas fa-cart-plus"></i> Añadir al carrito
                     </button>

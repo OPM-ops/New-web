@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Play More - Tienda Geek</title>
     <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Anton&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7/css/flag-icons.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -74,14 +75,41 @@
     <div class="carousel-dots" id="carouselDots"></div>
 </section>
 
+<!-- SECCIONES DE INICIO (se ocultan al entrar a "Todos" o cualquier categoría) -->
+<div id="homeSections">
 
+  <!-- COLECCIONES: vitrina curada de marcas/colecciones (editable desde el admin) -->
+  <section class="collections-section container">
+      <h2 class="section-title">Descubre más universos</h2>
+      <div class="collections-grid" id="collectionsGrid"></div>
+  </section>
 
+  <!-- FRANJA DE CONFIANZA: envíos, cambios, pagos -->
+  <section class="trust-strip">
+    <div class="container trust-strip-inner">
+      <a href="politicas.html#envios" class="trust-item">
+        <i class="fas fa-truck trust-icon"></i>
+        <strong>Recogida gratis en Bogotá</strong>
+        <span>Coordina la recogida sin costo o pide envío a toda Colombia desde tu casa.</span>
+      </a>
+      <a href="politicas.html#cambios-devoluciones" class="trust-item">
+        <i class="fas fa-rotate-left trust-icon"></i>
+        <strong>Cambios en 5 días hábiles</strong>
+        <span>Si algo llega mal o con un defecto de fábrica, lo resolvemos sin complicaciones.</span>
+      </a>
+      <a href="politicas.html#pagos" class="trust-item">
+        <i class="fas fa-shield-alt trust-icon"></i>
+        <strong>Pago 100% verificado</strong>
+        <span>Nequi, Bre-B, transferencia bancaria y Mercado Pago, siempre de forma segura.</span>
+      </a>
+    </div>
+  </section>
 
+</div>
 
-
-<!-- CATÁLOGO DE PRODUCTOS -->
-<section class="products-section container">
-    <h2 class="section-title">Nuestros Productos</h2>
+<!-- CATÁLOGO DE PRODUCTOS: oculto hasta que se navegue a "Todos" o una categoría -->
+<section class="products-section container" id="productsSection" style="display:none;">
+    <h2 class="section-title">Catálogo</h2>
     <div class="products-grid" id="productsGrid">
         <div class="loading">Cargando catálogo...</div>
     </div>
@@ -108,6 +136,9 @@
             <div id="couponAppliedChip" class="coupon-chip" style="display:none;">
                 <i class="fas fa-tag"></i> <span class="coupon-chip-code"></span>
                 <button id="removeCouponBtn" title="Quitar cupón" type="button">✕</button>
+            </div>
+            <div id="couponPreventaNote" class="coupon-preventa-note">
+                <i class="fas fa-circle-info"></i> Los productos en preventa de tu carrito no participan de este descuento.
             </div>
         </div>
 
@@ -146,9 +177,16 @@
           <li><a href="#productos" id="footer-productos-link">Productos</a></li>
           <li><a href="#ofertas" id="footer-ofertas-link">Ofertas</a></li>
           <li><a href="#novedades" id="footer-novedades-link">Novedades</a></li>
+          <li><a href="#contacto" id="footer-contacto-link">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Guías</h4>
+        <ul>
           <li><a href="aprende.html">Cómo jugar</a></li>
           <li><a href="coleccionar.html">Cómo coleccionar</a></li>
-          <li><a href="#contacto" id="footer-contacto-link">Contacto</a></li>
+          <li><a href="juegos-mesa.html">Juegos de mesa</a></li>
+          <li><a href="politicas.html" class="footer-link-highlight"><i class="fas fa-circle-info"></i> Políticas</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -196,6 +234,7 @@
 <script src="js/main.js"></script>
 <script src="js/announcement.js"></script>
 <script src="js/particles.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script src="js/admin.js"></script>  <!-- ← AÑADIDO AQUÍ, DENTRO DEL BODY -->
 
 <!-- TOAST NOTIFICATION -->

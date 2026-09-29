@@ -2,41 +2,50 @@
   "hero": {
     "label": "📦 CENTRO DE APRENDIZAJE",
     "title": "CÓMO EMPEZAR A COLECCIONAR CARTAS POKÉMON",
-    "subtitle": "Aprende a identificar rarezas, proteger tus cartas y elegir por dónde empezar tu colección sin perderte en el intento. Guías paso a paso para coleccionistas nuevos y experimentados.",
+    "subtitle": "Aprende a identificar rarezas, proteger tus cartas y armar una estrategia de colección inteligente sin perderte en el camino. Para quienes apenas empiezan y para quienes ya llevan tiempo coleccionando.",
     "ctaText": "Empieza a coleccionar",
-    "image1": "images/products/Chase Scarlet & Violet.webp",
-    "image2": "images/products/Cards MVenusaur.webp"
+    "image1": "images/Card/PAF_225_R_EN_LG.webp",
+    "image2": "images/products/First-Partner-Illustration-Collection.png.webp"
+    
   },
   "lessons": [
     {
       "id": "leccion-1",
-      "title": "Rarezas y símbolos de las cartas",
-      "text": "Cada carta de Pokémon TCG tiene un símbolo en la esquina inferior derecha que indica su rareza: círculo (común), diamante (poco común) y estrella (rara), además de categorías especiales como holográficas, full art, ilustraciones raras y doradas. Aprender a leer estos símbolos te ayuda a reconocer el valor real de lo que tienes antes de comprar o vender.",
-      "youtubeId": "s-lIeipltKs",
+      "title": "Rarezas y tipos de cartas",
+      "text": "El valor de una carta no depende solo de qué tan buena sea en el juego competitivo — también cuenta mucho el arte y el acabado. Así se dividen las rarezas más comunes que vas a encontrar hoy en día:<br><br><ul><li><strong>Comunes y Poco Comunes (C/UC):</strong> marcadas con un círculo o un diamante, son las cartas base de cualquier expansión.</li><li><strong>Raras Holo:</strong> tienen ese brillo característico en la ilustración o en el fondo.</li><li><strong>Pokémon ex, V, VMAX y VSTAR:</strong> diseños más modernos, con texturas y un arte más elaborado.</li><li><strong>Ilustraciones Raras (IR) y Súper Ilustraciones Raras (SIR):</strong> las más buscadas de las colecciones recientes, con arte a página completa.</li><li><strong>Doradas o Hiper Raras:</strong> acabado dorado con relieve, de las más difíciles de conseguir.</li></ul><br>Un truco que te ahorra tiempo: fíjate en el número de colección y el símbolo de la expansión, en la esquina inferior de la carta. Con eso puedes catalogar lo que tienes sin complicarte.",
+      "youtubeId": "DhIhxl9OoUA",
       "ctaText": "Ver ilustraciones raras",
-      "ctaLink": "index.html?category=cartas&filterType=cardType&filterValue=ilustracion_raras#productos"
+      "ctaLink": "index.html?category=cartas&filterType=subcategoryId&filterValue=ilustraciones_raras#productos"
     },
     {
       "id": "leccion-2",
-      "title": "Cómo proteger y guardar tu colección",
-      "text": "Una carta sin protección pierde valor rápido. Usa fundas (sleeves) desde el primer momento, agrega toploaders a tus cartas más valiosas y guarda todo en álbumes o carpetas específicas para TCG, lejos de la luz solar directa y la humedad. Es el hábito más importante para cualquier coleccionista, sin importar el presupuesto.",
-      "youtubeId": "X3QbNYLglqM",
+      "title": "Cómo proteger tu colección",
+      "text": "Una carta sin protección pierde valor —y se ve peor— en cuestión de semanas. Cuidarla bien no es un capricho, es lo mínimo:<br><br><ol><li><strong>Fundas (sleeves):</strong> ponlas desde el momento en que abres el sobre, así evitas rayones por fricción.</li><li><strong>Toploaders o Card Savers:</strong> para tus cartas más valiosas o brillantes, guárdalas primero en su funda y luego en un protector rígido.</li><li><strong>Álbumes de carga lateral:</strong> evita las carpetas de anillas metálicas, porque terminan doblando o marcando las cartas.</li><li><strong>Cuida el ambiente:</strong> lejos de la luz solar directa (los rayos UV decoloran la tinta) y de la humedad.</li></ol>",
+      "youtubeId": "eSsh9WGcd5w",
       "ctaText": "Ver accesorios de protección",
       "ctaLink": "index.html?category=accesorios#productos"
     },
     {
       "id": "leccion-3",
-      "title": "¿Por dónde empezar?",
-      "text": "No necesitas saberlo todo desde el primer día. Elige una expansión que te guste visualmente, abre algunos sobres para familiarizarte con las rarezas y mecánica del set, y evita el error más común: comprar sobres sueltos de muchas colecciones distintas sin profundizar en ninguna. Es más satisfactorio (y rentable) enfocarte en un set a la vez.",
+      "title": "¿Por dónde empezar tu colección?",
+      "text": "El error más común de quien empieza es querer comprar un poco de todo. Para disfrutar el proceso sin frustrarte:<br><br><ul><li><strong>Enfócate en una sola expansión:</strong> elige un set cuyo diseño te guste y ve reuniendo tus cartas favoritas de ahí.</li><li><strong>Arranca con un producto sellado:</strong> una Elite Trainer Box o un Booster Bundle son buenos puntos de entrada — traen sobres, dados, contadores y casi siempre una carta promo exclusiva.</li><li><strong>Decide tu enfoque:</strong> colección temática (por ejemplo, todos los Pikachu), un set completo, o simplemente las cartas que más te gustan visualmente.</li></ul>",
       "youtubeId": "V6QaSwy1gtY",
       "ctaText": "Ver todo Pokémon TCG",
       "ctaLink": "index.html?category=pokemon#productos"
+    },
+    {
+      "id": "leccion-4",
+      "title": "¿Abrir sobres o comprar cartas sueltas?",
+      "text": "La emoción de abrir un sobre no se compara con nada, pero conviene ser realista con el bolsillo.<br><br>Abrir sobres es divertido y tiene más sentido cuando recién sale una expansión — es una buena forma de armar la base de tu colección. El problema es que depender de la suerte para conseguir esa carta específica que quieres puede salir caro.<br><br>Si en cambio buscas una carta puntual (una SIR muy pedida, por ejemplo), casi siempre te sale más barato comprarla suelta a otro coleccionista o a una tienda.<br><br>La mayoría de coleccionistas con experiencia terminan combinando las dos estrategias.",
+      "youtubeId": "Pzeli0ithP8",
+      "ctaText": "Ver todos los productos",
+      "ctaLink": "index.html?category=all#productos"
     }
   ],
   "closingCta": {
     "title": "¿Listo para armar tu colección?",
     "subtitle": "Explora nuestro catálogo y encuentra las cartas, expansiones y accesorios de protección que necesitas para empezar con el pie derecho.",
     "buttonText": "Ver catálogo",
-    "link": "index.html#productos"
+    "link": "index.html?category=all#productos"
   }
 }

@@ -1,0 +1,124 @@
+{
+  "hero": {
+    "label": "🎲 CÓMO JUGAR",
+    "title": "GUÍAS DE NUESTROS JUEGOS DE MESA",
+    "subtitle": "Antes de comprar (o antes de tu próxima noche de juegos), aprende las reglas paso a paso. Vamos sumando más juegos y videos con el tiempo."
+  },
+  "games": [
+    {
+      "id": "polilla-tramposa",
+      "name": "La Polilla Tramposa",
+      "tagline": "El único juego donde hacer trampa no solo está permitido: es obligatorio.",
+      "players": "2 a 5 jugadores",
+      "duration": "15-20 min",
+      "age": "7+",
+      "image": "images/products/placeholder.jpg",
+      "youtubeId": "xe3-rM_mYqM",
+      "description": "Creado por Emily y Lukas Brand, ganador del Deutscher Spielepreis al mejor juego infantil. El objetivo es deshacerte de todas tus cartas antes que los demás, pero algunas —las polillas tramposas— no se pueden descartar de forma normal. Tendrás que hacer trampa para quitártelas de encima sin que te atrape el Chinche Guardián.",
+      "steps": [
+        {
+          "title": "Reparto inicial",
+          "text": "Cada jugador recibe 8 cartas en su mano. El resto del mazo se coloca boca abajo en el centro, y se voltea la primera carta para formar la pila de descarte."
+        },
+        {
+          "title": "En tu turno",
+          "text": "Debes colocar sobre la pila de descarte una carta con el número inmediatamente superior o inferior al de la carta visible. Si no tienes ninguna carta que te sirva, robas una del mazo y pasa el turno al siguiente jugador."
+        },
+        {
+          "title": "Cartas de acción",
+          "text": "Además de las cartas numéricas hay 4 tipos de cartas de acción con efectos especiales: puedes hacer que otro jugador robe cartas extra, deshacerte de una carta duplicada, o pasarle una carta a otro jugador. Se juegan igual que una carta normal, pero al colocarlas se resuelve su efecto antes de pasar el turno."
+        },
+        {
+          "title": "El Chinche Guardián",
+          "text": "En cada ronda, uno de los jugadores es el Chinche Guardián. Es el único que puede jugar cartas de polilla de forma normal, y su trabajo es estar atento para atrapar a quien intente hacer trampa."
+        },
+        {
+          "title": "Cómo hacer trampa (sí, es parte de las reglas)",
+          "text": "Mientras no seas el Chinche Guardián, puedes deshacerte de tus cartas de polilla escondiéndolas, dejándolas caer o pasándolas disimuladamente. Reglas para hacer trampa: tu mano siempre debe estar visible sobre la mesa, solo puedes deshacerte de una carta a la vez, y mientras se discute si alguien hizo trampa, nadie más puede intentarlo. Si el Chinche te atrapa, devuelves la carta a tu mano y te conviertes en el nuevo Chinche Guardián."
+        },
+        {
+          "title": "Fin de la ronda y puntuación",
+          "text": "La ronda termina cuando un jugador se queda sin cartas en la mano. Todos los demás restan puntos según las cartas que les quedaron. Se juegan tantas rondas como jugadores haya, así todos pasan por el rol de Chinche Guardián al menos una vez. ¡Gana quien menos puntos en contra tenga al final!"
+        }
+      ]
+    },
+    {
+      "id": "catan",
+      "name": "Catan",
+      "tagline": "Comercia, construye y conquista la isla de Catan.",
+      "players": "3 a 4 jugadores",
+      "duration": "60-90 min",
+      "age": "10+",
+      "image": "images/mesa/Catan_800X800.webp",
+      "youtubeId": "RiPHW2NDvuw",
+      "description": "CATAN es el clásico moderno donde cada partida te reta a colonizar una isla que se arma distinta cada vez. Recolecta recursos, negocia con los demás jugadores y construye carreteras, poblados y ciudades para hacerte con los puntos de victoria necesarios para ganar. Fácil de aprender, pero difícil de dominar.",
+      "steps": [
+        {
+          "title": "Arma el tablero",
+          "text": "Coloca las fichas hexagonales de terreno para formar la isla (el orden cambia en cada partida), reparte los números sobre ellas y ubica al ladrón sobre el hexágono de desierto."
+        },
+        {
+          "title": "Coloca tus primeras construcciones",
+          "text": "Por turnos, cada jugador ubica 2 poblados y sus 2 carreteras correspondientes en el orden de ida y vuelta (el último en salir es el primero en repetir). Tu segundo poblado ya te entrega recursos iniciales de los terrenos vecinos."
+        },
+        {
+          "title": "En tu turno, tira los dados",
+          "text": "Todos los jugadores con un poblado o ciudad junto al número que salió reciben los recursos de ese terreno. Si sale 7, mueves al ladrón a otro hexágono (bloqueando su producción) y robas una carta al azar a un jugador con una construcción junto a él."
+        },
+        {
+          "title": "Comercia con otros jugadores",
+          "text": "Si te faltan recursos para construir, puedes intercambiarlos con otros jugadores o hacer un cambio con el banco (generalmente 4 recursos iguales por 1 a tu elección, o menos si tienes puertos)."
+        },
+        {
+          "title": "Construye y crece",
+          "text": "Usa tus recursos para levantar carreteras, fundar nuevos poblados, mejorar un poblado a ciudad (te da más recursos) o comprar una carta de desarrollo del mazo."
+        },
+        {
+          "title": "Ve por los logros especiales",
+          "text": "Quien tenga la Ruta Comercial Más Larga (mínimo 5 carreteras seguidas) o el Ejército Más Grande (mínimo 3 caballeros jugados) suma 2 puntos de victoria extra mientras mantenga el logro."
+        },
+        {
+          "title": "Gana la partida",
+          "text": "El primer jugador en sumar 10 puntos de victoria entre poblados, ciudades, logros especiales y cartas de desarrollo de punto de victoria, gana la partida."
+        }
+      ]
+    },
+    {
+      "id": "cardia",
+      "name": "Duelo por Cardia",
+      "tagline": "Duelos de cartas rápidos donde hasta perder puede ser la jugada maestra.",
+      "players": "2 jugadores (con variante para 4)",
+      "duration": "15 min",
+      "age": "9+",
+      "image": "images/products/8436607949688-1200-face3d.png",
+      "youtubeId": "iaanFrF2dtI",
+      "description": "En Duelo por Cardia, dos jugadores se enfrentan por el control de una ciudad mágica dominada por cuatro facciones. Cada uno cuenta con un mazo idéntico de personajes, pero la clave está en saber cuándo jugar cada carta y cuándo aprovechar una derrota. El primero en conseguir 5 sellos se convierte en el gobernante de Cardia.",
+      "steps": [
+        {
+          "title": "Prepara la partida",
+          "text": "Cada jugador toma su mazo idéntico de cartas de personaje. Coloca las cartas de Localización, los sellos y las fichas de Habilidad Continua al alcance de ambos jugadores."
+        },
+        {
+          "title": "Cada turno es un duelo",
+          "text": "Ambos jugadores eligen en secreto una carta de personaje de su mano y la revelan al mismo tiempo."
+        },
+        {
+          "title": "Compara la Influencia",
+          "text": "La carta con mayor Influencia gana el duelo y obtiene un sello. La carta con menor Influencia no se queda atrás: activa la habilidad especial que tiene impresa."
+        },
+        {
+          "title": "Perder también puede convenir",
+          "text": "Muchas habilidades pueden voltear la partida: algunas cambian el resultado de un duelo anterior, roban un sello o alteran la Influencia de próximas cartas, así que perder un duelo a propósito a veces es la jugada correcta."
+        },
+        {
+          "title": "Usa tus modificadores",
+          "text": "Las fichas de Habilidad Continua y los modificadores de Influencia se juegan en el momento justo para inclinar un duelo a tu favor."
+        },
+        {
+          "title": "Gana la partida",
+          "text": "El primer jugador en conseguir 5 sellos se convierte en el gobernante de Cardia y gana el duelo."
+        }
+      ]
+    }
+  ]
+}
