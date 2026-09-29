@@ -1004,11 +1004,20 @@ function getActiveOfferProducts() {
   return adminProducts.filter(p => (p.originalPrice && p.originalPrice > p.price) || p.bestSeller);
 }
 
-// Descarga un respaldo de los precios rebajados y el badge de oferta originales,
-// por si se recarga la página (o se cierra el navegador) antes de volver a
-// activarlas: sin este respaldo descargado, esos datos se perderían para siempre.
-function downloadOffersBackupFile(backup) {
+// Descarga un respaldo LEGIBLE de qué productos tenían oferta y cuáles eran
+// sus precios exactos (antes/después), por si se recarga la página (o se
+// cierra el navegador) antes de volver a activarlas: sin este respaldo,
+// esos datos se perderían para siempre. Se guarda con nombre, categoría y
+// ambos precios explícitos — no solo el id — para que sirva como backup real
+// y se pueda leer/restaurar a mano si hiciera falta, sin adivinar nada.
+function downloadOffersBackupFile(entries) {
   try {
+    const backup = {
+      generadoEl: new Date().toISOString(),
+      totalProductos: entries.length,
+      nota: 'Respaldo de "Desactivar ofertas". Para restaurar un producto a mano: en products.json, pon price = precioConOferta y bestSeller = teniaOferta (buscando por id).',
+      productos: entries
+    };
     const json = JSON.stringify(backup, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
@@ -1035,7 +1044,14 @@ function disableAllOffers() {
   }
   if (!confirm(`¿Desactivar la oferta de ${offerProducts.length} producto(s) ahora mismo? Su precio vuelve al original y salen del apartado "OFERTAS" mientras estén desactivadas.`)) return;
 
-  disabledOffersBackup = offerProducts.map(p => ({ id: p.id, price: p.price, bestSeller: !!p.bestSeller }));
+  disabledOffersBackup = offerProducts.map(p => ({
+    id: p.id,
+    nombre: p.name,
+    categoria: p.category || p.categoryId,
+    precioConOferta: p.price,           // el que tenía puesto (rebajado) antes de desactivar
+    precioSinOferta: p.originalPrice,   // al que queda ahora
+    teniaOferta: !!p.bestSeller         // si tenía el badge "🔥 Oferta"
+  }));
   downloadOffersBackupFile(disabledOffersBackup); // respaldo de seguridad descargado
 
   offerProducts.forEach(p => {
@@ -1058,8 +1074,8 @@ function enableAllOffers() {
   disabledOffersBackup.forEach(entry => {
     const p = adminProducts.find(ap => ap.id === entry.id);
     if (p) {
-      p.price = entry.price;
-      p.bestSeller = entry.bestSeller;
+      p.price = entry.precioConOferta;
+      p.bestSeller = entry.teniaOferta;
       restored++;
     }
   });
@@ -1615,12 +1631,24 @@ function populateCouponScopeSelect() {
   sel.innerHTML = cats.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 }
 
+function populateCouponExcludeCategories(selected = []) {
+  const wrap = document.getElementById('couponExcludeCategoriesWrap');
+  if (!wrap) return;
+  const cats = adminCategories.length > 0 ? adminCategories : STATIC_BANNER_CATEGORIES;
+  wrap.innerHTML = cats.map(c => `
+    <label style="display:flex;align-items:center;gap:0.35rem;font-size:0.8rem;background:rgba(255,255,255,0.05);padding:0.35rem 0.6rem;border-radius:6px;cursor:pointer;">
+      <input type="checkbox" class="coupon-exclude-cat-cb" value="${c.id}" ${selected.includes(c.id) ? 'checked' : ''}> ${c.name}
+    </label>
+  `).join('');
+}
+
 function openCouponForm(coupon = null, index = null) {
   editingCouponIndex = index;
   const title = document.getElementById('couponFormTitle');
   title.textContent = coupon ? 'Editar Cupón' : 'Nuevo Cupón';
 
   populateCouponScopeSelect();
+  populateCouponExcludeCategories(coupon?.excludeCategoryIds || []);
 
   document.getElementById('couponCode').value = coupon ? coupon.code : '';
   document.getElementById('couponDescription').value = coupon ? (coupon.description || '') : '';
@@ -1628,6 +1656,7 @@ function openCouponForm(coupon = null, index = null) {
   document.getElementById('couponValue').value = coupon ? coupon.value : '';
   document.getElementById('couponScope').value = coupon ? (coupon.scope || 'all') : 'all';
   document.getElementById('couponScopeValue').value = coupon ? (coupon.scopeValue || '') : '';
+  document.getElementById('couponExcludeExpansions').value = coupon ? (coupon.excludeExpansions || []).join(', ') : '';
   document.getElementById('couponStartDate').value = coupon ? (coupon.startDate || '') : '';
   document.getElementById('couponEndDate').value = coupon ? (coupon.endDate || '') : '';
   document.getElementById('couponActive').checked = coupon ? !!coupon.active : true;
@@ -1688,6 +1717,13 @@ function saveAdminCoupon() {
   if (scope === 'category') coupon.scopeValue = scopeValue;
   if (startDate) coupon.startDate = startDate;
   if (endDate) coupon.endDate = endDate;
+
+  const excludeCategoryIds = Array.from(document.querySelectorAll('.coupon-exclude-cat-cb:checked')).map(cb => cb.value);
+  if (excludeCategoryIds.length) coupon.excludeCategoryIds = excludeCategoryIds;
+
+  const excludeExpansions = document.getElementById('couponExcludeExpansions').value
+    .split(',').map(s => s.trim()).filter(Boolean);
+  if (excludeExpansions.length) coupon.excludeExpansions = excludeExpansions;
 
   if (editingCouponIndex !== null) {
     adminCoupons[editingCouponIndex] = coupon;
@@ -2842,6 +2878,21 @@ function injectAdminHTML() {
             <div class="form-field" id="couponScopeCategoryWrap" style="display:none;">
               <label>Categoría</label>
               <select id="couponScopeValue"></select>
+            </div>
+            <div class="form-field">
+              <label>Excluir categorías (opcional)</label>
+              <div id="couponExcludeCategoriesWrap" style="display:flex; flex-wrap:wrap; gap:0.5rem;"></div>
+              <div class="admin-field-hint">Marca las categorías que este cupón NO debe tocar (ej. "Cartas" si el cupón es solo para el resto de la tienda).</div>
+            </div>
+            <div class="form-field">
+              <label>Excluir expansiones/colecciones (opcional)</label>
+              <input id="couponExcludeExpansions" type="text" placeholder="Ej: 30th aniversario, Otra colección">
+              <div class="admin-field-hint">Nombres exactos de expansión separados por coma (el mismo texto que pusiste en "Expansión" del producto), para excluir una colección puntual sin excluir toda su categoría.</div>
+            </div>
+            <div class="form-field">
+              <label class="checkbox-label" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;">
+                <input id="couponExcludeDiscounted" type="checkbox" checked disabled> <span>Nunca se suma a productos que ya tienen precio rebajado (automático, no editable)</span>
+              </label>
             </div>
             <div class="form-field">
               <label>Vigencia (opcional)</label>

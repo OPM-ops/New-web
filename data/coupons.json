@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "code": "NEW10",
+    "type": "percent",
+    "value": 10,
+    "scope": "all",
+    "active": true,
+    "description": "10% en toda la tienda, excepto Cartas y la colección 30th Aniversario",
+    "excludeCategoryIds": [
+      "cartas"
+    ],
+    "excludeExpansions": [
+      "30th aniversario"
+    ]
+  }
+]

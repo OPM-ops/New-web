@@ -149,7 +149,8 @@ function openProductModal(product) {
                 ${attributesHTML}
                 <div class="quantity-selector">
                     <label>Cantidad:</label>
-                    <input type="number" id="productQuantity" min="1" value="1">
+                    <input type="number" id="productQuantity" min="1" ${typeof product.stock === 'number' ? `max="${product.stock}"` : ''} value="1">
+                    ${typeof product.stock === 'number' ? `<span class="stock-hint">${product.stock} disponible(s)</span>` : ''}
                 </div>
                 <button id="addToCartFromModal" class="btn-add-cart">Añadir al carrito</button>
             </div>
@@ -241,7 +242,24 @@ function openProductModal(product) {
                 }
             }
 
-            const quantity = parseInt(document.getElementById('productQuantity').value, 10) || 1;
+            let quantity = parseInt(document.getElementById('productQuantity').value, 10) || 1;
+            // No dejar añadir más unidades de las que hay en stock (si el
+            // producto tiene stock definido). Si el carrito ya tiene unidades
+            // de este mismo producto, se suman para el chequeo.
+            if (typeof product.stock === 'number') {
+                const existingQty = (typeof cart !== 'undefined' ? cart : [])
+                    .filter(it => it.id === product.id)
+                    .reduce((s, it) => s + it.quantity, 0);
+                if (existingQty + quantity > product.stock) {
+                    const maxAdd = Math.max(0, product.stock - existingQty);
+                    if (maxAdd <= 0) {
+                        if (typeof showToast === 'function') showToast(`❌ Ya tienes en el carrito todo el stock disponible (${product.stock})`, 3000);
+                        return;
+                    }
+                    quantity = maxAdd;
+                    if (typeof showToast === 'function') showToast(`⚠️ Solo hay ${product.stock} disponible(s), se ajustó la cantidad`, 3000);
+                }
+            }
             const selectedOptions = {};
             let finalPrice = basePrice;
             

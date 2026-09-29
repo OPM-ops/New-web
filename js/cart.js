@@ -53,6 +53,8 @@ function addToCart(product, quantity = 1, selectedOptions = {}, finalPrice = nul
             image: productImage,
             categoryId: product.categoryId || '', // usado para cupones por categoría
             status: product.status || '',          // usado para excluir preventa de cupones
+            expansion: product.expansion || '',    // usado para excluir colecciones puntuales de un cupón
+            originalPrice: product.originalPrice || null, // usado para detectar si ya tiene precio rebajado
             selectedOptions: selectedOptions,
             quantity: quantity
         });
@@ -156,14 +158,50 @@ function getItemStatus(item) {
     return item.status || '';
 }
 
-// Monto elegible del carrito para un cupón (según su alcance).
-// Regla fija, sin excepción: los productos en preventa NUNCA entran en
-// ningún cupón/descuento, sin importar el "scope" del cupón (ni siquiera "all").
+// Mismo patrón que getItemStatus: preferimos el dato EN VIVO del catálogo
+// (allProducts) sobre lo que quedó guardado en el carrito, para que un
+// carrito "viejo" (agregado antes de este cambio, o antes de que cambiara
+// el producto) siga aplicando la regla correctamente.
+function getLiveProduct(item) {
+    if (typeof allProducts !== 'undefined' && Array.isArray(allProducts)) {
+        return allProducts.find(p => p.id === item.id) || null;
+    }
+    return null;
+}
+
+function getItemCategoryId(item) {
+    const live = getLiveProduct(item);
+    return (live && live.categoryId) || item.categoryId || '';
+}
+
+function getItemExpansion(item) {
+    const live = getLiveProduct(item);
+    return (live && live.expansion) || item.expansion || '';
+}
+
+// ¿Este producto YA tiene un precio rebajado activo (originalPrice > price)?
+// Si es así, NINGÚN cupón lo toca — protección automática y sin excepción,
+// para que un cupón de "10% en toda la tienda" nunca se sume al descuento
+// que el producto ya trae de fábrica.
+function itemHasOwnDiscount(item) {
+    const live = getLiveProduct(item);
+    const p = live || item;
+    return !!(p.originalPrice && p.price && p.originalPrice > p.price);
+}
+
 function getEligibleSubtotal(coupon) {
     if (!coupon) return 0;
     return cart.reduce((sum, item) => {
-        if (getItemStatus(item) === 'preventa') return sum; // ← exclusión dura de preventa
-        if (coupon.scope === 'category' && item.categoryId !== coupon.scopeValue) return sum;
+        if (getItemStatus(item) === 'preventa') return sum; // preventa nunca entra en cupones
+        if (itemHasOwnDiscount(item)) return sum; // ya tiene precio rebajado propio: nunca se le suma otro descuento
+        const itemCategoryId = getItemCategoryId(item);
+        if (coupon.scope === 'category' && itemCategoryId !== coupon.scopeValue) return sum;
+        if (Array.isArray(coupon.excludeCategoryIds) && coupon.excludeCategoryIds.includes(itemCategoryId)) return sum;
+        if (Array.isArray(coupon.excludeExpansions) && coupon.excludeExpansions.length) {
+            const itemExpansion = (getItemExpansion(item) || '').trim().toLowerCase();
+            const isExcluded = coupon.excludeExpansions.some(ex => (ex || '').trim().toLowerCase() === itemExpansion);
+            if (isExcluded) return sum;
+        }
         return sum + (item.price * item.quantity);
     }, 0);
 }
@@ -321,7 +359,16 @@ cartItemsContainer.innerHTML = cart.map((item, index) => `
 
 // Funciones auxiliares para botones (se llaman desde onclick)
 window.incrementCartItem = function(index) {
-    updateQuantity(index, cart[index].quantity + 1);
+    const item = cart[index];
+    const live = (typeof allProducts !== 'undefined' && Array.isArray(allProducts))
+        ? allProducts.find(p => p.id === item.id)
+        : null;
+    const stock = live && typeof live.stock === 'number' ? live.stock : null;
+    if (stock !== null && item.quantity + 1 > stock) {
+        if (typeof showToast === 'function') showToast(`⚠️ Solo hay ${stock} disponible(s) de este producto`, 2500);
+        return;
+    }
+    updateQuantity(index, item.quantity + 1);
 };
 
 window.decrementCartItem = function(index) {
