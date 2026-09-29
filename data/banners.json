@@ -1,5 +1,14 @@
 [
   {
+    "image": "images/banners/descuento10.jpg",
+    "title": "¡Celebramos nuestro nuevo espacio!",
+    "subtitle": "Renovamos por completo nuestra tienda y queremos celebrarlo contigo. Usa el cupón NEW10 y recibe un 10% de descuento en toda la tienda, excepto cartas o singles y productos del 30.º aniversario.",
+    "buttonText": "NEW10",
+    "link": "",
+    "mediaType": "image",
+    "scope": "global"
+  },
+  {
     "image": "images/banners/sss.png",
     "title": "¡Síguenos en Instagram!",
     "subtitle": "@one_play_more",
@@ -49,16 +58,6 @@
     "scope": "global",
     "filterType": "expansion",
     "filterValue": "Chaos Rising"
-  },
-  {
-    "image": "https://clichead.com/wp-content/uploads/2020/11/KASR2XOVA5EAPNIGCQN4KLHISE.jpg",
-    "title": "Descuentos especiales",
-    "subtitle": "Hasta 50% en Funkos seleccionados",
-    "buttonText": "Aprovecha",
-    "link": "",
-    "filterType": "expansion",
-    "filterValue": "",
-    "categoryId": "Perfect Order"
   },
   {
     "image": "",

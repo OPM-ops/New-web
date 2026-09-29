@@ -69,7 +69,7 @@ function initAdmin() {
   injectAdminHTML();
   bindAdminEvents();
   checkAdminSession();
-  console.log('[Admin] ✅ Panel inicializado. Atajo: Ctrl+Shift+A o Ctrl+Shift+M. Botón: escudo morado ↘️');
+  console.log('[Admin] ✅ Panel inicializado.');
 }
 
 // Atajo: Ctrl+Shift+A o Ctrl+Shift+M (funciona en todos los navegadores)
@@ -78,11 +78,9 @@ document.addEventListener('keydown', (e) => {
   const isA = e.ctrlKey && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a');
   const isM = e.ctrlKey && e.shiftKey && (e.code === 'KeyM' || e.key === 'M' || e.key === 'm');
   if (isA || isM) {
-    console.log('[Admin] Atajo detectado:', e.code || e.key);
     e.preventDefault();
     e.stopPropagation();
     if (!document.getElementById('adminOverlay')) {
-      console.log('[Admin] Re-inyectando panel...');
       initAdmin();
     }
     toggleAdminPanel();
@@ -94,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initAdmin();
   const trigger = document.getElementById('adminTrigger');
   if (trigger) trigger.addEventListener('click', toggleAdminPanel);
-  console.log('[Admin] DOM listo. Prueba Ctrl+Shift+A o haz click en el escudo morado ↘️');
 });
 
 function toggleAdminPanel() {
@@ -3218,35 +3215,39 @@ function injectAdminHTML() {
   `;
 
   document.body.insertAdjacentHTML('beforeend', html);
-
-  // Botón visible de Admin en la esquina inferior derecha
-  if (!document.getElementById('adminEmergencyTrigger')) {
-    const emergency = document.createElement('button');
-    emergency.id = 'adminEmergencyTrigger';
-    emergency.title = 'Panel Admin (Ctrl+Shift+A o Ctrl+Shift+M)';
-    emergency.innerHTML = '<i class="fas fa-shield-alt"></i>';
-    emergency.style.cssText = `
-      position:fixed; bottom:12px; right:12px; width:44px; height:44px;
-      background:rgba(138,108,184,0.9); border:none; border-radius:50%;
-      color:white; font-size:1.1rem; cursor:pointer; z-index:99998;
-      box-shadow:0 4px 15px rgba(138,108,184,0.4);
-      display:flex; align-items:center; justify-content:center;
-      transition:transform 0.2s, background 0.2s;
-    `;
-    emergency.onmouseenter = () => {
-      emergency.style.transform = 'scale(1.1)';
-      emergency.style.background = 'rgba(138,108,184,1)';
-    };
-    emergency.onmouseleave = () => {
-      emergency.style.transform = 'scale(1)';
-      emergency.style.background = 'rgba(138,108,184,0.9)';
-    };
-    emergency.onclick = (ev) => { ev.stopPropagation(); toggleAdminPanel(); };
-    document.body.appendChild(emergency);
-    console.log('[Admin] Botón de emergencia agregado. Haz click en el escudo morado ↘️');
-  }
 }
 
+// ─────────────────────────────────────────────
+// ACCESO OCULTO AL ADMIN
+// Antes había un botón (escudo morado) siempre visible en la esquina —
+// cualquiera lo veía. Ahora el panel se abre solo de dos formas discretas:
+//   1) Atajo de teclado Ctrl+Shift+A (o Ctrl+Shift+M) — para computador.
+//   2) Tocar 5 veces seguidas el texto de copyright del pie de página
+//      (en menos de 3 segundos) — para celular, sin necesitar teclado.
+// Ninguna de las dos se anuncia visualmente en el sitio.
+// ─────────────────────────────────────────────
+function initHiddenAdminAccess() {
+  const trigger = document.getElementById('footerCopyright');
+  if (!trigger || trigger._adminAccessBound) return;
+  trigger._adminAccessBound = true;
+
+  let tapCount = 0;
+  let tapTimer = null;
+
+  trigger.addEventListener('click', () => {
+    tapCount++;
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => { tapCount = 0; }, 3000);
+
+    if (tapCount >= 5) {
+      tapCount = 0;
+      clearTimeout(tapTimer);
+      toggleAdminPanel();
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initHiddenAdminAccess);
 
 // ─────────────────────────────────────────────
 // CSS DEL PANEL
