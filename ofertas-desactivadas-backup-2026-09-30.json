@@ -1,0 +1,565 @@
+{
+  "generadoEl": "2026-09-30T03:48:32.133Z",
+  "totalProductos": 70,
+  "nota": "Respaldo de \"Desactivar ofertas\". Para restaurar un producto a mano: en products.json, pon price = precioConOferta y bestSeller = teniaOferta (buscando por id).",
+  "productos": [
+    {
+      "id": "mega-diance-ex---asc-267217-mud8lqtd",
+      "nombre": "Mega Diance ex - ASC-267/217",
+      "categoria": "Cartas",
+      "precioConOferta": 20000,
+      "precioSinOferta": 24998,
+      "teniaOferta": true
+    },
+    {
+      "id": "xerneas---cri-091086-mud6qabv",
+      "nombre": "Xerneas - CRI-091/086",
+      "categoria": "Cartas",
+      "precioConOferta": 21000,
+      "precioSinOferta": 25000,
+      "teniaOferta": true
+    },
+    {
+      "id": "rowlet---por-090088-mud6bxel",
+      "nombre": "Rowlet - POR-090/088",
+      "categoria": "Cartas",
+      "precioConOferta": 17500,
+      "precioSinOferta": 18000,
+      "teniaOferta": true
+    },
+    {
+      "id": "pinsir---twm-168167-mu4czzj4",
+      "nombre": "Pinsir - TWM-168/167",
+      "categoria": "Cartas",
+      "precioConOferta": 52000,
+      "precioSinOferta": 55000,
+      "teniaOferta": true
+    },
+    {
+      "id": "moltres-zapdos-articuno-gx---tag-all-stars-102-173-mu4c9v0t",
+      "nombre": "Moltres & Zapdos & Articuno GX - Tag All Stars-102-173",
+      "categoria": "Cartas",
+      "precioConOferta": 95000,
+      "precioSinOferta": 110000,
+      "teniaOferta": true
+    },
+    {
+      "id": "galarian-perrserker-v---swsh11-129196-mu4b9jfa",
+      "nombre": "Galarian Perrserker V - SWSH11-129/196",
+      "categoria": "Cartas",
+      "precioConOferta": 4000,
+      "precioSinOferta": 5000,
+      "teniaOferta": true
+    },
+    {
+      "id": "hops-wooloo---jtg-170159-mu4aj4hb",
+      "nombre": "Hop's Wooloo - JTG-170/159",
+      "categoria": "Cartas",
+      "precioConOferta": 18999,
+      "precioSinOferta": 20000,
+      "teniaOferta": false
+    },
+    {
+      "id": "zacian---pfl-100094-mu481b2h",
+      "nombre": "Zacian - PFL-100/094",
+      "categoria": "Cartas",
+      "precioConOferta": 15500,
+      "precioSinOferta": 17000,
+      "teniaOferta": false
+    },
+    {
+      "id": "duelo-por-cardia-mu3il2p6",
+      "nombre": "Duelo por Cardia",
+      "categoria": "Juegos de Mesa",
+      "precioConOferta": 55000,
+      "precioSinOferta": 60000,
+      "teniaOferta": true
+    },
+    {
+      "id": "team-set-shinobi-shiren-1st-edition-mu3dkxcd",
+      "nombre": "Team Set Shinobi Shiren 1st Edition",
+      "categoria": "TCG",
+      "precioConOferta": 125000,
+      "precioSinOferta": 135000,
+      "teniaOferta": false
+    },
+    {
+      "id": "booster-display-shinobi-shiren-1st-edition-mu3d5viu",
+      "nombre": "Booster Display Shinobi Shiren 1st Edition",
+      "categoria": "TCG",
+      "precioConOferta": 485000,
+      "precioSinOferta": 500000,
+      "teniaOferta": false
+    },
+    {
+      "id": "team-sets-konoha-shido-2nd-edicion-mu3bo53i",
+      "nombre": "Team Sets Konoha Shido 2nd edición",
+      "categoria": "TCG",
+      "precioConOferta": 125000,
+      "precioSinOferta": 135000,
+      "teniaOferta": false
+    },
+    {
+      "id": "booster-display-konoha-shido-2nd-edicion-mu3bgr8v",
+      "nombre": "Booster Display Konoha Shidō 2nd edición",
+      "categoria": "TCG",
+      "precioConOferta": 485000,
+      "precioSinOferta": 500002,
+      "teniaOferta": false
+    },
+    {
+      "id": "catan-mu36lz9j",
+      "nombre": "Catan",
+      "categoria": "Juegos de Mesa",
+      "precioConOferta": 240000,
+      "precioSinOferta": 250000,
+      "teniaOferta": false
+    },
+    {
+      "id": "mega-scrafty-ex---asc-270217-mu1rcb9f",
+      "nombre": "Mega Scrafty ex - ASC-270/217",
+      "categoria": "Cartas",
+      "precioConOferta": 20000,
+      "precioSinOferta": 22000,
+      "teniaOferta": true
+    },
+    {
+      "id": "mega-clefable-ex---por-031088-mu1p5kf2",
+      "nombre": "Mega Clefable ex - POR-031/088",
+      "categoria": "Cartas",
+      "precioConOferta": 4000,
+      "precioSinOferta": 5000,
+      "teniaOferta": true
+    },
+    {
+      "id": "paldean-wooper---pfl-102094-mu1oing4",
+      "nombre": "Paldean Wooper - PFL-102/094",
+      "categoria": "Cartas",
+      "precioConOferta": 15500,
+      "precioSinOferta": 18000,
+      "teniaOferta": true
+    },
+    {
+      "id": "ns-darmanitan-poke-ball---asc-033217-mu1oc8a3",
+      "nombre": "N's Darmanitan (Poke Ball) - ASC-033/217",
+      "categoria": "Cartas",
+      "precioConOferta": 1500,
+      "precioSinOferta": 2500,
+      "teniaOferta": true
+    },
+    {
+      "id": "pansear-poke-ball---wht-014086-mu1k36qu",
+      "nombre": "Pansear (Poke Ball) - WHT-014/086",
+      "categoria": "Cartas",
+      "precioConOferta": 2000,
+      "precioSinOferta": 3500,
+      "teniaOferta": true
+    },
+    {
+      "id": "emboar-poke-ball---wht-013086-mu1js3gb",
+      "nombre": "Emboar (Poke Ball) - WHT-013/086",
+      "categoria": "Cartas",
+      "precioConOferta": 2000,
+      "precioSinOferta": 2500,
+      "teniaOferta": true
+    },
+    {
+      "id": "noivern-energy-symbol---asc-157217-mu1jcx4f",
+      "nombre": "Noivern (Energy Symbol) - ASC-157/217",
+      "categoria": "Cartas",
+      "precioConOferta": 1200,
+      "precioSinOferta": 1500,
+      "teniaOferta": true
+    },
+    {
+      "id": "coalossal-energy-symbol---asc-120217-mu1j8wsx",
+      "nombre": "Coalossal (Energy Symbol) - ASC-120/217",
+      "categoria": "Cartas",
+      "precioConOferta": 1200,
+      "precioSinOferta": 1500,
+      "teniaOferta": false
+    },
+    {
+      "id": "model-kit-mega-rayquaza-mu1hg85l",
+      "nombre": "Model Kit Mega Rayquaza",
+      "categoria": "Figuras",
+      "precioConOferta": 140000,
+      "precioSinOferta": 150000,
+      "teniaOferta": false
+    },
+    {
+      "id": "zapdos-ex-collection-151-mu1gmbae",
+      "nombre": "Zapdos ex Collection 151",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 260000,
+      "precioSinOferta": 300000,
+      "teniaOferta": true
+    },
+    {
+      "id": "elite-trainer-box-phantasmal-flames-mu0nz708",
+      "nombre": "Elite Trainer Box Phantasmal Flames",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 500000,
+      "precioSinOferta": 520000,
+      "teniaOferta": true
+    },
+    {
+      "id": "koraidon-ex---svp-197-mtvto84a",
+      "nombre": "Koraidon ex - SVP-197",
+      "categoria": "Cartas",
+      "precioConOferta": 5000,
+      "precioSinOferta": 6000,
+      "teniaOferta": true
+    },
+    {
+      "id": "spiritomb---meg-148132-mtvt9ozd",
+      "nombre": "Spiritomb - MEG-148/132",
+      "categoria": "Cartas",
+      "precioConOferta": 12500,
+      "precioSinOferta": 15000,
+      "teniaOferta": false
+    },
+    {
+      "id": "mini-tin-lumiose-city-mtuus0ut",
+      "nombre": "Mini Tin Lumiose City",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 57000,
+      "precioSinOferta": 60000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-evolving-skies-mturjuwt",
+      "nombre": "Booster Evolving Skies",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 30000,
+      "precioSinOferta": 35000,
+      "teniaOferta": false
+    },
+    {
+      "id": "ultra-premium-collection-mega-charizard-x-mtujljue",
+      "nombre": "Ultra Premium Collection Mega Charizard X",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 720000,
+      "precioSinOferta": 750000,
+      "teniaOferta": true
+    },
+    {
+      "id": "mabosstiff-ex---svp-086-mt6bg7lu",
+      "nombre": "Mabosstiff ex - SVP-086",
+      "categoria": "Cartas",
+      "precioConOferta": 3000,
+      "precioSinOferta": 4000,
+      "teniaOferta": false
+    },
+    {
+      "id": "thievul---pbl-092084-mt69smy5",
+      "nombre": "Thievul - PBL-092/084",
+      "categoria": "Cartas",
+      "precioConOferta": 8500,
+      "precioSinOferta": 9500,
+      "teniaOferta": true
+    },
+    {
+      "id": "cynthias-gabite-cosmos-holo---dri-103182-mt39kg4h",
+      "nombre": "Cynthia's Gabite (Cosmos Holo) - DRI-103/182",
+      "categoria": "Cartas",
+      "precioConOferta": 5500,
+      "precioSinOferta": 6000,
+      "teniaOferta": true
+    },
+    {
+      "id": "bravery-charm---sv7-134102-mt2hhorf",
+      "nombre": "Bravery Charm - SV7-134/102",
+      "categoria": "Cartas",
+      "precioConOferta": 10500,
+      "precioSinOferta": 12000,
+      "teniaOferta": true
+    },
+    {
+      "id": "teal-mask-ogerpon-twilight-masquerade-stamp--twm-024167-mt21b8ow",
+      "nombre": "Teal Mask Ogerpon (Twilight Masquerade Stamp) -TWM-024/167",
+      "categoria": "Cartas",
+      "precioConOferta": 45000,
+      "precioSinOferta": 50000,
+      "teniaOferta": true
+    },
+    {
+      "id": "crushing-hammer---pbl-105084-mt1flq9t",
+      "nombre": "Crushing Hammer - PBL-105/084",
+      "categoria": "Cartas",
+      "precioConOferta": 18500,
+      "precioSinOferta": 20000,
+      "teniaOferta": true
+    },
+    {
+      "id": "model-kit-miraidon-mszmjcx6",
+      "nombre": "Model Kit Miraidon",
+      "categoria": "Figuras",
+      "precioConOferta": 110000,
+      "precioSinOferta": 115000,
+      "teniaOferta": true
+    },
+    {
+      "id": "fezandipiti-ex---sfa-073064-msytwb4o",
+      "nombre": "Fezandipiti ex - SFA-073/064",
+      "categoria": "Cartas",
+      "precioConOferta": 40000,
+      "precioSinOferta": 43000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-journey-together-msxxmsz3",
+      "nombre": "Booster Journey Together",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 23000,
+      "precioSinOferta": 25000,
+      "teniaOferta": true
+    },
+    {
+      "id": "league-battle-deck-team-rockets-mewtwo-ex-mswqss7n",
+      "nombre": "League Battle Deck Team Rocket's Mewtwo ex",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 105000,
+      "precioSinOferta": 135000,
+      "teniaOferta": true
+    },
+    {
+      "id": "unova-poster-collection-black-bolt-white-flare-mswpw3b2",
+      "nombre": "Unova Poster Collection Black Bolt White Flare",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 110000,
+      "precioSinOferta": 120000,
+      "teniaOferta": true
+    },
+    {
+      "id": "cynthias-garchomp-ex-premium-collection-mswotldj",
+      "nombre": "Cynthia's Garchomp EX Premium Collection",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 200000,
+      "precioSinOferta": 220000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-box-mega-symphonia-msw97ouw",
+      "nombre": "Booster Box Mega Symphonia",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 500000,
+      "precioSinOferta": 510000,
+      "teniaOferta": true
+    },
+    {
+      "id": "mabostiff-ex-showcase-box-msw92u7j",
+      "nombre": "Mabostiff ex Showcase Box",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 95000,
+      "precioSinOferta": 100000,
+      "teniaOferta": true
+    },
+    {
+      "id": "pokemon-day-2026-msw8mdfg",
+      "nombre": "Pokemon Day 2026",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 80000,
+      "precioSinOferta": 90000,
+      "teniaOferta": true
+    },
+    {
+      "id": "sleeves-verde-lima-estandar-msty4m6i",
+      "nombre": "Sleeves Verde Lima Estandar",
+      "categoria": "Accesorios",
+      "precioConOferta": 17000,
+      "precioSinOferta": 20000,
+      "teniaOferta": true
+    },
+    {
+      "id": "elite-trainer-box-pitxh-black-mstxp66c",
+      "nombre": "Elite Trainer Box Pitxh Black",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 240000,
+      "precioSinOferta": 250000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-bundle-perfect-order-mstxc8lq",
+      "nombre": "Booster Bundle Perfect Order",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 140000,
+      "precioSinOferta": 150000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-box-perfect-order-mstx9453",
+      "nombre": "Booster Box Perfect Order",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 730000,
+      "precioSinOferta": 750000,
+      "teniaOferta": true
+    },
+    {
+      "id": "deluxe-pin-collection-ascended-heroes-mstwv27b",
+      "nombre": "Deluxe Pin Collection Ascended Heroes",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 250000,
+      "precioSinOferta": 260000,
+      "teniaOferta": true
+    },
+    {
+      "id": "mega-ex-box-ascended-heroes-mstrj0ax",
+      "nombre": "Mega ex Box Ascended Heroes",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 210000,
+      "precioSinOferta": 215000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-bundle-mega-evolution-mstq7a7a",
+      "nombre": "Booster Bundle Mega Evolution",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 140000,
+      "precioSinOferta": 150000,
+      "teniaOferta": true
+    },
+    {
+      "id": "toploader-ultra-pro-mssyr81v",
+      "nombre": "Toploader Ultra Pro",
+      "categoria": "Accesorios",
+      "precioConOferta": 1200,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-bundle-chaos-rising-mssyhiim",
+      "nombre": "Booster  Bundle Chaos Rising",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 140000,
+      "precioSinOferta": 150000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-pitch-black-mssl38ti",
+      "nombre": "Booster Pitch Black",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 23000,
+      "precioSinOferta": 25000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-box-pitch-black-msskr5pm",
+      "nombre": "Booster Box Pitch Black",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 730000,
+      "precioSinOferta": 750000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-chaos-rising-msrtcr89",
+      "nombre": "Booster Chaos Rising",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 23000,
+      "precioSinOferta": 25000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-box-chaos-rising-36-sobres-msrt4rc1",
+      "nombre": "Booster Box Chaos Rising (36 sobres)",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 730000,
+      "precioSinOferta": 750000,
+      "teniaOferta": true
+    },
+    {
+      "id": "elite-trainer-box-chaos-rising-msrspx1f",
+      "nombre": "Elite Trainer Box Chaos Rising",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 240000,
+      "precioSinOferta": 250000,
+      "teniaOferta": true
+    },
+    {
+      "id": "deluxe-battle-deck---miraidon-ex-mpfikz2y",
+      "nombre": "Deluxe Battle Deck - Miraidon EX",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 80000,
+      "precioSinOferta": 100000,
+      "teniaOferta": true
+    },
+    {
+      "id": "booster-perfect-order-mpdmitob",
+      "nombre": "Booster Perfect Order",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 23000,
+      "precioSinOferta": 25000,
+      "teniaOferta": false
+    },
+    {
+      "id": "funko-pop-nico-robin-egghead-2137-mpdls3kz",
+      "nombre": "Funko Pop! Nico Robin Egghead #2137",
+      "categoria": "Funko Pop!",
+      "precioConOferta": 45000,
+      "precioSinOferta": 50000,
+      "teniaOferta": true
+    },
+    {
+      "id": "funko-pop-bertholdt-hoover-aot-s3-1167-mpdl349g",
+      "nombre": "Funko Pop! Bertholdt Hoover AOT S3 #1167",
+      "categoria": "Funko Pop!",
+      "precioConOferta": 25000,
+      "precioSinOferta": 40000,
+      "teniaOferta": true
+    },
+    {
+      "id": "Deck-Miraidon",
+      "nombre": "Deluxe Battle Deck - Koraidon EX",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 80000,
+      "precioSinOferta": 90000,
+      "teniaOferta": true
+    },
+    {
+      "id": "Blister-Shrouded-Fable",
+      "nombre": "Blister Fabula Sombría",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 56000,
+      "precioSinOferta": 60000,
+      "teniaOferta": false
+    },
+    {
+      "id": "Tech-Ascended",
+      "nombre": "Tech Sticker Collection Ascended Heroes",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 70000,
+      "precioSinOferta": 80000,
+      "teniaOferta": true
+    },
+    {
+      "id": "Funko-Nobara",
+      "nombre": "Funko Nobara (Painting) #1647",
+      "categoria": "Funko Pop!",
+      "precioConOferta": 35000,
+      "precioSinOferta": 45000,
+      "teniaOferta": true
+    },
+    {
+      "id": "Tin-Charizard",
+      "nombre": "Tin Mega Charizard",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 115000,
+      "teniaOferta": true
+    },
+    {
+      "id": "Tin-Ferrodada",
+      "nombre": "Tin Ferrodada Destinos de Paldea",
+      "categoria": "Pokémon TCG",
+      "precioConOferta": 110000,
+      "precioSinOferta": 120000,
+      "teniaOferta": true
+    },
+    {
+      "id": "Maximo-Metagross",
+      "nombre": "Maximo Metagross ex - ASC-289/217",
+      "categoria": "Cartas",
+      "precioConOferta": 290000,
+      "precioSinOferta": 310000,
+      "teniaOferta": true
+    }
+  ]
+}
